@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package org.automateit.testng.listener;
+package org.automateit.testng;
 
 import java.awt.Font;
 import java.io.File;

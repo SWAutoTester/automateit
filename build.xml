@@ -8,7 +8,6 @@
   <property name="dist" value="dist"/>
   <property name="docs" value="docs"/>
   <property name="api" value="api"/>
-  <property name="core" value="../core"/>
   <property name="src" value="src"/>
   <property name="lib" value="lib"/>
   <property name="results" value="results"/>
@@ -49,7 +48,7 @@
   <!--////////////////////////////////////////////////////-->
   <target name="clean" description="Clean all components">
       <echo message="Deleting classes/com/" /> 
-      <delete dir="classes/com/" />
+      <delete dir="classes/org/" />
       <delete dir="docs/api" />
       <delete dir="dist" />
   </target>
@@ -66,7 +65,7 @@
            windowtitle="AutomateIt! Test Automation Framework API">
 
            <fileset dir="src" defaultexcludes="yes">
-                <include name="com/automateit/**"/>
+                <include name="org/automateit/**"/>
            </fileset>
            <classpath>
               <fileset dir="lib">

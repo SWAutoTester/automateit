@@ -33,7 +33,7 @@ import org.automateit.data.DataArchive;
 
 import org.automateit.util.Utils;
 
-import org.automateit.testng.listener.TestNGUtils;
+import org.automateit.testng.TestNGUtils;
 
 import org.automateit.util.CommonProperties;
 
