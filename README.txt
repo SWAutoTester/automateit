@@ -1,4 +1,4 @@
-Automate It! Web/Mobile v test automation framework v3.1 - 28 September 2017
+Automate It! Web/Mobile test automation framework v1.0 - 28 September 2017
 
 Thank you for downloading and using most flexible and powerful Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
