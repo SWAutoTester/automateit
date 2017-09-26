@@ -12,7 +12,7 @@ Features:
 4) Handles complexity of waiting for all ajax call completion
 5) Data Input and Output for easy data driven input file reading (Excel; xlsx, xls - pipe-delimited; "|", and comma separated values (CSV)) 
 6) Special IE handling of user-prompt authentications
-7) Page loading statistics for each page created during the test, and a summary analysis of all page loading during the executions of all test cases.
+7) Page loading performance statistics for each page created during the test, and a summary analysis of all page loading during the executions of all test cases.
 8) Debugging help in reports:
    a) selenium/webdriver command list
    b) Screenshots for browser and desktop
