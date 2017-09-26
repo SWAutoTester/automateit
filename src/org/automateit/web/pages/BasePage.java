@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.web.pages;
+package org.automateit.web.pages;
 
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
@@ -46,14 +46,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.apache.log4j.Logger;
 
-import com.automateit.util.CommandList;
-import com.automateit.util.CommonProperties;
-import com.automateit.util.CommonSelenium;
-import com.automateit.util.PerformanceCapture;
-import com.automateit.util.ScreenshotCapture;
-import com.automateit.util.Utils;
+import org.automateit.util.CommandList;
+import org.automateit.util.CommonProperties;
+import org.automateit.util.CommonSelenium;
+import org.automateit.util.PerformanceCapture;
+import org.automateit.util.ScreenshotCapture;
+import org.automateit.util.Utils;
 
-import com.automateit.web.WebDriverFactory;
+import org.automateit.web.WebDriverFactory;
 
 /**
  * BasePage is the class that all other page classes should extend for web-based UI testing.

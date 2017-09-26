@@ -17,7 +17,7 @@
  *  
  **/
 
-package com.automateit.util;
+package org.automateit.util;
 
 import java.util.LinkedList;
 

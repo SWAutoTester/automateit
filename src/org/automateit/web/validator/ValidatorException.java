@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.web.validator;
+package org.automateit.web.validator;
 
 /**
  * This class is used as a special exception to identify a problem when 

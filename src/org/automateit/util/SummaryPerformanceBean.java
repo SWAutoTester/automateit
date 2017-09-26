@@ -16,14 +16,14 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.util;
+package org.automateit.util;
 
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.automateit.data.DataArchive;
-import com.automateit.data.XLSXDataArchive;
+import org.automateit.data.DataArchive;
+import org.automateit.data.XLSXDataArchive;
 
 /**
  * This class keeps track of page summary (total page load time, max page load time, average page load time, page hits) for a page.

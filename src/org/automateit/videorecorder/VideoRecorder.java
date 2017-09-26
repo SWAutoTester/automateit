@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.videorecorder;
+package org.automateit.videorecorder;
 
 /**
  * This interface is what is video recorders need to implement to be used

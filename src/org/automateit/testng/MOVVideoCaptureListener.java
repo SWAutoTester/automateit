@@ -16,14 +16,14 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.testng.listener;
+package org.automateit.testng.listener;
 
 import org.apache.log4j.Logger;
 
 import org.testng.ITestResult;
 
-import com.automateit.videorecorder.VideoController;
-import com.automateit.videorecorder.VideoRecorder;
+import org.automateit.videorecorder.VideoController;
+import org.automateit.videorecorder.VideoRecorder;
 
 /**
  * This class is added to testng task to listen for events.

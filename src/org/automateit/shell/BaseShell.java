@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.shell;
+package org.automateit.shell;
  
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,9 +29,9 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-import com.automateit.util.CommandList;
-import com.automateit.util.CommonProperties;
-import com.automateit.util.Utils;
+import org.automateit.util.CommandList;
+import org.automateit.util.CommonProperties;
+import org.automateit.util.Utils;
 
 /**
  * This class is an API to obfuscate complexity and implementation of 

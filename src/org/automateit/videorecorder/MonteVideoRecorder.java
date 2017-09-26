@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.videorecorder;
+package org.automateit.videorecorder;
 
 import java.awt.*;
 import java.util.*;
@@ -31,7 +31,7 @@ import org.monte.screenrecorder.ScreenRecorder;
 
 import org.apache.log4j.Logger;
 
-import com.automateit.util.Utils;
+import org.automateit.util.Utils;
 
 /**
  * This video recorder uses Monte Test Recorder API to capture video.

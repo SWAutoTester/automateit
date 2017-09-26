@@ -17,7 +17,7 @@
  *  
  **/
 
-package com.automateit.mobile;
+package org.automateit.mobile;
 
 /**
  * This class is used as a special exception to identify a problem when using 

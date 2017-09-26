@@ -16,13 +16,13 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.videorecorder;
+package org.automateit.videorecorder;
 
 import atu.testrecorder.ATUTestRecorder;
 
 import org.apache.log4j.Logger;
 
-import com.automateit.util.Utils;
+import org.automateit.util.Utils;
 
 /**
  * This video recorder uses ATUTestRecorder API to capture video.

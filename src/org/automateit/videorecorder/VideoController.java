@@ -16,12 +16,12 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.videorecorder;
+package org.automateit.videorecorder;
 
 import org.apache.log4j.Logger;
 
-import com.automateit.util.CommonProperties;
-import com.automateit.util.Utils;
+import org.automateit.util.CommonProperties;
+import org.automateit.util.Utils;
 
 /**
  * This class is the control center for operating a video capture for any

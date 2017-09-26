@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.testng.listener;
+package org.automateit.testng.listener;
 
 import org.apache.log4j.Logger;
 
@@ -24,9 +24,9 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-import com.automateit.videorecorder.VideoController;
-import com.automateit.videorecorder.VideoRecorder;
-import com.automateit.util.Utils;
+import org.automateit.videorecorder.VideoController;
+import org.automateit.videorecorder.VideoRecorder;
+import org.automateit.util.Utils;
 
 /**
  * This class is a base class for video recoder listeners (common shared objects).

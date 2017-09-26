@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.web;
+package org.automateit.web;
 
 import java.util.Arrays;
 
@@ -30,7 +30,7 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
 
-import com.automateit.util.CommonProperties;
+import org.automateit.util.CommonProperties;
 
 /**
  * This class returns a class implementing webdriver interface.

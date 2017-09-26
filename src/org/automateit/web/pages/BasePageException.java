@@ -17,7 +17,7 @@
  *  
  **/
 
-package com.automateit.web.pages;
+package org.automateit.web.pages;
 
 /**
  * This class is used as a special exception to identify a problem when using 

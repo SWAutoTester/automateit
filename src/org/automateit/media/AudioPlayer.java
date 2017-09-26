@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.media;
+package org.automateit.media;
 
 import java.io.InputStream;
 

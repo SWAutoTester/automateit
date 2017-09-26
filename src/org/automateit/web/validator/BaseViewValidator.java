@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package com.automateit.web.validator;
+package org.automateit.web.validator;
 
 import org.apache.log4j.Logger;
 
-import com.automateit.web.pages.BasePage;
-import com.automateit.data.DataDrivenInput;
+import org.automateit.web.pages.BasePage;
+import org.automateit.data.DataDrivenInput;
 
 /**
  * This class is the base class for all view validators.

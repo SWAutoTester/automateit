@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.data;
+package org.automateit.data;
 
 /**
  * This class is a lightweight factory that returns an obsfuscated instance of 

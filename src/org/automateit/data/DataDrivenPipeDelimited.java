@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.data;
+package org.automateit.data;
 
 /**
  * This class allows for use of "|" Pipe Delimited file to provide input data to

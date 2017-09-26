@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.data;
+package org.automateit.data;
 
 import org.apache.log4j.Logger;
 

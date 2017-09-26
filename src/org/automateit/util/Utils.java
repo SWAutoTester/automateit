@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.util;
+package org.automateit.util;
 
 import java.io.File;
 import java.io.InputStream;
@@ -37,15 +37,15 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.automateit.data.DataDrivenInputFactory;
-import com.automateit.data.DataDrivenInput;
-import com.automateit.data.DataArchive;
-import com.automateit.data.CSVAppendDataArchive;
+import org.automateit.data.DataDrivenInputFactory;
+import org.automateit.data.DataDrivenInput;
+import org.automateit.data.DataArchive;
+import org.automateit.data.CSVAppendDataArchive;
 
-import com.automateit.media.JarvisTextToSpeechConverter;
-import com.automateit.media.JLayerAudioPlayer;
-import com.automateit.media.JMFAudioPlayer;
-import com.automateit.media.JavaSoundAPIAudioPlayer;
+import org.automateit.media.JarvisTextToSpeechConverter;
+import org.automateit.media.JLayerAudioPlayer;
+import org.automateit.media.JMFAudioPlayer;
+import org.automateit.media.JavaSoundAPIAudioPlayer;
 
 /**
  * This class is a utility class that can be used by other classes to do stuff.

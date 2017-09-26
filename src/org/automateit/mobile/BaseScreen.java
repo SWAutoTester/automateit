@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.mobile;
+package org.automateit.mobile;
  
 import java.io.FileInputStream;
 import java.net.URL;
@@ -45,11 +45,11 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
 
-import com.automateit.util.CommandList;
-import com.automateit.util.CommonProperties;
-import com.automateit.util.CommonSelenium;
-import com.automateit.data.DataDrivenInput;
-import com.automateit.util.Utils;
+import org.automateit.util.CommandList;
+import org.automateit.util.CommonProperties;
+import org.automateit.util.CommonSelenium;
+import org.automateit.data.DataDrivenInput;
+import org.automateit.util.Utils;
         
 /**
  * This class is the base class for all other screen classes to use.

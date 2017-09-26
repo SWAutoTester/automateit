@@ -17,7 +17,7 @@
  * 
  **/
 
-package com.automateit.test;
+package org.automateit.test;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -27,15 +27,15 @@ import org.apache.log4j.Logger;
 
 import org.testng.Assert;
 
-import com.automateit.data.DataDrivenInput;
-import com.automateit.data.DataArchiveFactory;
-import com.automateit.data.DataArchive;
+import org.automateit.data.DataDrivenInput;
+import org.automateit.data.DataArchiveFactory;
+import org.automateit.data.DataArchive;
 
-import com.automateit.util.Utils;
+import org.automateit.util.Utils;
 
-import com.automateit.testng.listener.TestNGUtils;
+import org.automateit.testng.listener.TestNGUtils;
 
-import com.automateit.util.CommonProperties;
+import org.automateit.util.CommonProperties;
 
 /**
  * This is the base testing class.

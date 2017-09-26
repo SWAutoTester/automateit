@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.testng.listener;
+package org.automateit.testng.listener;
 
 import java.awt.Font;
 import java.io.File;
@@ -55,18 +55,18 @@ import org.jfree.ui.TextAnchor;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
-import com.automateit.data.DataArchive;
-import com.automateit.data.DataDrivenInput;
-import com.automateit.data.PipeDelimitedAppendDataArchive;
-import com.automateit.data.XLSXDataArchive;
-import com.automateit.util.CommandList;
-import com.automateit.util.CommonProperties;
-import com.automateit.util.PerformanceCapture;
-import com.automateit.util.PerformanceCaptureBean;
-import com.automateit.util.ScreenshotCapture;
-import com.automateit.util.SummaryPerformance;
-import com.automateit.util.SummaryPerformanceBean;
-import com.automateit.util.Utils;
+import org.automateit.data.DataArchive;
+import org.automateit.data.DataDrivenInput;
+import org.automateit.data.PipeDelimitedAppendDataArchive;
+import org.automateit.data.XLSXDataArchive;
+import org.automateit.util.CommandList;
+import org.automateit.util.CommonProperties;
+import org.automateit.util.PerformanceCapture;
+import org.automateit.util.PerformanceCaptureBean;
+import org.automateit.util.ScreenshotCapture;
+import org.automateit.util.SummaryPerformance;
+import org.automateit.util.SummaryPerformanceBean;
+import org.automateit.util.Utils;
 
 /**
  * This class is a utility class that can be used by TestNG listeners to 

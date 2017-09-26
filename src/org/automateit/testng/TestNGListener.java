@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.testng.listener;
+package org.automateit.testng.listener;
 
 import java.io.File;
 
@@ -26,7 +26,7 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.TestListenerAdapter;
 
-import com.automateit.util.ScreenshotCapture;
+import org.automateit.util.ScreenshotCapture;
 
 /**
  * This class is added to testng task to listen for events.

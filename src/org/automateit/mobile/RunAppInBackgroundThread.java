@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package com.automateit.mobile;
+package org.automateit.mobile;
 
 import java.time.Duration;
 

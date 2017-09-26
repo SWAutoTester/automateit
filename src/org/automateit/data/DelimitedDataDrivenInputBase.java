@@ -16,7 +16,7 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package com.automateit.data;
+package org.automateit.data;
 
 import java.io.BufferedReader;
 import java.io.File;
