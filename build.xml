@@ -1,0 +1,79 @@
+<?xml version='1.0'?>
+<project name="Automate It! Test Automation Framework" default="jar" basedir=".">
+    
+  <!--////////////////////////////////////////////////////-->
+  <!--// Identify properties                            //-->
+  <!--////////////////////////////////////////////////////-->
+  <property name="classes" value="classes"/>
+  <property name="dist" value="dist"/>
+  <property name="docs" value="docs"/>
+  <property name="api" value="api"/>
+  <property name="core" value="../core"/>
+  <property name="src" value="src"/>
+  <property name="lib" value="lib"/>
+  <property name="results" value="results"/>
+  
+  <!--////////////////////////////////////////////////////-->
+  <!--// Create necessary directories                   //-->
+  <!--////////////////////////////////////////////////////-->
+  <target name="mkdirs" depends="clean">
+    <mkdir dir="${classes}"/>
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${docs}"/>
+    <mkdir dir="${docs}/${api}"/>
+  </target>
+
+  <!--////////////////////////////////////////////////////-->
+  <!--// Build the code                                 //-->
+  <!--////////////////////////////////////////////////////-->
+  <target name="compile" depends="mkdirs">
+      <javac srcdir="src" destdir="classes/">
+          <classpath>
+              <fileset dir="lib">
+                  <include name="**/*.jar"/>
+              </fileset>
+          </classpath>
+      </javac>
+  </target>
+  
+  <!--////////////////////////////////////////////////////-->
+  <!--// Create Java archive (jar) file of the          //-->
+  <!--// automated test code                            //-->
+  <!--////////////////////////////////////////////////////-->  
+  <target name="jar" depends="compile">
+      <jar destfile="dist/automateit.jar" basedir="classes" />  
+  </target>
+  
+  <!--////////////////////////////////////////////////////-->
+  <!--// Clean task                                     //-->
+  <!--////////////////////////////////////////////////////-->
+  <target name="clean" description="Clean all components">
+      <echo message="Deleting classes/com/" /> 
+      <delete dir="classes/com/" />
+      <delete dir="docs/api" />
+      <delete dir="dist" />
+  </target>
+  
+  <!--////////////////////////////////////////////////////-->
+  <!--// Create javadocs                                //-->
+  <!--////////////////////////////////////////////////////-->
+  <target name="javadoc" description="Create API javadoc">
+      <javadoc
+           destdir="docs/api"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="AutomateIt! Test Automation Framework API">
+
+           <fileset dir="src" defaultexcludes="yes">
+                <include name="com/automateit/**"/>
+           </fileset>
+           <classpath>
+              <fileset dir="lib">
+                  <include name="**/*.jar"/>
+              </fileset>
+          </classpath>
+      </javadoc>
+   </target>
+
+</project>
