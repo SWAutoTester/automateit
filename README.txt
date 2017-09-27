@@ -23,7 +23,7 @@ Use this framework for rapid test case automation without detailed knowledge of 
 have a better understanding of application user experience with individual page loading statistics for each page during test case execution,
 and quick diagnosis of test failures.
 
-How to build the framework: type "ant" and the code will compile and create a jar file with the classes in the frameworks/dist directory.
+How to build the framework: type "ant" and the code will compile and create a jar file with the classes in the "dist" directory.
 
-Copy the jar files from framework/lib and framework/dist and also copy the framework/conf directory to your test project.
+Copy the jar files from "lib" and "dist" and also copy the "conf" directory to your test project.
 
