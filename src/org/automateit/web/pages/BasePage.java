@@ -190,6 +190,8 @@ public class BasePage {
             logger.info("Starting at baseURL: " + properties.getBaseURL());
             
             init(getModifiedStartURL());
+            
+            stopPerformanceCapturePageLoaded();
         
         }
         catch(Exception e) { throw new BasePageException(e); }
@@ -220,6 +222,8 @@ public class BasePage {
             logger.info("Starting at baseURL: " + properties.getBaseURL());
             
             init(getModifiedStartURL(), username, password); 
+            
+            stopPerformanceCapturePageLoaded();
         
         }
         catch(Exception e) { throw new BasePageException(e); }
@@ -959,6 +963,8 @@ public class BasePage {
         robotUsername = basePage.getRobotUsername();
         
         robotPassword = basePage.getRobotPassword();
+        
+        stopPerformanceCapturePageLoaded();
        
         try { if(doScreenshot) doScreenshot(); }
         catch(Exception e) { logger.error(e); }

@@ -52,5 +52,18 @@ public class ExampleTests extends TestBase {
         catch(Exception e) { this.googleHomePage.printDOM(); throw e; }
     
     }
+    
+    /**
+     * Test that the user can close the app in the browser
+     *
+     * @throws Exception 
+     */
+    @Test(description = "Verify that the user can close the app in the browser", groups = { "example" })
+    public void test_C_Validate_Close_App() throws Exception {
+      
+        try { this.googleHomePage.close(); }
+        catch(Exception e) { this.googleHomePage.printDOM(); throw e; }
+    
+    }
 	
 }

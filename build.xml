@@ -13,6 +13,8 @@
   <property name="src" value="src"/>
   <property name="lib" value="lib"/>
   <property name="results" value="results"/>
+  <property name="performance" value="performance"/>
+  <property name="screenshots" value="screenshots"/>
   
   <!--////////////////////////////////////////////////////-->
   <!--// Create necessary directories                   //-->
@@ -22,6 +24,9 @@
     <mkdir dir="${dist}"/>
     <mkdir dir="${docs}"/>
     <mkdir dir="${docs}/${api}"/>
+    <mkdir dir="${results}"/>
+    <mkdir dir="${performance}"/>
+    <mkdir dir="${screenshots}"/>
   </target>
 
   <!--////////////////////////////////////////////////////-->
@@ -53,6 +58,8 @@
       <delete dir="${classes}/${org}/" />
       <delete dir="${docs}/${api}" />
       <delete dir="${dist}" />
+      <delete dir="${performance}" />
+      <delete dir="${screenshots}" />
   </target>
   
   <!--////////////////////////////////////////////////////-->
@@ -79,7 +86,6 @@
    
    <target name="example" depends="jar">
       <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener">
-      <!--//<testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">//-->
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>
@@ -89,6 +95,8 @@
               </fileset>
 	  </classpath>
 	  <classfileset dir="${classes}" includes="**/*.class" />
+          <sysproperty key="org.uncommons.reportng.title" value="Example tests"/>
+          <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
       </testng>
   </target>
 

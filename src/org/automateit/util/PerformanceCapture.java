@@ -40,7 +40,7 @@ public class PerformanceCapture {
     /**
      *  logging object
      */
-    private static Logger log = Logger.getLogger(CommandList.class);
+    private static Logger logger = Logger.getLogger(PerformanceCapture.class);
     
     /**
      * PerformanceCapture instance
@@ -68,10 +68,13 @@ public class PerformanceCapture {
         
         if(bean == null) return;
         
+        logger.info("Marking the end time for page loading: " + pageName);
+        
         this.bean.markEndTime(pageName);
+        
         list.add(this.bean);
         
-        this.bean = null;	// use a new bean next time
+        this.bean = null;
         
     }
     
@@ -83,14 +86,12 @@ public class PerformanceCapture {
     public void start(String fromPageName) {
         
         this.bean = new PerformanceCaptureBean();
+        
         this.bean.markStartTime(fromPageName);
         
     }
     
-    public void addSleepTime(long millis) {
-    	if (this.bean!=null)
-    		this.bean.addSleepTime(millis); 
-    } 
+    public void addSleepTime(long millis) { if(this.bean!=null) this.bean.addSleepTime(millis); } 
     
     /**
      * Removes all commands in the list.
@@ -116,10 +117,6 @@ public class PerformanceCapture {
      * 
      * @return 
      */
-    public boolean isEmpty() {
-        
-        return (getSize() == 0);
-        
-    }
+    public boolean isEmpty() { return (getSize() == 0); }
             
 }
