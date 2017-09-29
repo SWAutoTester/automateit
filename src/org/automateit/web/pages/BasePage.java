@@ -2688,6 +2688,32 @@ public class BasePage {
         catch(Exception e) { throw new BasePageException(e); }
 
     }
+    
+    /**
+     * Get the entire element hierarchy.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getElementDOM() throws Exception {
+        
+        try { return this.driver.getPageSource(); }
+        catch(Exception e) { throw new BasePageException(e); }
+        
+    }
+    
+    /**
+     * Print the element hierarchy.
+     * 
+     * @throws Exception 
+     */
+    public void printDOM() throws Exception {
+        
+        try { logger.error("DOM|" + getElementDOM()); }
+        catch(Exception e) { logger.error("Not able to get element DOM"); }
+        
+    }
 
 }
 

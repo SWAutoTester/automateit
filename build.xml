@@ -1,6 +1,8 @@
 <?xml version='1.0'?>
 <project name="Automate It! Test Automation Framework" default="jar" basedir=".">
     
+  <taskdef resource="testngtasks" classpath="./lib/testng-6.0.1-nobsh-noguice.jar"/>
+    
   <!--////////////////////////////////////////////////////-->
   <!--// Identify properties                            //-->
   <!--////////////////////////////////////////////////////-->
@@ -26,9 +28,9 @@
   <!--// Build the code                                 //-->
   <!--////////////////////////////////////////////////////-->
   <target name="compile" depends="mkdirs">
-      <javac srcdir="src" destdir="classes/">
+      <javac srcdir="${src}" destdir="${classes}">
           <classpath>
-              <fileset dir="lib">
+              <fileset dir="${lib}">
                   <include name="**/*.jar"/>
               </fileset>
           </classpath>
@@ -40,7 +42,7 @@
   <!--// automated test code                            //-->
   <!--////////////////////////////////////////////////////-->  
   <target name="jar" depends="compile">
-      <jar destfile="dist/automateit.jar" basedir="classes" />  
+      <jar destfile="${dist}/automateit.jar" basedir="${classes}" />  
   </target>
   
   <!--////////////////////////////////////////////////////-->
@@ -48,9 +50,9 @@
   <!--////////////////////////////////////////////////////-->
   <target name="clean" description="Clean all components">
       <echo message="Deleting classes/com/" /> 
-      <delete dir="classes/org/" />
-      <delete dir="docs/api" />
-      <delete dir="dist" />
+      <delete dir="${classes}/${org}/" />
+      <delete dir="${docs}/${api}" />
+      <delete dir="${dist}" />
   </target>
   
   <!--////////////////////////////////////////////////////-->
@@ -58,21 +60,36 @@
   <!--////////////////////////////////////////////////////-->
   <target name="javadoc" description="Create API javadoc">
       <javadoc
-           destdir="docs/api"
+           destdir="${docs}/${api}"
            author="true"
            version="true"
            use="true"
            windowtitle="AutomateIt! Test Automation Framework API">
 
-           <fileset dir="src" defaultexcludes="yes">
+           <fileset dir="${src}" defaultexcludes="yes">
                 <include name="org/automateit/**"/>
            </fileset>
            <classpath>
-              <fileset dir="lib">
+              <fileset dir="${lib}">
                   <include name="**/*.jar"/>
               </fileset>
           </classpath>
       </javadoc>
    </target>
+   
+   <target name="example" depends="jar">
+      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener">
+      <!--//<testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">//-->
+          <classpath>
+              <fileset dir="${lib}">
+                  <include name="**/*.jar"/>
+              </fileset>
+              <fileset dir="${dist}">
+                  <include name="**/*.jar"/>
+              </fileset>
+	  </classpath>
+	  <classfileset dir="${classes}" includes="**/*.class" />
+      </testng>
+  </target>
 
 </project>
