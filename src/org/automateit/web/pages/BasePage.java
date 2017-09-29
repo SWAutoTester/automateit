@@ -21,13 +21,10 @@ package org.automateit.web.pages;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import java.awt.event.KeyEvent;
 
 import java.io.File;
-
-import java.net.URL;
 
 import org.testng.Assert;
 
@@ -46,6 +43,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.apache.log4j.Logger;
 
+import org.automateit.core.Capabilities;
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
 import org.automateit.util.CommonSelenium;
@@ -190,8 +188,6 @@ public class BasePage {
             initializeCommonProperties();
         
             logger.info("Starting at baseURL: " + properties.getBaseURL());
-            
-            //init(properties.getBaseURL()); 
             
             init(getModifiedStartURL());
         
