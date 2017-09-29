@@ -44,7 +44,9 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.remote.MobileCapabilityType;
 
+import org.automateit.core.Capabilities;
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
 import org.automateit.util.CommonSelenium;
@@ -196,61 +198,62 @@ public class BaseScreen {
             logger.info("Returning from setup - already has been initialized - did not do a total reset");
             
             return;
+            
         }
        
         try {
        
-            logger.info("Loading webdriver property: " + "device" + "|" + properties.get("device"));
-            capabilities.setCapability("device", properties.get("device"));
+            logger.info("Loading webdriver property: " + Capabilities.DEVICE + "|" + properties.get(Capabilities.DEVICE));
+            capabilities.setCapability(Capabilities.DEVICE, properties.get(Capabilities.DEVICE));
             
-            logger.info("Loading webdriver property: " + "deviceName" + "|" + properties.get("deviceName"));
-            capabilities.setCapability("deviceName", properties.get("deviceName"));
+            logger.info("Loading webdriver property: " + Capabilities.DEVICE_NAME + "|" + properties.get(Capabilities.DEVICE_NAME));
+            capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, properties.get(Capabilities.DEVICE_NAME));
             
             logger.info("Loading webdriver property: " + CapabilityType.BROWSER_NAME + "|\"\"");
-            capabilities.setCapability(CapabilityType.BROWSER_NAME, "");
+            capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "");
             
-            logger.info("Loading webdriver property: " + "app-package" + "|" + properties.get("app-package"));
-            capabilities.setCapability("app-package", properties.get("app-package"));
+            logger.info("Loading webdriver property: " + Capabilities.APP_PACKAGE + "|" + properties.get(Capabilities.APP_PACKAGE));
+            capabilities.setCapability(Capabilities.APP_PACKAGE, properties.get(Capabilities.APP_PACKAGE));
             
-            logger.info("Loading webdriver property: " + "app-wait-package" + "|" + properties.get("app-wait-package"));
-            capabilities.setCapability("app-wait-package", properties.get("app-wait-package"));
+            logger.info("Loading webdriver property: " + Capabilities.APP_WAIT_PACKAGE + "|" + properties.get(Capabilities.APP_WAIT_PACKAGE));
+            capabilities.setCapability(Capabilities.APP_WAIT_PACKAGE, properties.get(Capabilities.APP_WAIT_PACKAGE));
             
-            logger.info("Loading webdriver property: " + "app-activity" + "|" + properties.get("app-activity"));
-            capabilities.setCapability("app-activity", properties.get("app-activity"));
+            logger.info("Loading webdriver property: " + Capabilities.APP_ACTIVITY + "|" + properties.get(Capabilities.APP_ACTIVITY));
+            capabilities.setCapability(Capabilities.APP_ACTIVITY, properties.get(Capabilities.APP_ACTIVITY));
             
-            logger.info("Loading webdriver property: " + "app-wait-activity" + "|" + properties.get("app-wait-activity"));
-            capabilities.setCapability("app-wait-activity", properties.get("app-wait-activity"));
+            logger.info("Loading webdriver property: " + Capabilities.APP_WAIT_ACTIVITY + "|" + properties.get(Capabilities.APP_WAIT_ACTIVITY));
+            capabilities.setCapability(Capabilities.APP_WAIT_ACTIVITY, properties.get(Capabilities.APP_WAIT_ACTIVITY));
             
-            logger.info("Loading webdriver property: " + CapabilityType.VERSION + "|" + properties.get("version"));
-            capabilities.setCapability(CapabilityType.VERSION, properties.get("version"));
+            logger.info("Loading webdriver property: " + CapabilityType.VERSION + "|" + properties.get(Capabilities.VERSION));
+            capabilities.setCapability(CapabilityType.VERSION, properties.get(Capabilities.VERSION));
             
-            logger.info("Loading webdriver property: " + CapabilityType.PLATFORM + "|" + properties.get("platform"));
-            capabilities.setCapability(CapabilityType.PLATFORM, properties.get("platform"));
+            logger.info("Loading webdriver property: " + CapabilityType.PLATFORM + "|" + properties.get(Capabilities.PLATFORM));
+            capabilities.setCapability(CapabilityType.PLATFORM, properties.get(Capabilities.PLATFORM));
             
-            logger.info("Loading webdriver property: " + "platformName" + "|" + properties.get("platformName"));
-            capabilities.setCapability("platformName", properties.get("platformName"));
+            logger.info("Loading webdriver property: " + Capabilities.PLATFORM_NAME + "|" + properties.get(Capabilities.PLATFORM_NAME));
+            capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, properties.get(Capabilities.PLATFORM_NAME));
             
-            logger.info("Loading webdriver property: " + "app" + "|" + properties.get("app_location"));
-            capabilities.setCapability("app", properties.get("app_location"));  
+            logger.info("Loading webdriver property: " + Capabilities.APP + "|" + properties.get(Capabilities.APP));
+            capabilities.setCapability(Capabilities.APP, properties.get(Capabilities.APP));  
             
-            if(properties.getProperty("automationName") != null) {
+            if(properties.getProperty(Capabilities.AUTOMATION_NAME) != null) {
                 
-                logger.info("Loading webdriver property: " + "automationName" + "|" + properties.get("automationName"));
-                capabilities.setCapability("automationName", properties.get("automationName"));
+                logger.info("Loading webdriver property: " + Capabilities.AUTOMATION_NAME + "|" + properties.get(Capabilities.AUTOMATION_NAME));
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, properties.get(Capabilities.AUTOMATION_NAME));
             
             }
             
-            if(properties.getProperty("platformVersion") != null) {
+            if(properties.getProperty(Capabilities.PLATFORM_VERSION) != null) {
                 
-                logger.info("Loading webdriver property: " + "platformVersion" + "|" + properties.get("platformVersion"));
-                capabilities.setCapability("platformVersion", properties.get("platformVersion"));
+                logger.info("Loading webdriver property: " + Capabilities.PLATFORM_VERSION + "|" + properties.get(Capabilities.PLATFORM_VERSION));
+                capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, properties.get(Capabilities.PLATFORM_VERSION));
             
             }
             
-            if(properties.getProperty("bundleId") != null) {
+            if(properties.getProperty(Capabilities.BUNDLE_ID) != null) {
                 
-                logger.info("Loading webdriver property: " + "bundleId" + "|" + properties.get("bundleId"));
-                capabilities.setCapability("bundleId", properties.get("bundleId"));
+                logger.info("Loading webdriver property: " + Capabilities.BUNDLE_ID + "|" + properties.get(Capabilities.BUNDLE_ID));
+                capabilities.setCapability(Capabilities.BUNDLE_ID, properties.get(Capabilities.BUNDLE_ID));
             
             }
             
@@ -268,14 +271,14 @@ public class BaseScreen {
             
             }
             
-            if(properties.getProperty("reInstallApp") != null) {
+            if(properties.getProperty(Capabilities.REINSTALL_APP) != null) {
                 
-                logger.info("Loading webdriver property: " + "reInstallApp" + "|" + properties.get("reInstallApp"));
+                logger.info("Loading webdriver property: " + Capabilities.REINSTALL_APP + "|" + properties.get(Capabilities.REINSTALL_APP));
                 
-                boolean reset = (new Boolean(properties.get("reInstallApp"))).booleanValue();
+                boolean reset = (new Boolean(properties.get(Capabilities.REINSTALL_APP))).booleanValue();
                 
-                capabilities.setCapability("noReset", !reset); // android
-                if(isIOS()) capabilities.setCapability("fullReset", reset); //ios
+                capabilities.setCapability(MobileCapabilityType.NO_RESET, !reset); // android
+                if(isIOS()) capabilities.setCapability(MobileCapabilityType.FULL_RESET, reset); //ios
                     
             }
             
@@ -285,33 +288,33 @@ public class BaseScreen {
                 
                 logger.info("Forcing the app not to be re-installed/reset");
                
-                capabilities.setCapability("noReset", true);
-                if(isIOS()) capabilities.setCapability("fullReset", false); //ios
+                capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+                if(isIOS()) capabilities.setCapability(MobileCapabilityType.FULL_RESET, false); //ios
                     
             }
             
-            if(properties.getProperty("udid") != null) {
+            if(properties.getProperty(Capabilities.UDID) != null) {
                 
-                logger.info("Loading webdriver property: " + "udid" + "|" + properties.get("udid"));
-                capabilities.setCapability("udid", properties.get("udid"));
+                logger.info("Loading webdriver property: " + Capabilities.UDID + "|" + properties.get(Capabilities.UDID));
+                capabilities.setCapability(MobileCapabilityType.UDID, properties.get(Capabilities.UDID));
             
             }
             
-            if(properties.getProperty("newCommandTimeout") != null) {
+            if(properties.getProperty(Capabilities.NEW_COMMAND_TIMEOUT) != null) {
                 
-                logger.info("Loading webdriver property: " + "newCommandTimeout" + "|" + properties.get("newCommandTimeout"));
-                capabilities.setCapability("newCommandTimeout", properties.get("newCommandTimeout"));
+                logger.info("Loading webdriver property: " + Capabilities.NEW_COMMAND_TIMEOUT + "|" + properties.get(Capabilities.NEW_COMMAND_TIMEOUT));
+                capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, properties.get(Capabilities.NEW_COMMAND_TIMEOUT));
             
             }
             
-            logger.info("Loading webdriver property: " + "URL" + "|" + properties.get("URL"));
+            logger.info("Loading webdriver property: " + Capabilities.URL + "|" + properties.get(Capabilities.URL));
               
             logger.info("Preparing to create a new web driver instance");
-            if(properties.get("device").trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get("URL")), capabilities);
-            else this.driver = new IOSDriver(new URL(properties.get("URL")), capabilities);
+            if(properties.get(Capabilities.DEVICE).trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get(Capabilities.URL)), capabilities);
+            else this.driver = new IOSDriver(new URL(properties.get(Capabilities.URL)), capabilities);
             
-            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get("timeout"));
-            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get(Capabilities.WAIT_TIMEOUT));
+            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get(Capabilities.WAIT_TIMEOUT))).longValue(), TimeUnit.SECONDS);
             
             // set the captureWebDriverCommands
             if(properties.getProperty("captureWebDriverCommands") != null) { this.captureWebDriverCommands = (new Boolean(properties.getProperty("captureWebDriverCommands"))).booleanValue(); }
@@ -333,13 +336,13 @@ public class BaseScreen {
             
             logger.info("Preparing to create a new web driver instance");
             
-            if(properties.get("device").trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get("URL")), capabilities);
-            else this.driver = new IOSDriver(new URL(properties.get("URL")), capabilities);
+            if(properties.get(Capabilities.DEVICE).trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get(Capabilities.URL)), capabilities);
+            else this.driver = new IOSDriver(new URL(properties.get(Capabilities.URL)), capabilities);
             
             CommonSelenium.getInstance().setWebDriver(this.driver);
             
-            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get("timeout"));
-            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get(Capabilities.WAIT_TIMEOUT));
+            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get(Capabilities.WAIT_TIMEOUT))).longValue(), TimeUnit.SECONDS);
             
         }
       
@@ -354,12 +357,12 @@ public class BaseScreen {
         
         try {
           
-            if(properties.get("device").trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get("URL")), capabilities);
-            else this.driver = new IOSDriver(new URL(properties.get("URL")), capabilities);
+            if(properties.get(Capabilities.DEVICE).trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get(Capabilities.URL)), capabilities);
+            else this.driver = new IOSDriver(new URL(properties.get(Capabilities.URL)), capabilities);
             
             CommonSelenium.getInstance().setWebDriver(this.driver);
             
-            driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait((new Long(properties.get(Capabilities.WAIT_TIMEOUT))).longValue(), TimeUnit.SECONDS);
             
         }
         catch(Exception e) { throw e;}
