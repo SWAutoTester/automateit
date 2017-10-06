@@ -77,6 +77,8 @@ public class CommonSelenium {
      */
     public void closeWebBrowser() {
         
+        CommandList.getInstance().addToList("quit");
+        
         try { if(this.driver != null) this.driver.quit(); }
         catch(Exception e) { }
         
