@@ -19,7 +19,7 @@ public class GoogleHomePage extends BasePage {
     /**
      * Xpath element locator for the search button
      */
-    public static final String ELEMENT_SEARCH_BUTTON = "//input[@class = 'lsb')]"; //"//*[contains(text(), 'Search')]"; //*[text() = 'Google Search']";
+    public static final String ELEMENT_SEARCH_BUTTON = "//input[@class = 'lsb')]";
     
     /**
      * Xpath element locator for the validation check

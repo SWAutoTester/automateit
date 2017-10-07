@@ -7,6 +7,7 @@
   <!--// Identify properties                            //-->
   <!--////////////////////////////////////////////////////-->
   <property name="classes" value="classes"/>
+  <property name="conf" value="conf"/>
   <property name="dist" value="dist"/>
   <property name="docs" value="docs"/>
   <property name="api" value="api"/>
@@ -15,6 +16,7 @@
   <property name="results" value="results"/>
   <property name="performance" value="performance"/>
   <property name="screenshots" value="screenshots"/>
+  <property name="master_configuration_file" value="configuration.properties"/>
   
   <!--////////////////////////////////////////////////////-->
   <!--// Create necessary directories                   //-->
@@ -98,6 +100,40 @@
           <sysproperty key="org.uncommons.reportng.title" value="Example tests"/>
           <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
       </testng>
+  </target>
+  
+  <target name="example_firefox" depends="jar">
+      <antcall target="delete_master_configuration_file"/>
+      <antcall target="copy_firefox_configuration_file"/>
+      <antcall target="example"/>
+  </target>
+  
+  <target name="example_chrome" depends="jar">
+      <antcall target="delete_master_configuration_file"/>
+      <antcall target="copy_chrome_configuration_file"/>
+      <antcall target="example"/>
+  </target>
+  
+  <target name="example_safari" depends="jar">
+      <antcall target="delete_master_configuration_file"/>
+      <antcall target="copy_safari_configuration_file"/>
+      <antcall target="example"/>
+  </target>
+  
+  <target name="delete_master_configuration_file">
+      <delete file="${conf}/${master_configuration_file}"/>
+  </target>
+  
+  <target name="copy_firefox_configuration_file">
+      <copy file="${conf}/configuration.properties.firefox.properties" tofile="${conf}/${master_configuration_file}"/>
+  </target>
+  
+  <target name="copy_chrome_configuration_file">
+      <copy file="${conf}/configuration.properties.chrome.properties" tofile="${conf}/${master_configuration_file}"/>
+  </target>
+  
+  <target name="copy_safari_configuration_file">
+      <copy file="${conf}/configuration.properties.safari.properties" tofile="${conf}/${master_configuration_file}"/>
   </target>
 
 </project>

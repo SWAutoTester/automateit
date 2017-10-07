@@ -24,11 +24,7 @@ public class ExampleTests extends TestBase {
     @Test(description = "Verify that we can display the correct starting page", groups = { "example" })
     public void test_A_Validate_Start_Page() throws Exception {
       
-        try { 
-            
-            this.yahooHomePage = new YahooHomePage(); 
-        
-        }
+        try { this.yahooHomePage = new YahooHomePage(); }
         catch(Exception e) { throw e; }
     
     }
