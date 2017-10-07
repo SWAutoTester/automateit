@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import org.automateit.test.TestBase;
 
-import org.automateit.example.page.GoogleHomePage;
+import org.automateit.example.page.YahooHomePage;
 
 /**
  * This class shows an example of how to use the AutomateIt! framework
@@ -14,7 +14,7 @@ import org.automateit.example.page.GoogleHomePage;
  */
 public class ExampleTests extends TestBase {
     
-    protected GoogleHomePage googleHomePage = null;
+    protected YahooHomePage yahooHomePage = null;
     
     /**
      * Test a failed login use case - using spaced.
@@ -24,7 +24,11 @@ public class ExampleTests extends TestBase {
     @Test(description = "Verify that we can display the correct starting page", groups = { "example" })
     public void test_A_Validate_Start_Page() throws Exception {
       
-        try { this.googleHomePage = new GoogleHomePage(); }
+        try { 
+            
+            this.yahooHomePage = new YahooHomePage(); 
+        
+        }
         catch(Exception e) { throw e; }
     
     }
@@ -36,20 +40,16 @@ public class ExampleTests extends TestBase {
      * @throws Exception 
      */
     @Test(description = "Verify that search will execute", groups = { "example" })
-    public void test_B_Validate_Search_Works() throws Exception {
+    public void test_B_Validate_Search() throws Exception {
       
         try { 
             
-            this.googleHomePage.enterSearchText("Automate It");
+            this.yahooHomePage.enterSearchText("Automate It");
             
             delay(2000); // wait 2 seconds
             
-            this.googleHomePage.clickOnSearchButton();
-             
-            delay(5000); // wait seconds
-            
         }
-        catch(Exception e) { this.googleHomePage.printDOM(); throw e; }
+        catch(Exception e) { this.yahooHomePage.printDOM(); throw e; }
     
     }
     
@@ -61,8 +61,8 @@ public class ExampleTests extends TestBase {
     @Test(description = "Verify that the user can close the app in the browser", groups = { "example" })
     public void test_C_Validate_Close_App() throws Exception {
       
-        try { this.googleHomePage.close(); }
-        catch(Exception e) { this.googleHomePage.printDOM(); throw e; }
+        try { this.yahooHomePage.close(); }
+        catch(Exception e) { this.yahooHomePage.printDOM(); throw e; }
     
     }
 	

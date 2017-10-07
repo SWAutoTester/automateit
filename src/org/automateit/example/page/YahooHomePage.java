@@ -9,17 +9,17 @@ import org.automateit.web.pages.BasePage;
  * 
  * @author mburnside
  */
-public class GoogleHomePage extends BasePage {
+public class YahooHomePage extends BasePage {
     
     /**
      * Xpath element locator for the search box
      */
-    public static final String ELEMENT_SEARCH_FIELD = "//*[@title = 'Search']";
+    public static final String ELEMENT_SEARCH_FIELD = "//*[@id = 'uh-search-box']";
     
     /**
      * Xpath element locator for the search button
      */
-    public static final String ELEMENT_SEARCH_BUTTON = "//input[@class = 'lsb')]"; //"//*[contains(text(), 'Search')]"; //*[text() = 'Google Search']";
+    public static final String ELEMENT_SEARCH_BUTTON = "//*[@id = 'uh-search-button')]";
     
     /**
      * Xpath element locator for the validation check
@@ -31,7 +31,7 @@ public class GoogleHomePage extends BasePage {
      * 
      * @throws Exception 
      */
-    public GoogleHomePage() throws Exception {
+    public YahooHomePage() throws Exception {
         
         try { init(); validate(); }
         catch(Exception e) { throw e; }
@@ -46,7 +46,7 @@ public class GoogleHomePage extends BasePage {
      */
     private void validate() throws Exception {
         
-        try { assertText("Google"); }
+        try { assertText("Yahoo"); }
         catch(Exception e) { throw e; }
         
     }

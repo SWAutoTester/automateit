@@ -85,7 +85,7 @@
    </target>
    
    <target name="example" depends="jar">
-      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener">
+      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>

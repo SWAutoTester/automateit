@@ -283,11 +283,6 @@ public class BasePage {
                 
             }
             
-            // set the maximizeBrowserWindow
-            if(properties.getProperty("maximizeBrowserWindow") != null) { this.maximizeBrowserWindow = (new Boolean(properties.getProperty("maximizeBrowserWindow"))).booleanValue(); }
-            
-            if(this.maximizeBrowserWindow) maximizeWindow();
-            
             logger.info("Maximize browser set to: " + this.maximizeBrowserWindow);
             
             // screenshot properties
@@ -328,6 +323,11 @@ public class BasePage {
             logger.info("Opening the start url: " + startURL);
             
             open(startURL);
+            
+            // set the maximizeBrowserWindow
+            if(properties.getProperty("maximizeBrowserWindow") != null) { this.maximizeBrowserWindow = (new Boolean(properties.getProperty("maximizeBrowserWindow"))).booleanValue(); }
+            
+            if(this.maximizeBrowserWindow) maximizeWindow();
             
         }
         catch(Exception e) { 
