@@ -125,11 +125,8 @@ public class DelimitedDataDrivenInputBase extends DataDrivenInputBase implements
             
             for(int i = 0; i < array.length; i++) {
                
-                if((array[i] != null) || (array[i].trim().length() > 0)) {
-                   
-                    rowData.put(String.valueOf(i), array[i]);
-                }
-                
+                if((array[i] != null) || (array[i].trim().length() > 0)) rowData.put(String.valueOf(i), array[i]);
+            
             }
             
             return rowData;

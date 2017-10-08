@@ -29,7 +29,7 @@ public class DataDrivenPipeDelimited extends DelimitedDataDrivenInputBase {
     /**
      * The delimiter to use for these types of files.
      */
-    private final static String DELIMITER = "|";
+    private final static String DELIMITER = "\\|";
     
     /**
      * Copy constructor.

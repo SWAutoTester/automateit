@@ -135,5 +135,21 @@
   <target name="copy_safari_configuration_file">
       <copy file="${conf}/configuration.properties.safari.properties" tofile="${conf}/${master_configuration_file}"/>
   </target>
+  
+  <target name="example_read_input_data" depends="jar">
+      <testng outputdir="results/" groups="example_read_input_data" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
+          <classpath>
+              <fileset dir="${lib}">
+                  <include name="**/*.jar"/>
+              </fileset>
+              <fileset dir="${dist}">
+                  <include name="**/*.jar"/>
+              </fileset>
+	  </classpath>
+	  <classfileset dir="${classes}" includes="**/*.class" />
+          <sysproperty key="org.uncommons.reportng.title" value="Example Data Input tests"/>
+          <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
+      </testng>
+  </target>
 
 </project>

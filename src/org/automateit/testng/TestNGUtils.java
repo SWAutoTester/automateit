@@ -35,7 +35,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
@@ -127,9 +126,7 @@ public class TestNGUtils {
         Reporter.setCurrentTestResult(result);
          
         Object[] parameters = result.getParameters();
-        
-        //createSeleniumCommandLog(divId);
-        
+       
         int index = screenshotFile.lastIndexOf(".");
         String performanceFile = screenshotFile.substring(0, index) + "_perf." + ScreenshotCapture.PNG;
         printPerformanceNumbers(performanceFile, divId, utils.getFirstToken(result.getName(), " "));
@@ -388,7 +385,7 @@ public class TestNGUtils {
      */
     private void createSeleniumCommandLog(int divId) {
         
-        logger.debug("Is selenium command list empty: " + CommandList.getInstance().isEmpty());
+        logger.debug("Is WebDriver command list empty: " + CommandList.getInstance().isEmpty());
         
         if(CommandList.getInstance().isEmpty() || !captureSeleniumCommands()) {
             
@@ -402,10 +399,10 @@ public class TestNGUtils {
        
         String[] list = CommandList.getInstance().getAllInList();
         
-        logger.debug("Writing the selenium command log with : " + list.length + " commands");
+        logger.debug("Writing the WebDriver command log with : " + list.length + " commands");
                 
         // note: toggleElement is a javascript function provided by ReportsNG
-        Reporter.log("<p><input type=\"button\" onclick=\"javascript:toggleElement('" + newId  + "', 'block');\" value=\"Show/Hide Selenium commands\" /><p><br>");
+        Reporter.log("<p><input type=\"button\" onclick=\"javascript:toggleElement('" + newId  + "', 'block');\" value=\"Show/Hide WebDriver commands\" /><p><br>");
         
         Reporter.log("<div class=\"mid\" id=\"" + newId + "\" style=\"DISPLAY: none\">");
         
@@ -504,15 +501,11 @@ public class TestNGUtils {
     /**
      * Determine if we should print the list of selenium commands.
      * 
+     * note: for AutomateIt! v1.X, this method returns true always
+     * 
      * @return 
      */
-    private boolean captureSeleniumCommands() {
-        
-        // set the captureSeleniumCommands    
-        if((properties.getProperty("captureSeleniumCommands") != null) && "true".equals(properties.getProperty("captureSeleniumCommands"))) return true;
-        else return false;
-       
-    }
+    private boolean captureSeleniumCommands() { return true; }
     
     /**
      * Determine if we should print the list of page load numbers.
@@ -838,7 +831,6 @@ public class TestNGUtils {
             }
             
             return dataset;
-            
             
         }
         catch(Exception e) { throw e; }

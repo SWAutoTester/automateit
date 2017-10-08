@@ -6,7 +6,7 @@ Comments for improvement are very welcome.
 
 Features:
 
-1) Suppots use of Selenium 3.5.3 WebDriver and Appium 5.0.3 Mobile Drivers using a configuration file 
+1) Drive automated tasks using Selenium 3.5.3 WebDriver and Appium 5.0.3 Mobile Drivers using a configuration file 
 2) Obfuscation of selenium API / no test code changes for testing web and mobile applications
 3) Ability to configure mandatory waits in test execution
 4) Handles jquery/prototype page load waiting

@@ -43,7 +43,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.apache.log4j.Logger;
 
-import org.automateit.core.Capabilities;
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
 import org.automateit.util.CommonSelenium;
@@ -855,9 +854,9 @@ public class BasePage {
         
         logger.info("Asserting expected text is present: " + s);
         
-        commandList.addToList("assertText(: " + s);
+        commandList.addToList("assertText| " + s);
         
-        try { Assert.assertTrue(this.driver.getPageSource().contains(s), "Expect text '"+ s +"' in page but not found."); }
+        try { Assert.assertTrue(this.driver.getPageSource().contains(s), "Expect text '" + s +"' in page but not found."); }
         catch(Exception e) { throw new BasePageException(e); }
     
     }
