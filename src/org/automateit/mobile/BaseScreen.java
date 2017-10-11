@@ -390,7 +390,7 @@ public class BaseScreen {
     /**
      * Stop the session.
      */
-    protected void stopSession() { 
+    public void stopSession() { 
         
         logger.info("Stopping webdriver session");
             
@@ -1141,7 +1141,11 @@ public class BaseScreen {
             
             if(expectedText == null) throw new BaseScreenException("Validate that there is a web element at resource id containing the text expected because expected text is null: " + expectedText);
             
-            Assert.assertTrue(getValueAtWebElementWithResourceId(resourceId).trim().contains(expectedText.trim())); 
+            String realValue = getValueAtWebElementWithResourceId(resourceId);
+            
+            logger.info("Text value of resource id: " + resourceId + "|" + realValue + "|" + expectedText);
+            
+            Assert.assertTrue(realValue.trim().contains(expectedText.trim()));
                  
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1168,7 +1172,11 @@ public class BaseScreen {
             
             if(expectedText == null) throw new BaseScreenException("Validate that there is a web element at resource id matching the text expected because expected text is null: " + expectedText);
             
-            Assert.assertTrue(getValueAtWebElementWithResourceId(resourceId).trim().equals(expectedText.trim())); 
+            String realValue = getValueAtWebElementWithResourceId(resourceId);
+            
+            logger.info("Text value of resource id: " + resourceId + "|" + realValue + "|" + expectedText);
+            
+            Assert.assertTrue(realValue.trim().contains(expectedText.trim()));
                  
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -3102,7 +3110,7 @@ public class BaseScreen {
     /**
      * Stop the session.
      */
-    protected void quit() { 
+    public void quit() { 
         
         logger.info("Closing webdriver");
             

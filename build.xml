@@ -14,6 +14,9 @@
   <property name="src" value="src"/>
   <property name="lib" value="lib"/>
   <property name="results" value="results"/>
+  <property name="html" value="html"/>
+  <property name="images" value="images"/>
+  <property name="resources" value="resources"/>
   <property name="performance" value="performance"/>
   <property name="screenshots" value="screenshots"/>
   <property name="master_configuration_file" value="configuration.properties"/>
@@ -29,6 +32,7 @@
     <mkdir dir="${results}"/>
     <mkdir dir="${performance}"/>
     <mkdir dir="${screenshots}"/>
+    <mkdir dir="${images}"/>
   </target>
 
   <!--////////////////////////////////////////////////////-->
@@ -97,7 +101,7 @@
               </fileset>
 	  </classpath>
 	  <classfileset dir="${classes}" includes="**/*.class" />
-          <sysproperty key="org.uncommons.reportng.title" value="Example tests"/>
+          <sysproperty key="org.uncommons.reportng.title" value="Example Tests"/>
           <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
       </testng>
   </target>
@@ -136,6 +140,14 @@
       <copy file="${conf}/configuration.properties.safari.properties" tofile="${conf}/${master_configuration_file}"/>
   </target>
   
+  <target name="copy_android_configuration_file">
+      <copy file="${conf}/configuration.properties.android.properties" tofile="${conf}/${master_configuration_file}"/>
+  </target>
+  
+  <target name="copy_ios_configuration_file">
+      <copy file="${conf}/configuration.properties.ios.properties" tofile="${conf}/${master_configuration_file}"/>
+  </target>
+  
   <target name="example_read_input_data" depends="jar">
       <testng outputdir="results/" groups="example_read_input_data" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
           <classpath>
@@ -147,9 +159,41 @@
               </fileset>
 	  </classpath>
 	  <classfileset dir="${classes}" includes="**/*.class" />
-          <sysproperty key="org.uncommons.reportng.title" value="Example Data Input tests"/>
+          <sysproperty key="org.uncommons.reportng.title" value="Example Data Input Tests"/>
           <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
       </testng>
+  </target>
+  
+  <target name="android" depends="jar">
+      <antcall target="delete_master_configuration_file"/>
+      <antcall target="copy_android_configuration_file"/>
+      <testng outputdir="results/" groups="android" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MobileScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
+          <classpath>
+              <fileset dir="${lib}">
+                  <include name="**/*.jar"/>
+              </fileset>
+              <fileset dir="${dist}">
+                  <include name="**/*.jar"/>
+              </fileset>
+	  </classpath>
+	  <classfileset dir="${classes}" includes="**/*.class" />
+          <sysproperty key="org.uncommons.reportng.title" value="Example Android Mobile App Tests"/>
+          <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
+      </testng>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
+  </target>
+  
+  <target name="copy_screenshots">
+      <copy todir="${results}/${html}">
+          <fileset dir="${screenshots}"/>
+      </copy>
+  </target>
+  
+  <target name="copy_images">
+      <copy todir="${results}/${html}">
+          <fileset dir="${resources}/${images}"/>
+      </copy>
   </target>
 
 </project>
