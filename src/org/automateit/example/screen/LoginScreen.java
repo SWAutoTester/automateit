@@ -22,6 +22,16 @@ public abstract class LoginScreen extends BaseScreen {
     
     protected String resourceId_button_login = null;
     
+    protected final static String TITLE_LOGIN_FAIL = "Login Attempt Failed";
+    
+    protected final static String TITLE_LOGIN_SUCCESS = "Login Attempt Succeeded";
+    
+    protected final static String MESSAGE_LOGIN_FAIL_REQUIRED_INPUT = "Please enter data in both username/password text fields";
+    
+    protected final static String MESSAGE_LOGIN_FAIL_INVALID_CREDENTIALS = "Please enter a valid username/password credentials";
+    
+    protected final static String MESSAGE_LOGIN_SUCCEEDED = "Congratulations";
+    
     /**
      * Logging class
      */

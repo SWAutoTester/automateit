@@ -184,6 +184,26 @@
       <antcall target="copy_screenshots"/>
   </target>
   
+  <target name="ios" depends="jar">
+      <antcall target="delete_master_configuration_file"/>
+      <antcall target="copy_ios_configuration_file"/>
+      <testng outputdir="results/" groups="ios" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MobileScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
+          <classpath>
+              <fileset dir="${lib}">
+                  <include name="**/*.jar"/>
+              </fileset>
+              <fileset dir="${dist}">
+                  <include name="**/*.jar"/>
+              </fileset>
+	  </classpath>
+	  <classfileset dir="${classes}" includes="**/*.class" />
+          <sysproperty key="org.uncommons.reportng.title" value="Example iOS Mobile App Tests"/>
+          <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
+      </testng>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
+  </target>
+  
   <target name="copy_screenshots">
       <copy todir="${results}/${html}">
           <fileset dir="${screenshots}"/>

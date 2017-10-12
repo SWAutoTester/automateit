@@ -2244,16 +2244,17 @@ public class BaseScreen {
         else if(isIOS()) {
             
             // this is a very special case because I tried all of the other techniques from webdriver/appium before and nothing 
-            // was working, so for xcode 8, for now explicity click on the Done button
+            // was working, so for xcode 8 and 9, for now explicity click on the Done button
             // we will change this when the traditional methods of hide keyboard strategies work again (3rd party api dependent)
-            try { clickOnWebElementMatchingText("Done", "XCUIElementTypeButton"); }    
-            catch(Exception e2) { 
+            try { clickOnWebElementMatchingText("Done", "XCUIElementTypeButton"); return; }    
+            catch(Exception e2) { }
+            
+            try { clickOnWebElementMatchingText("Return", "XCUIElementTypeButton"); return; }    
+            catch(Exception e2) { }
                 
-                try { click("//XCUIElementTypeApplication[1]/XCUIElementTypeWindow[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeToolbar/XCUIElementTypeButton[3]"); }  
-                catch(Exception le) { }
-            
-            }
-            
+            try { click("//XCUIElementTypeApplication[1]/XCUIElementTypeWindow[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeToolbar/XCUIElementTypeButton[3]"); }  
+            catch(Exception le) { }
+             
         }   
          
     }
