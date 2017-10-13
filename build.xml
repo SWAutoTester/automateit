@@ -91,7 +91,7 @@
    </target>
    
    <target name="example" depends="jar">
-      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener">
+      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>
@@ -149,7 +149,7 @@
   </target>
   
   <target name="example_read_input_data" depends="jar">
-      <testng outputdir="results/" groups="example_read_input_data" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
+      <testng outputdir="results/" groups="example_read_input_data" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>

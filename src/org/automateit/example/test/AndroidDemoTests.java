@@ -158,7 +158,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that the user can close the app in on the device", groups = { "example" }, priority = 100)
+    @Test(description = "Verify that the user can close the app in on the device", groups = { "android" }, priority = 100)
     public void test_H_Validate_Close_App() throws Exception {
       
         try { loginScreen.quit(); }
