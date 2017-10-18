@@ -45,7 +45,7 @@ public class TextToSpeechTests extends TestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Read in a text Hello There and play the audio on the computer", groups = { "example_texttospeech" })
+    @Test(description = "Read in a text Hello There and play the audio on the computer - Spanish accent", groups = { "example_texttospeech" })
     public void test_B_Convert_Text_To_Speech_Welcome_Message_Spanish_Accent() throws Exception {
       
         try { audioPlayer.play(textToSpeechConverter.execute("Hello and welcome to the Automate It Test Automation Framework", "es-MX")); }
@@ -58,7 +58,7 @@ public class TextToSpeechTests extends TestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Read in a text Hello There and play the audio on the computer", groups = { "example_texttospeech" })
+    @Test(description = "Read in a text Hello There and play the audio on the computer - native spanish language", groups = { "example_texttospeech" })
     public void test_C_Convert_Text_To_Speech_Welcome_Message_Spanish() throws Exception {
       
         try { audioPlayer.play(textToSpeechConverter.execute("Hola, tu estas bueno tambien?", "es-MX")); }
