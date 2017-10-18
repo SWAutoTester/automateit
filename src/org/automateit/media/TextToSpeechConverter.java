@@ -39,6 +39,18 @@ public interface TextToSpeechConverter {
      * @throws Exception 
      */
     public InputStream execute(String message) throws Exception;
+    
+    /**
+     * This method uses text-to-speech synthesizer to convert a string (text) to an audio file.
+     * 
+     * @param message
+     * @param language ("en-us", etc) - encoding language
+     * 
+     * @return The audio input stream
+     * 
+     * @throws Exception 
+     */
+    public InputStream execute(String message, String language) throws Exception;
 
 }
 

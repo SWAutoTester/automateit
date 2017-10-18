@@ -17,7 +17,7 @@ public class ExampleTests extends TestBase {
     protected YahooHomePage yahooHomePage = null;
     
     /**
-     * Test a failed login use case - using spaced.
+     * Validate the the home page appears and is correct
      *
      * @throws Exception 
      */

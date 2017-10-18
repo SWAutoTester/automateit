@@ -17,7 +17,6 @@
  **/
 package org.automateit.media;
 
-import java.io.File;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
@@ -59,7 +58,28 @@ public class JarvisTextToSpeechConverter implements TextToSpeechConverter {
             
             logger.info("Creating an audio input stream from the text string: " + message);
            
-            String language = "en-us";
+            return execute(message, "en-us");
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * This method uses text-to-speech synthesizer to convert a string (text) to an audio file.
+     * 
+     * @param message
+     * @param language ("en-us", etc) - encoding language
+     * 
+     * @return The audio input stream
+     * 
+     * @throws Exception 
+     */
+    public InputStream execute(String message, String language) throws Exception {
+        
+        try { 
+            
+            logger.info("Creating an audio input stream from the text string: " + message + " and language: " + language);
             
             Synthesiser synth = new Synthesiser(language);
             
