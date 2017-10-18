@@ -19,6 +19,8 @@ Features:
    b) Screenshots for mobile screen, web browser, and desktop
    c) video recording of test case execution in .mov or .mp4 format (QuickTime and MPEG-4)
 10) Easy text-based page content validation
+11) Text-To-Speech conversion and player to send audio commands to Siri, Alexa, etc.
+12) Speech-To-Text to listen to response from app and translate to text for response validation.
 
 This framework allows anyone with basic Java programming skills to write automated tests without needing any knowledge of Selenium or Appium WebDrivers.
 
