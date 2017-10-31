@@ -766,6 +766,55 @@ public class BaseScreen {
     }
     
     /**
+     * Return the web element matching the type and containing the text.
+     * 
+     * @param text1
+     * @param text2
+     * @param className
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    /*
+    public WebElement getWebElementContainingText(String text1, String text2, String className) throws Exception {
+        
+        logger.info("getWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
+            
+        commandList.addToList("getWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
+        
+        try {
+             
+            List<WebElement> elements = this.driver.findElements(By.className(className));
+            
+            for(WebElement element:elements) {
+                
+                if(!element.isDisplayed() || !element.isEnabled()) continue;
+               
+                String data1 = element.getAttribute("name");
+                
+                if(data1 == null) continue;
+                
+                String data = data1.trim();
+               
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                   
+                logger.info("Checking element text value: " + data);
+                
+                if(data.contains(text1) || data.contains(text2)) return element;
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception
+            throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
+            
+        }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    */
+    
+    /**
      * Get the full displayed value of the web element matching the type and containing the text.
      * 
      * @param text
@@ -796,7 +845,7 @@ public class BaseScreen {
      */
     public void clickOnWebElementContainingText(String text, String className) throws Exception {
         
-        logger.info("clickOnWebElementContainingText:" + text + "," + className);
+        logger.info("clickOnWebElementContainingText:" + text + "|" + className);
             
         commandList.addToList("clickOnWebElementContainingText:" + text + "|" + className);
         
@@ -808,6 +857,28 @@ public class BaseScreen {
     /**
      * Click on a web element matching the type and containing the text.
      * 
+     * @param text1
+     * @param text2
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    /*
+    public void clickOnWebElementContainingText(String text1, String text2, String className) throws Exception {
+        
+        logger.info("clickOnWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
+            
+        commandList.addToList("clickOnWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
+        
+        try { getWebElementContainingText(text1, text2, className).click(); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    */
+    
+    /**
+     * Click on a web element matching the type and containing the text.
+     * 
      * @param text
      * @param className
      * 
@@ -815,7 +886,7 @@ public class BaseScreen {
      */
     public void clickOnSecondWebElementContainingText(String text, String className) throws Exception {
         
-        logger.info("clickOnSecondWebElementContainingText:" + text + "," + className);
+        logger.info("clickOnSecondWebElementContainingText:" + text + "|" + className);
             
         commandList.addToList("clickOnSecondWebElementContainingText:" + text + "|" + className);
         
@@ -888,9 +959,9 @@ public class BaseScreen {
                 
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
                 
-                logger.info("Checking text value of attribute: " + data);
+                logger.info("Checking text value of attribute: " + data + "|" + text1 + "|" + text2);
                    
-                if(data.contains(text1) && data.contains(text2)) {
+                if(data.contains(text1) || data.contains(text2)) {
                    
                     element.click();
                     
@@ -950,6 +1021,54 @@ public class BaseScreen {
             
             // if we get here, we could not find the element so throw an exception
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
+            
+            
+        }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Click on a web element matching the type and containing the text.
+     * 
+     * @param text1
+     * @param text2
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    protected void clickOnWebElementMatchingText(String text1, String text2, String className) throws Exception {
+        
+        logger.info("clickOnWebElementMatchingText:" + text1 + "|" + text2 + "|" + className);
+        
+        commandList.addToList("clickOnWebElementMatchingText:" + text1 + "|" + text2 + "|" + className);
+        
+        try {
+            
+            List<WebElement> elements = this.driver.findElements(By.className(className));
+            
+            for (WebElement element:elements) {
+                
+                String data = element.getAttribute("name");
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking text value of attribute: " + data);
+                
+                if(data.trim().equals(text1.trim()) || data.trim().equals(text2.trim())) {
+                    
+                    element.click();
+                    
+                    delay(2000);
+                        
+                    return;
+                
+                }
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception
+            throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text1 + "|" + text2);
             
             
         }
@@ -1077,6 +1196,50 @@ public class BaseScreen {
             
             // if we get here, we could not find the element so throw an exception
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
+                   
+        }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementContainingText_ContentDescription(String text, String className) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementContainingText_ContentDescription:" + text + "|" + className);
+        
+        try {
+            
+            List<WebElement> elements = this.driver.findElements(By.className(className));
+           
+            for (WebElement element:elements) {
+                
+                if(element == null) continue;
+                
+                String data1 = element.getAttribute("contentDescription");
+                
+                if(data1 == null) continue;
+                
+                String data = data1.trim();
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking text value of attribute: " + data);
+                   
+                if(data.contains(text)) return;
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception
+            throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text + " in the Content Description attribute");
                    
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1820,7 +1983,17 @@ public class BaseScreen {
         commandList.addToList("clearWebElement:" + element);
         
         try { element.clear(); }
-        catch(Exception e) { throw new BaseScreenException(e); }
+        catch(Exception e) { 
+            
+            if(isIOS()) throw new BaseScreenException(e); 
+            else { //android nexus 6 dictionary)
+                
+                try { clickOnWebElementContainingTextValueAttribute("DELETE", "android.widget.TextView"); }
+                catch(Exception le) { throw le; }
+            
+            }
+            
+        }
         
     }
     
@@ -1838,7 +2011,7 @@ public class BaseScreen {
         commandList.addToList("clearWebElement:" + locator);
     
         try { clearWebElement(getWebElementByXPath(locator)); }
-        catch(Exception e) { throw new BaseScreenException(e); }
+        catch(Exception e) {  throw new BaseScreenException(e); }
         
     }
     
@@ -2246,8 +2419,11 @@ public class BaseScreen {
             // this is a very special case because I tried all of the other techniques from webdriver/appium before and nothing 
             // was working, so for xcode 8 and 9, for now explicity click on the Done button
             // we will change this when the traditional methods of hide keyboard strategies work again (3rd party api dependent)
-            try { clickOnWebElementMatchingText("Done", "XCUIElementTypeButton"); return; }    
+            try { clickOnWebElementMatchingText("Next", "Done", "XCUIElementTypeButton"); return; }    
             catch(Exception e2) { }
+            
+            //try { clickOnWebElementMatchingText("Done", "XCUIElementTypeButton"); return; }    
+            //catch(Exception e2) { }
             
             try { clickOnWebElementMatchingText("Return", "XCUIElementTypeButton"); return; }    
             catch(Exception e2) { }

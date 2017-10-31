@@ -6,7 +6,7 @@ Comments for improvement are very welcome.
 
 Features:
 
-1) Drive automated tasks using Selenium 3.5.3 WebDriver and Appium 5.0.3 Mobile Drivers using a configuration file 
+1) Drive automated tasks using latest and greatest Selenium WebDriver and Appium Mobile Drivers using a configuration file 
 2) Obfuscation of selenium API / no test code changes for testing web and mobile applications
 3) Ability to configure mandatory waits in test execution
 4) Handles jquery/prototype page load waiting
@@ -38,4 +38,38 @@ Instructions to build the framework:
 It's very simple to build and use. After downloading the code, type "ant" and the code will compile and create a jar file with the classes in the "dist" directory.
 
 Copy the jar files from "lib" and "dist" and also copy the configuration files "conf" directory to your test project and modify them for your test settings.
+
+Third Party API Dependency Versions:
+
+FirefoxDriver
+-------------
+v0.19.0
+https://github.com/mozilla/geckodriver/releases
+https://github.com/mozilla/geckodriver/releases/tag/v0.19.0
+
+ChromeDriver
+-------------
+v2.33
+https://sites.google.com/a/chromium.org/chromedriver/downloads
+https://chromedriver.storage.googleapis.com/index.html?path=2.33/
+
+SafariDriver
+------------
+Latest version of SafariDriver comes embedded in latest Safari browser
+
+Selenium Server
+---------------
+v3.6.0
+https://goo.gl/21wWg8
+http://www.seleniumhq.org/download/
+
+Appium Drivers
+--------------
+v5.0.4
+http://appium.io/downloads.html
+https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
+
+
+
+
 
