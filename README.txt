@@ -43,9 +43,9 @@ Third Party API Dependency Versions:
 
 FirefoxDriver
 -------------
-v0.19.0
+v0.19.1
 https://github.com/mozilla/geckodriver/releases
-https://github.com/mozilla/geckodriver/releases/tag/v0.19.0
+https://github.com/mozilla/geckodriver/releases/tag/v0.19.1
 
 ChromeDriver
 -------------
@@ -59,8 +59,8 @@ Latest version of SafariDriver comes embedded in latest Safari browser
 
 Selenium Server
 ---------------
-v3.6.0
-https://goo.gl/21wWg8
+v3.7.1
+https://goo.gl/3aWDMc
 http://www.seleniumhq.org/download/
 
 Appium Drivers
@@ -69,6 +69,9 @@ v5.0.4
 http://appium.io/downloads.html
 https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
 
+Log4J
+------
+v1.2.17
 
 
 

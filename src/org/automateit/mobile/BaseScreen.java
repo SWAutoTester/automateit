@@ -306,6 +306,17 @@ public class BaseScreen {
             
             }
             
+            if(properties.getProperty("useNewWDA") != null) {
+                
+                logger.info("Loading webdriver property: " + "useNewWDA" + "|" + properties.get("useNewWDA"));
+                
+                boolean useNewWDA = (new Boolean(properties.get("useNewWDA"))).booleanValue();
+                
+                capabilities.setCapability("useNewWDA", useNewWDA);
+                    
+            }
+            else { if(isIOS()) capabilities.setCapability("useNewWDA", true); }
+            
             logger.info("Loading webdriver property: " + "URL" + "|" + properties.get("URL"));
               
             logger.info("Preparing to create a new web driver instance");
@@ -2422,7 +2433,8 @@ public class BaseScreen {
             try { clickOnWebElementMatchingText("Next", "Done", "XCUIElementTypeButton"); return; }    
             catch(Exception e2) { }
             
-            //try { clickOnWebElementMatchingText("Done", "XCUIElementTypeButton"); return; }    
+            try { clickOnWebElementContainingText("Done", "XCUIElementTypeButton"); return; }    
+            catch(Exception e2) { }
             //catch(Exception e2) { }
             
             try { clickOnWebElementMatchingText("Return", "XCUIElementTypeButton"); return; }    
