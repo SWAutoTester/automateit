@@ -1036,7 +1036,7 @@ public class BasePage {
     public void mouseEventClick(String locator) throws BasePageException {
 
         try {
-
+            commandList.addToList("mouseEventClick: " + locator);
             WebElement element = driver.findElement(By.xpath(locator));
 
             JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -2609,11 +2609,31 @@ public class BasePage {
     public void scrollingToElementofAPage(String xpath) throws BasePageException {
 
         try {
+            commandList.addToList("scrollingToElementOfAPage: " + xpath);
             WebElement element = driver.findElement(By.xpath(xpath));
             ((JavascriptExecutor) driver).executeScript(
                         "arguments[0].scrollIntoView();", element);
         }
         catch(Exception e) { throw new BasePageException(e); }
+    }
+
+    /**
+     * wait until the element is clickable or not
+     *
+     * @param xpath
+     *
+     * @return
+     */
+    public boolean waitUntilElementBecomeClickable(String xpath){
+
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 5);
+            commandList.addToList("waitUntilElementBecomeClickable: " + xpath);
+            WebElement element = driver.findElement(By.xpath(xpath));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            return true;
+        }
+        catch (Exception e) { return false; }
     }
 
     /**

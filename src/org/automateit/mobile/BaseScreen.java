@@ -18,6 +18,7 @@
 
 package org.automateit.mobile;
  
+import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.time.Duration;
@@ -30,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import org.apache.commons.io.FileUtils;
+
 import org.testng.Assert; 
 
 import org.openqa.selenium.By; 
@@ -39,6 +42,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -46,12 +51,14 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.remote.MobileCapabilityType;
 
+import org.automateit.data.DataDrivenInput;
 import org.automateit.core.Capabilities;
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
 import org.automateit.util.CommonSelenium;
-import org.automateit.data.DataDrivenInput;
 import org.automateit.util.Utils;
+
+import org.automateit.ocr.OCRProcessor;
         
 /**
  * This class is the base class for all other screen classes to use.
@@ -954,7 +961,7 @@ public class BaseScreen {
      * 
      * @throws Exception 
      */
-    protected void clickOnWebElementContainingText(String text1, String text2, String className) throws Exception {
+    public void clickOnWebElementContainingText(String text1, String text2, String className) throws Exception {
         
         logger.info("clickOnWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
             
@@ -1000,7 +1007,7 @@ public class BaseScreen {
      * 
      * @throws Exception 
      */
-    protected void clickOnWebElementMatchingText(String text, String className) throws Exception {
+    public void clickOnWebElementMatchingText(String text, String className) throws Exception {
         
         logger.info("clickOnWebElementMatchingText:" + text + "|" + className);
         
@@ -1048,7 +1055,7 @@ public class BaseScreen {
      * 
      * @throws Exception 
      */
-    protected void clickOnWebElementMatchingText(String text1, String text2, String className) throws Exception {
+    public void clickOnWebElementMatchingText(String text1, String text2, String className) throws Exception {
         
         logger.info("clickOnWebElementMatchingText:" + text1 + "|" + text2 + "|" + className);
         
@@ -3313,6 +3320,92 @@ public class BaseScreen {
             
         }
         catch(Exception e) { }
+        
+    }
+    
+    /**
+     * Allow for setting the timeout manually (if needed)
+     * 
+     * @param timeout
+     * 
+     * @throws Exception 
+     */
+    public void setTimeout(String timeout) throws Exception {
+        
+        try { this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get the text from a screenshot of the mobile app screen using OCR
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getCurrentTextOnScreenUsingOCR() throws Exception {
+        
+        String screenshotFilename = utils.getBaseScreenshotsDirectory() + "ocrimage.png";
+                
+        try { 
+            
+            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
+            
+            OCRProcessor ocrProcessor = new OCRProcessor();
+            
+            ocrProcessor.setDatapath("../framework/resources/tessdata");
+            
+            return ocrProcessor.getTextInImage(screenshotFilename); 
+        
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Validate that the expected text appears on the screen using OCR.
+     * 
+     * @param expectedText
+     * 
+     * @throws Exception 
+     */
+    public void validateTextOnScreenUsingOCR(String expectedText) throws Exception {
+        
+        logger.info("Validating expected text on the Screen using OCR");
+        
+        commandList.addToList("validateTextOnScreenUsingOCR|" + expectedText);
+        
+        try { 
+            
+            if(expectedText == null) throw new Exception("Unable to get any text from OCR because expected text to verify is null");
+            
+            String renderedText = getCurrentTextOnScreenUsingOCR();
+            
+            logger.info("Text read from OCR operation on the mobile screen:\n\n" + renderedText + "\n\n");
+            
+            if(renderedText == null) throw new Exception("Unable to get any text from OCR");
+            
+            if(!renderedText.contains(expectedText.trim())) throw new Exception("Expected text: " + expectedText + " does not appear on the screen");
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Validate that a set of expected text appears on the screen using OCR.
+     * 
+     * @param expectedText
+     * 
+     * @throws Exception 
+     */
+    public void validateTextOnScreenUsingOCR(String[] expectedText) throws Exception {
+        
+        logger.info("Validating expected text on the Screen using OCR");
+        
+        try { for(int i = 0; i < expectedText.length; i++) validateTextOnScreenUsingOCR(expectedText[i]); }
+        catch(Exception e) { throw e; }
         
     }
 

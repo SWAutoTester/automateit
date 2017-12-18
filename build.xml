@@ -233,5 +233,23 @@
       <antcall target="copy_images"/>
       <antcall target="copy_screenshots"/>
   </target>
+  
+  <target name="example_ocr" depends="jar">
+      <testng outputdir="results/" groups="example_ocr" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
+          <classpath>
+              <fileset dir="${lib}">
+                  <include name="**/*.jar"/>
+              </fileset>
+              <fileset dir="${dist}">
+                  <include name="**/*.jar"/>
+              </fileset>
+	  </classpath>
+	  <classfileset dir="${classes}" includes="**/*.class" />
+          <sysproperty key="org.uncommons.reportng.title" value="Example OCR Tests"/>
+          <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
+      </testng>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
+  </target>
 
 </project>
