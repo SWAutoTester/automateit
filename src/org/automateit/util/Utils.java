@@ -580,6 +580,7 @@ public class Utils {
             if(originalURL == null) throw new Exception("Unable to return modified URL because original URL is null");
             
             if(replaceDomainName == null) return originalURL; // if the replace domain isn't set, just return the original url
+            else if(replaceDomainName.contains("Dev")) replaceDomainName = "dev"; // replace string Dev with dev
             
             // the url contains @ and has an embedded username and password
             if(originalURL.contains("@")) {

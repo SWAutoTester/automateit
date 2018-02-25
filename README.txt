@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v1.2.0 - 16 December 2017
+Automate It! Web/Mobile Test Automation Framework v1.3 - 21 February 2018
 
 Thank you for downloading and using most flexible and powerful Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -22,6 +22,7 @@ Features:
 11) Text-To-Speech conversion and player to send audio commands to Siri, Alexa, etc.
 12) Speech-To-Text to listen to response from app and translate to text for response validation.
 13) OCR (Optical Character Recognition)
+14) Scrolling web pages up/down from Safari, Chrome, Firefox web browsers
 
 This framework allows anyone with basic Java programming skills to write automated tests without needing any knowledge of Selenium or Appium WebDrivers.
 
@@ -50,9 +51,9 @@ https://github.com/mozilla/geckodriver/releases/tag/v0.19.1
 
 ChromeDriver
 -------------
-v2.34
+v2.35
 https://sites.google.com/a/chromium.org/chromedriver/downloads
-https://chromedriver.storage.googleapis.com/index.html?path=2.34/
+https://chromedriver.storage.googleapis.com/index.html?path=2.35/
 
 SafariDriver
 ------------
@@ -60,19 +61,20 @@ Latest version of SafariDriver comes embedded in latest Safari browser
 
 Selenium Server
 ---------------
-v3.7.1
+v3.8.1
 https://goo.gl/hvDPsK
 http://www.seleniumhq.org/download/
 
 Appium Drivers
 --------------
-v6.0.0-BETA
+v6.0.0-BETA2
 http://appium.io/downloads.html
 https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
 
 Log4J
 ------
-v1.2.17
+Apache Log4j API 2.10.0 API
+https://logging.apache.org/log4j/2.x/download.html
 
 
 

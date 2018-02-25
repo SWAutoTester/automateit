@@ -7,17 +7,30 @@ import org.automateit.test.TestBase;
 import org.automateit.example.page.YahooHomePage;
 
 /**
- * This class shows an example of how to use the AutomateIt! framework
+ * This class shows an example of how to use the AutomateIt! framework - and various useful features
  * for testing.
  * 
  * @author mburnside
  */
 public class ExampleTests extends TestBase {
     
+    /**
+     * The page object top use to interact with Yahoo home page
+     */
     protected YahooHomePage yahooHomePage = null;
     
     /**
-     * Validate the the home page appears and is correct
+     * The scroll interaction limit for example purposes
+     */
+    public static final int SCROLLINTERACTIONLIMIT = 5;
+    
+    /**
+     * The scroll pixel value (scroll up or down this many pixels)
+     */
+    public static final int SCROLLPIXELS = 500;
+    
+    /**
+     * Validate that the home page appears and is correct
      *
      * @throws Exception 
      */
@@ -59,6 +72,50 @@ public class ExampleTests extends TestBase {
       
         try { this.yahooHomePage.close(); }
         catch(Exception e) { this.yahooHomePage.printDOM(); throw e; }
+    
+    }
+    
+    /**
+     * Validate that the framework can scroll down a web page
+     *
+     * @throws Exception 
+     */
+    @Test(description = "Validate that the framework can scroll down a web page", groups = { "example" })
+    public void test_D_Validate_Scroll_Down() throws Exception {
+      
+        try { 
+            
+            this.yahooHomePage = new YahooHomePage(); 
+            
+            delay(2000);
+            
+            for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { this.yahooHomePage.scrollDown(SCROLLPIXELS); delay(1000); }
+            
+            delay(3000);
+            
+        }
+        catch(Exception e) { throw e; }
+    
+    }
+    
+    /**
+     * Validate that the framework can scroll up a web page
+     *
+     * @throws Exception 
+     */
+    @Test(description = "Validate that the framework can scroll up a web page", groups = { "example" })
+    public void test_E_Validate_Scroll_Up() throws Exception {
+      
+        try { 
+           
+            for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { this.yahooHomePage.scrollUp(SCROLLPIXELS); delay(1000); }
+            
+            delay(3000);
+            
+            this.yahooHomePage.close(); 
+        
+        }
+        catch(Exception e) { throw e; }
     
     }
 	

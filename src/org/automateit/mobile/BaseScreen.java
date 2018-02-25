@@ -242,6 +242,17 @@ public class BaseScreen {
             logger.info("Loading webdriver property: " + "app" + "|" + properties.get("app_location"));
             capabilities.setCapability(MobileCapabilityType.APP, properties.get("app_location"));  
             
+            if(properties.getProperty("autoGrantPermissions") != null) {
+                
+                logger.info("Loading webdriver property: " + "autoGrantPermissions" + "|" + properties.get("autoGrantPermissions"));
+               
+                boolean autoGrantPermissions = (new Boolean(properties.get("autoGrantPermissions"))).booleanValue();
+                
+                capabilities.setCapability("autoGrantPermissions", autoGrantPermissions);
+                    
+            }
+            else capabilities.setCapability("autoGrantPermissions", "true");
+            
             if(properties.getProperty("automationName") != null) {
                 
                 logger.info("Loading webdriver property: " + "automationName" + "|" + properties.get("automationName"));
@@ -1013,6 +1024,26 @@ public class BaseScreen {
         
         commandList.addToList("clickOnWebElementMatchingText:" + text + "|" + className);
         
+        try { clickOnWebElementMatchingText(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Click on a web element matching the type and containing the text.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void clickOnWebElementMatchingText(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("clickOnWebElementMatchingText:" + text + "|" + className + "|" + ignoreCase);
+        
+        commandList.addToList("clickOnWebElementMatchingText(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1025,14 +1056,31 @@ public class BaseScreen {
                 
                 logger.info("Checking text value of attribute: " + data);
                 
-                if(data.trim().equals(text.trim())) {
+                if(ignoreCase) {
                     
-                    element.click();
+                    if(data.toLowerCase().trim().equals(text.trim().toLowerCase())) {
                     
-                    delay(2000);
+                        element.click();
+                    
+                        delay(2000);
                         
-                    return;
+                        return;
                 
+                    }
+                    
+                }
+                else {
+                    
+                    if(data.trim().equals(text.trim())) {
+                    
+                        element.click();
+                    
+                        delay(2000);
+                        
+                        return;
+                
+                    }
+                    
                 }
                 
             }
@@ -1108,6 +1156,26 @@ public class BaseScreen {
             
         commandList.addToList("validateWebElementContainingText:" + text + "|" + className);
         
+        try { validateWebElementContainingText(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text. - ignore case
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementContainingText(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementContainingText(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1126,7 +1194,8 @@ public class BaseScreen {
                 
                 logger.info("Checking text value of attribute: " + data + "|"+ text);
                    
-                if(data.contains(text)) return;
+                if(ignoreCase) { if(data.toLowerCase().contains(text.toLowerCase())) return; }
+                else { if(data.contains(text)) return; }
                 
             }
             
@@ -1152,6 +1221,26 @@ public class BaseScreen {
             
         commandList.addToList("validateWebElementMatchingText:" + text + "|" + className);
         
+        try { validateWebElementMatchingText(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and matching the text.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementMatchingText(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementMatchingText(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1164,7 +1253,8 @@ public class BaseScreen {
                 
                 logger.info("Checking text value of attribute: " + data);
                    
-                if(data.equals(text)) return;
+                if(ignoreCase) { if(data.toLowerCase().equals(text.toLowerCase())) return; }
+                else { if(data.equals(text)) return; }
                 
             }
             
@@ -1190,6 +1280,26 @@ public class BaseScreen {
             
         commandList.addToList("validateWebElementContainingTextValueAttribute:" + text + "|" + className);
         
+        try { validateWebElementContainingTextValueAttribute(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementContainingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementContainingTextValueAttribute(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1206,14 +1316,15 @@ public class BaseScreen {
                 
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
                 
-                logger.info("Checking text value of attribute: " + data);
-                   
-                if(data.contains(text)) return;
+                logger.info("Checking text value of attribute:" + text + "|" + data);
+                 
+                if(ignoreCase) { if(data.toLowerCase().contains(text.toLowerCase())) return; }
+                else { if(data.contains(text)) return; }
                 
             }
             
             // if we get here, we could not find the element so throw an exception
-            throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
+            throw new Exception("Could not validate a screen component with text in any screen element containing type: " + className + " and text: " + text);
                    
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1234,6 +1345,26 @@ public class BaseScreen {
             
         commandList.addToList("validateWebElementContainingText_ContentDescription:" + text + "|" + className);
         
+        try { validateWebElementContainingText_ContentDescription(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementContainingText_ContentDescription:" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1252,7 +1383,8 @@ public class BaseScreen {
                 
                 logger.info("Checking text value of attribute: " + data);
                    
-                if(data.contains(text)) return;
+                if(ignoreCase) { if(data.toLowerCase().contains(text.toLowerCase())) return; }
+                else { if(data.contains(text)) return; }
                 
             }
             
@@ -1278,6 +1410,26 @@ public class BaseScreen {
             
         commandList.addToList("validateWebElementMatchingTextValueAttribute:" + text + "|" + className);
         
+        try { validateWebElementMatchingTextValueAttribute(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementMatchingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementMatchingTextValueAttribute(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1290,7 +1442,8 @@ public class BaseScreen {
                 
                 logger.info("Checking text value of attribute: " + data);
                    
-                if(data.equals(text)) return;
+                if(ignoreCase) { if(data.toLowerCase().equals(text.toLowerCase())) return; }
+                else { if(data.equals(text)) return; }
                 
             }
             
@@ -1316,6 +1469,26 @@ public class BaseScreen {
             
         commandList.addToList("validateElementWithResourceIdContainingText:" + resourceId + "|" + expectedText);
         
+        try { validateElementWithResourceIdContainingText(resourceId, expectedText, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element at resource id containing the text expected.
+     * 
+     * @param resourceId
+     * @param expectedText
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateElementWithResourceIdContainingText(String resourceId, String expectedText, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validate that there is a web element at resource id containing the text expected: " + resourceId + "|" + expectedText + "|" + ignoreCase);
+            
+        commandList.addToList("validateElementWithResourceIdContainingText(ignoreCase):" + resourceId + "|" + expectedText + "|" + ignoreCase);
+        
         try { 
             
             if(resourceId == null) throw new BaseScreenException("Validate that there is a web element at resource id containing the text expected because resource id is null: " + resourceId);
@@ -1326,7 +1499,8 @@ public class BaseScreen {
             
             logger.info("Text value of resource id: " + resourceId + "|" + realValue + "|" + expectedText);
             
-            Assert.assertTrue(realValue.trim().contains(expectedText.trim()));
+            if(ignoreCase) { Assert.assertTrue(realValue.trim().toLowerCase().contains(expectedText.trim().toLowerCase())); }
+            else { Assert.assertTrue(realValue.trim().contains(expectedText.trim())); }
                  
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1347,6 +1521,26 @@ public class BaseScreen {
             
         commandList.addToList("validateElementWithResourceIdMatchingText:" + resourceId + "|" + expectedText);
         
+        try { validateElementWithResourceIdMatchingText(resourceId, expectedText, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element at resource id matching the text expected.
+     * 
+     * @param resourceId
+     * @param expectedText
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateElementWithResourceIdMatchingText(String resourceId, String expectedText, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validate that there is a web element at resource id matching the text expected: " + resourceId + "|" + expectedText + "|" + ignoreCase);
+            
+        commandList.addToList("validateElementWithResourceIdMatchingText:" + resourceId + "|" + expectedText + "|" + ignoreCase);
+        
         try { 
             
             if(resourceId == null) throw new BaseScreenException("Validate that there is a web element at resource id matching the text expected because resource id is null: " + resourceId);
@@ -1357,7 +1551,8 @@ public class BaseScreen {
             
             logger.info("Text value of resource id: " + resourceId + "|" + realValue + "|" + expectedText);
             
-            Assert.assertTrue(realValue.trim().contains(expectedText.trim()));
+            if(ignoreCase) { Assert.assertTrue(realValue.trim().toLowerCase().contains(expectedText.trim().toLowerCase())); }
+            else { Assert.assertTrue(realValue.trim().contains(expectedText.trim())); }
                  
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1378,6 +1573,26 @@ public class BaseScreen {
         
         commandList.addToList("clickOnWebElementContainingTextValueAttribute:" + text + "|" + className);
         
+        try { clickOnWebElementContainingTextValueAttribute(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text.
+     *
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void clickOnWebElementContainingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Clicking on web element of type: " + className + " containing text: " + text + " appears on the screen somewhere.");
+        
+        commandList.addToList("clickOnWebElementContainingTextValueAttribute(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1391,16 +1606,33 @@ public class BaseScreen {
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
                 
                 logger.info("Checking text value of attribute: " + data);
-                   
-                if(data.contains(text)) {
+                  
+                if(ignoreCase) { 
+                
+                    if(data.toLowerCase().contains(text.toLowerCase())) {
                     
-                    element.click();
+                        element.click();
                     
-                    delay(3000);
+                        delay(3000);
                     
-                    return;
+                        return;
                     
-                };
+                    };
+                    
+                }
+                else {
+                    
+                    if(data.contains(text)) {
+                    
+                        element.click();
+                    
+                        delay(3000);
+                    
+                        return;
+                    
+                    };
+                    
+                }
                 
             }
             
@@ -1426,6 +1658,26 @@ public class BaseScreen {
         
         commandList.addToList("clickOnWebElementMatchingTextValueAttribute:" + text + "|" + className);
         
+        try { clickOnWebElementMatchingTextValueAttribute(text, className, false); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void clickOnWebElementMatchingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Clicking on web element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
+        
+        commandList.addToList("clickOnWebElementMatchingTextValueAttribute(ignoreCase):" + text + "|" + className + "|" + ignoreCase);
+        
         try {
           
             List<WebElement> elements = this.driver.findElements(By.className(className));
@@ -1438,15 +1690,32 @@ public class BaseScreen {
                 
                 logger.info("Checking text value of attribute: " + data);
                    
-                if(data.equals(text)) {
-                   
-                    element.click();
+                if(ignoreCase) { 
+                
+                    if(data.toLowerCase().contains(text.toLowerCase())) {
                     
-                    delay(3000);
+                        element.click();
                     
-                    return;
+                        delay(3000);
                     
-                };
+                        return;
+                    
+                    };
+                    
+                }
+                else {
+                    
+                    if(data.contains(text)) {
+                    
+                        element.click();
+                    
+                        delay(3000);
+                    
+                        return;
+                    
+                    };
+                    
+                }
                 
             }
             
@@ -1992,13 +2261,13 @@ public class BaseScreen {
      * 
      * @param element
      * 
-     * @throws BasePageException 
+     * @throws BaseScreenException
      */
-    public void clearWebElement(WebElement element) throws Exception { 
+    public void clearWebElement(WebElement element) throws BaseScreenException { 
         
-        logger.info("Clear web element: " + element);
+        logger.info("Clear web element");
         
-        commandList.addToList("clearWebElement:" + element);
+        //commandList.addToList("clearWebElement");
         
         try { element.clear(); }
         catch(Exception e) { 
@@ -2007,7 +2276,7 @@ public class BaseScreen {
             else { //android nexus 6 dictionary)
                 
                 try { clickOnWebElementContainingTextValueAttribute("DELETE", "android.widget.TextView"); }
-                catch(Exception le) { throw le; }
+                catch(Exception le) { throw new BaseScreenException(le); }
             
             }
             
@@ -2020,16 +2289,16 @@ public class BaseScreen {
      * 
      * @param locator
      * 
-     * @throws BasePageException 
+     * @throws BaseScreenException
      */
-    public void clearWebElement(String locator) throws Exception { 
+    public void clearWebElement(String locator) throws BaseScreenException { 
         
         logger.info("Clear web element: " + locator);
         
         commandList.addToList("clearWebElement:" + locator);
     
         try { clearWebElement(getWebElementByXPath(locator)); }
-        catch(Exception e) {  throw new BaseScreenException(e); }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     

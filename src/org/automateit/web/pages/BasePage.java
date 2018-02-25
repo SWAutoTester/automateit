@@ -1034,16 +1034,19 @@ public class BasePage {
      * @throws BasePageException
      */
     public void mouseEventClick(String locator) throws BasePageException {
+        
+        commandList.addToList("mouseEventClick: " + locator);
 
         try {
-            commandList.addToList("mouseEventClick: " + locator);
+            
             WebElement element = driver.findElement(By.xpath(locator));
 
             JavascriptExecutor js = (JavascriptExecutor) driver;
 
             js.executeScript("var evt = document.createEvent('MouseEvents');" + "evt.initMouseEvent('click',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" + "arguments[0].dispatchEvent(evt);", element);
+        
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
 
@@ -1133,7 +1136,7 @@ public class BasePage {
             waitForPageToLoad(timeout, checkAjax);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
     
@@ -1153,7 +1156,7 @@ public class BasePage {
         commandList.addToList("click: " + locator);
         
         try { click(locator, true); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
     
@@ -1608,7 +1611,7 @@ public class BasePage {
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1653,7 +1656,7 @@ public class BasePage {
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text1: " + text1 + " and text2: " + text2);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1697,7 +1700,7 @@ public class BasePage {
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1733,7 +1736,7 @@ public class BasePage {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1769,7 +1772,7 @@ public class BasePage {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1805,7 +1808,7 @@ public class BasePage {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1841,7 +1844,7 @@ public class BasePage {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1885,7 +1888,7 @@ public class BasePage {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1929,7 +1932,7 @@ public class BasePage {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1954,7 +1957,7 @@ public class BasePage {
             if(element == null) throw new Exception("Could not validate a screen component with screen element matching name: " + name);
                    
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1987,7 +1990,7 @@ public class BasePage {
             }
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2020,7 +2023,7 @@ public class BasePage {
             }
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2046,7 +2049,7 @@ public class BasePage {
             return values;
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2077,7 +2080,7 @@ public class BasePage {
             return true;
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2105,7 +2108,7 @@ public class BasePage {
             return textValues.contains(value);
            
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2266,7 +2269,7 @@ public class BasePage {
             waitForPageToLoad(timeout);
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2284,7 +2287,7 @@ public class BasePage {
         commandList.addToList("clearWebElement:" + element);
     
         try { element.clear(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2302,7 +2305,7 @@ public class BasePage {
         commandList.addToList("clearWebElement:" + locator);
     
         try { clearWebElement(getWebElementWithLocator(locator)); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -2369,7 +2372,7 @@ public class BasePage {
             driver.switchTo().window(CurrentWindowHandle); 
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
 
@@ -2607,15 +2610,44 @@ public class BasePage {
      * @throws BasePageException
      */
     public void scrollingToElementofAPage(String xpath) throws BasePageException {
+        
+        commandList.addToList("scrollingToElementOfAPage: " + xpath);
 
         try {
-            commandList.addToList("scrollingToElementOfAPage: " + xpath);
+            
             WebElement element = driver.findElement(By.xpath(xpath));
-            ((JavascriptExecutor) driver).executeScript(
-                        "arguments[0].scrollIntoView();", element);
+            
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
+            
         }
         catch(Exception e) { throw new BasePageException(e); }
     }
+
+    /**
+     * Perform drag and drop operation with given web element
+     *
+     * @param xpath
+     * @param x_axis
+     * @param y_axis
+     *
+     * @throws BasePageException
+     */
+    public void dragAndDropBy(String xpath, int x_axis, int y_axis) throws BasePageException {
+
+        commandList.addToList("dragAndDropBy " + xpath + " x-axis|" + x_axis + " y-axis|" + y_axis);
+
+        try {
+
+            WebElement drag = driver.findElement(By.xpath(xpath));
+
+            Actions action = new Actions(driver);
+
+            action.dragAndDropBy(drag, x_axis, y_axis).build().perform();
+
+        }
+        catch(Exception e) { throw new BasePageException(e); }
+    }
+
 
     /**
      * wait until the element is clickable or not
@@ -2624,16 +2656,23 @@ public class BasePage {
      *
      * @return
      */
-    public boolean waitUntilElementBecomeClickable(String xpath){
+    public boolean waitUntilElementBecomeClickable(String xpath) {
+        
+        commandList.addToList("waitUntilElementBecomeClickable: " + xpath);
 
         try {
+            
             WebDriverWait wait = new WebDriverWait(driver, 5);
-            commandList.addToList("waitUntilElementBecomeClickable: " + xpath);
+            
             WebElement element = driver.findElement(By.xpath(xpath));
+            
             wait.until(ExpectedConditions.elementToBeClickable(element));
+            
             return true;
+        
         }
         catch (Exception e) { return false; }
+    
     }
 
     /**
@@ -2733,11 +2772,125 @@ public class BasePage {
      * 
      * @throws Exception 
      */
-    public void printDOM() throws Exception {
+    public void printDOM() {
         
-        try { logger.error("DOM|" + getElementDOM()); }
+        try { /*logger.error("DOM|" + getElementDOM());*/ }
         catch(Exception e) { logger.error("Not able to get element DOM"); }
         
+    }
+    
+    /**
+     * Scroll down
+     * 
+     * @throws BasePageException 
+     */
+    public void scrollDown() throws BasePageException {
+        
+        logger.info("scroll down");
+        
+        commandList.addToList("scroll down");
+            
+        try {
+                 
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+
+            js.executeScript("window.scrollBy(0,250)", "");
+                 
+        }
+        catch(Exception e) { throw new BasePageException(e); }
+              
+    }
+    
+    /**
+     * Scroll down - specify pixels to scroll down
+     * 
+     * @param pixelsDown
+     * 
+     * @throws BasePageException 
+     */
+    public void scrollDown(int pixelsDown) throws BasePageException {
+        
+        logger.info("scroll down: " + pixelsDown);
+        
+        commandList.addToList("scroll down: " + pixelsDown);
+            
+        try {
+                 
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+
+            js.executeScript("window.scrollBy(0," + String.valueOf(pixelsDown) + ")", "");
+                 
+        }
+        catch(Exception e) { throw new BasePageException(e); }
+              
+    }
+    
+    /**
+     * Scroll up
+     * 
+     * @throws BasePageException 
+     */
+    public void scrollUp() throws BasePageException {
+        
+        logger.info("scroll up");
+        
+        commandList.addToList("scroll up");
+            
+        try {
+                 
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+
+            js.executeScript("window.scrollBy(0,-250)", "");
+                 
+        }
+        catch(Exception e) { throw new BasePageException(e); }
+              
+    }
+    
+    /**
+     * Scroll up - specify pixels to scroll up
+     * 
+     * @param pixelsUp
+     * 
+     * @throws BasePageException 
+     */
+    public void scrollUp(int pixelsUp) throws BasePageException {
+        
+        logger.info("scroll up");
+        
+        commandList.addToList("scroll up");
+            
+        try {
+                 
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+
+            js.executeScript("window.scrollBy(0,-" + String.valueOf(pixelsUp) + ")", "");
+                 
+        }
+        catch(Exception e) { throw new BasePageException(e); }
+              
+    }
+    
+    /**
+     * Scroll down to the bottpm of the web page
+     * 
+     * @throws BasePageException 
+     */
+    public void scrollDownToBottomOfPage() throws BasePageException {
+        
+        logger.info("scroll down to botom of page");
+        
+        commandList.addToList("scroll down to bottom of page");
+            
+        try {
+                 
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+                 
+        }
+        catch(Exception e) { throw new BasePageException(e); }
+              
     }
 
 }
