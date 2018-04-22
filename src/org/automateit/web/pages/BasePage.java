@@ -43,6 +43,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.apache.log4j.Logger;
 
+import org.automateit.core.ViewBase;
+
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
 import org.automateit.util.CommonSelenium;
@@ -64,7 +66,7 @@ import org.automateit.web.WebDriverFactory;
  * </b>
  * @author mburnside
  */
-public class BasePage {
+public class BasePage extends ViewBase {
     
     /**
      * JavaScript library that the application is using. This is required to query the active ajax connection

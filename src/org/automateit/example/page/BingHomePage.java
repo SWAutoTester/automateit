@@ -48,6 +48,12 @@ public class BingHomePage extends BasePage {
         
         try { assertText("Bing"); }
         catch(Exception e) { throw e; }
+        finally {
+            
+            try { addScreenshotToReport(); }
+            catch(Exception e) { }
+            
+        }
         
     }
     

@@ -46,8 +46,16 @@ public class YahooHomePage extends BasePage {
      */
     private void validate() throws Exception {
         
+        info("Validating the Yahoo homepage");
+        
         try { assertText("Yahoo"); }
         catch(Exception e) { throw e; }
+        finally {
+            
+            try { addScreenshotToReport(); }
+            catch(Exception e) { }
+            
+        }
         
     }
     
@@ -60,6 +68,8 @@ public class YahooHomePage extends BasePage {
      */
     public void enterSearchText(String text) throws Exception {
         
+        info("Entering search text: " + text);
+        
         try { type(ELEMENT_SEARCH_FIELD, text); }
         catch(Exception e) { throw e; }
         
@@ -71,6 +81,8 @@ public class YahooHomePage extends BasePage {
      * @throws Exception 
      */
     public void clickOnSearchButton() throws Exception {
+        
+        info("Validating the Search button");
         
         try { click(ELEMENT_SEARCH_BUTTON); }
         catch(Exception e) { throw e; }

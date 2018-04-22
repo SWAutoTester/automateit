@@ -59,6 +59,7 @@ public class ExampleTests extends TestBase {
             
         }
         catch(Exception e) { this.yahooHomePage.printDOM(); throw e; }
+        finally { this.yahooHomePage.addScreenshotToReport(); }
     
     }
     
@@ -89,7 +90,15 @@ public class ExampleTests extends TestBase {
             
             delay(2000);
             
-            for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { this.yahooHomePage.scrollDown(SCROLLPIXELS); delay(1000); }
+            for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { 
+                
+                this.yahooHomePage.scrollDown(SCROLLPIXELS); 
+                
+                delay(1000); 
+                
+                this.yahooHomePage.addScreenshotToReport(); 
+            
+            }
             
             delay(3000);
             
@@ -108,7 +117,15 @@ public class ExampleTests extends TestBase {
       
         try { 
            
-            for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { this.yahooHomePage.scrollUp(SCROLLPIXELS); delay(1000); }
+            for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { 
+                
+                this.yahooHomePage.scrollUp(SCROLLPIXELS); 
+                
+                delay(1000); 
+                
+                this.yahooHomePage.addScreenshotToReport(); 
+            
+            }
             
             delay(3000);
             

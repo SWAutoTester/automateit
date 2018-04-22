@@ -21,6 +21,7 @@
   <property name="performance" value="performance"/>
   <property name="screenshots" value="screenshots"/>
   <property name="master_configuration_file" value="configuration.properties"/>
+  <property name="report" value="report"/>
   
   <!--////////////////////////////////////////////////////-->
   <!--// Create necessary directories                   //-->
@@ -31,6 +32,7 @@
     <mkdir dir="${docs}"/>
     <mkdir dir="${docs}/${api}"/>
     <mkdir dir="${results}"/>
+    <mkdir dir="${report}"/>
     <mkdir dir="${performance}"/>
     <mkdir dir="${screenshots}"/>
     <mkdir dir="${images}"/>
@@ -66,6 +68,8 @@
       <delete dir="${dist}" />
       <delete dir="${performance}" />
       <delete dir="${screenshots}" />
+      <delete dir="${results}" />
+      <delete dir="${report}" />
   </target>
   
   <!--////////////////////////////////////////////////////-->
@@ -91,7 +95,7 @@
    </target>
    
    <target name="example" depends="jar">
-      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
+      <testng outputdir="results/" groups="example" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener,org.automateit.testng.ExtentReportTestListener">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>

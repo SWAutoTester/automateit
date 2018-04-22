@@ -33,9 +33,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.net.URL;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+
+import org.apache.commons.io.FileUtils;
+
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.OutputType;
 
 import org.automateit.data.DataDrivenInputFactory;
 import org.automateit.data.DataDrivenInput;
@@ -46,6 +52,8 @@ import org.automateit.media.JarvisTextToSpeechConverter;
 import org.automateit.media.JLayerAudioPlayer;
 import org.automateit.media.JMFAudioPlayer;
 import org.automateit.media.JavaSoundAPIAudioPlayer;
+
+import org.automateit.reports.ReportsManager;
 
 /**
  * This class is a utility class that can be used by other classes to do stuff.
@@ -826,6 +834,48 @@ public class Utils {
     public void playAudioUsingJavaMediaFramework(String audioFilename) throws Exception {
         
         try { (new JMFAudioPlayer()).play(audioFilename); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Take a screenshot and add it to the test results report
+     * 
+     * @param destinationDirectory
+     * 
+     * @throws Exception 
+     */
+    public void addScreenshotToReport(String destinationDirectory) throws Exception {
+               
+        try { addScreenshotToReport(destinationDirectory, null); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Take a screenshot and add it to the test results report
+     * 
+     * @param destinationDirectory
+     * @param title
+     * 
+     * @throws Exception 
+     */
+    public void addScreenshotToReport(String destinationDirectory, String title) throws Exception {
+               
+        try { 
+            
+            Date now = new Date();
+            
+            String filename = String.valueOf(now.getTime()) + ".png";
+            
+            String screenshotFilename = destinationDirectory + File.separator + filename;
+            
+            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
+            
+            if(title == null) ReportsManager.getInstance().addImageToReport(filename);
+            else ReportsManager.getInstance().addImageToReport(filename, title);
+        
+        }
         catch(Exception e) { throw e; }
         
     }

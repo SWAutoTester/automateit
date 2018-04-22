@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v1.3 - 21 February 2018
+Automate It! Web/Mobile Test Automation Framework v1.4 - 22 April 2018
 
 Thank you for downloading and using most flexible and powerful Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -23,6 +23,7 @@ Features:
 12) Speech-To-Text to listen to response from app and translate to text for response validation.
 13) OCR (Optical Character Recognition)
 14) Scrolling web pages up/down from Safari, Chrome, Firefox web browsers
+15) Special styled reporting using Extent-based reporting framework for really nice and professional test result reports including easy to include screenshots from web and mobile application
 
 This framework allows anyone with basic Java programming skills to write automated tests without needing any knowledge of Selenium or Appium WebDrivers.
 
@@ -41,19 +42,27 @@ It's very simple to build and use. After downloading the code, type "ant" and th
 
 Copy the jar files from "lib" and "dist" and also copy the configuration files "conf" directory to your test project and modify them for your test settings.
 
+Instructions to run the web-app-based testing examples:
+
+1) In the installation directory, type "ant example_safari", "ant example_chrome", "ant_example_firefox" for each browser.
+
+Instructions to run the mobile-app-based testing examples:
+
+1) In the installation directory, type "ant ios", "ant android" for each mobile app. For your specific environment, you may need to edit the configuration files in "conf" directory.
+
 Third Party API Dependency Versions:
 
 FirefoxDriver
 -------------
-v0.19.1
+v0.20.0
 https://github.com/mozilla/geckodriver/releases
-https://github.com/mozilla/geckodriver/releases/tag/v0.19.1
+https://github.com/mozilla/geckodriver/releases/tag/v0.20.0
 
 ChromeDriver
 -------------
-v2.35
+v2.37
 https://sites.google.com/a/chromium.org/chromedriver/downloads
-https://chromedriver.storage.googleapis.com/index.html?path=2.35/
+https://chromedriver.storage.googleapis.com/index.html?path=2.37/
 
 SafariDriver
 ------------
@@ -61,13 +70,13 @@ Latest version of SafariDriver comes embedded in latest Safari browser
 
 Selenium Server
 ---------------
-v3.8.1
-https://goo.gl/hvDPsK
+v3.11.0
+https://goo.gl/UzaKCo
 http://www.seleniumhq.org/download/
 
 Appium Drivers
 --------------
-v6.0.0-BETA2
+v6.0.0-BETA4
 http://appium.io/downloads.html
 https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
 

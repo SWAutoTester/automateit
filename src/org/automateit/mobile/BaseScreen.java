@@ -18,32 +18,25 @@
 
 package org.automateit.mobile;
  
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
-import org.apache.commons.io.FileUtils;
 
 import org.testng.Assert; 
 
 import org.openqa.selenium.By; 
 import org.openqa.selenium.WebElement; 
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.Point;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -51,15 +44,10 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.remote.MobileCapabilityType;
 
+import org.automateit.core.ViewBase;
 import org.automateit.data.DataDrivenInput;
-import org.automateit.core.Capabilities;
-import org.automateit.util.CommandList;
-import org.automateit.util.CommonProperties;
 import org.automateit.util.CommonSelenium;
-import org.automateit.util.Utils;
-
-import org.automateit.ocr.OCRProcessor;
-        
+      
 /**
  * This class is the base class for all other screen classes to use.
  * 
@@ -69,7 +57,7 @@ import org.automateit.ocr.OCRProcessor;
  * 
  * @author mburnside
  */
-public class BaseScreen {
+public class BaseScreen extends ViewBase {
     
     /**
      * The webdriver class to use
@@ -80,45 +68,6 @@ public class BaseScreen {
      * Logging class
      */
     private Logger logger = Logger.getLogger(BaseScreen.class);
-    /**
-     * Properties that can be used for any class extending this class
-     */
-    protected CommonProperties properties = CommonProperties.getInstance();
-    
-    /**
-     * If the web driver has been initialized
-     */
-    protected boolean hasBeenInitialized = false;
-    
-    /**
-     * If the logging mechanism has been initialized
-     */
-    protected boolean loggingSetup = false;
-    
-    /**
-     * Indicates for the framework to record the video
-     */
-    protected boolean recordVideo = false;
-    
-    /**
-     * The web driver capabilities object
-     */
-    protected DesiredCapabilities capabilities = new DesiredCapabilities();
-    
-    /**
-     * Utilities for convenience methods
-     */
-    protected Utils utils = new Utils();
-    
-    /**
-     * Capture WebDriver commands. Default is <code>false</code>.
-     */
-    protected boolean captureWebDriverCommands = false;
-    
-    /**
-     * Command List
-     */
-    protected CommandList commandList = CommandList.getInstance();
     
     /**
      * Default Constructor. The first screen that appears on the app must use this constructor
@@ -180,16 +129,7 @@ public class BaseScreen {
         catch(Exception e) { throw e; }
         
     }
-    /**
-     * Thread.sleep in milliseconds. Makes less code to type.
-     * 
-     * @param milliseconds 
-     */
-    protected void delay(long milliseconds) {
-        
-        try { Thread.sleep(milliseconds); } catch(Exception e) { }
-        
-    }
+    
     
     /**
      * Setup the web driver to use for this set of tests.
@@ -335,6 +275,17 @@ public class BaseScreen {
             }
             else { if(isIOS()) capabilities.setCapability("useNewWDA", true); }
             
+            if(properties.getProperty("showXcodeLog") != null) {
+                
+                logger.info("Loading webdriver property: " + "showXcodeLog" + "|" + properties.get("showXcodeLog"));
+                
+                boolean showXcodeLog = (new Boolean(properties.get("showXcodeLog"))).booleanValue();
+                
+                capabilities.setCapability("showXcodeLog", showXcodeLog);
+                    
+            }
+            else { if(isIOS()) capabilities.setCapability("showXcodeLog", false); }
+            
             logger.info("Loading webdriver property: " + "URL" + "|" + properties.get("URL"));
               
             logger.info("Preparing to create a new web driver instance");
@@ -448,25 +399,7 @@ public class BaseScreen {
         
     }
     
-    /**
-     * Setup logging with log4j.
-     * 
-     * @throws Exception 
-     */
-    protected void setupLogging() throws Exception {
-        
-        try {
-            
-            Properties props = new Properties();
-            props.load(new FileInputStream("./conf/log4j.properties"));
-            PropertyConfigurator.configure(props);
-            
-            loggingSetup = true;
-            
-        }
-        catch(Exception e) { throw e; }
-
-    }
+    
   
     /**
      * Perform a swipe on the screen.
@@ -882,28 +815,6 @@ public class BaseScreen {
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
-    
-    /**
-     * Click on a web element matching the type and containing the text.
-     * 
-     * @param text1
-     * @param text2
-     * @param className
-     * 
-     * @throws Exception 
-     */
-    /*
-    public void clickOnWebElementContainingText(String text1, String text2, String className) throws Exception {
-        
-        logger.info("clickOnWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
-            
-        commandList.addToList("clickOnWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
-        
-        try { getWebElementContainingText(text1, text2, className).click(); }
-        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
-        
-    }
-    */
     
     /**
      * Click on a web element matching the type and containing the text.
@@ -2307,7 +2218,7 @@ public class BaseScreen {
      * 
      * @param resourceId
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
     public void clearWebElementByResourceId(String resourceId) throws Exception { 
         
@@ -2418,28 +2329,6 @@ public class BaseScreen {
         
         try { return this.driver.findElement(By.id(resourceId)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
-        
-    }
-    
-    /**
-     * Log the exception.
-     * 
-     * @param e
-     * 
-     * @throws Exception 
-     */
-    protected void logException(Exception e) throws Exception {
-        
-        try {
-            
-            logger.info("----------------------------------------------------------");
-            logger.info("");
-            logger.error(e);
-            logger.info("");
-            logger.info("----------------------------------------------------------");
-            
-        }
-        catch(Exception e2) { throw e2; }
         
     }
     
@@ -2803,13 +2692,6 @@ public class BaseScreen {
     }
     
     /**
-     * Get the platform type.
-     * 
-     * @return 
-     */
-    public String getPlatFormType() { return properties.get("platformName"); }
-    
-    /**
      * Indicates this is an android device.
      * 
      * @return 
@@ -3059,6 +2941,30 @@ public class BaseScreen {
         } 
         catch (Exception e) { throw e; }
         
+    }
+
+    /**
+     * Get coordinates of given element
+     *
+     * @param classname
+     * @param text
+     *
+     * @throws Exception
+     */
+    public Point getCoordinates(String className, String text) throws Exception {
+
+        WebElement webElement = null;
+
+        try {
+
+                try { webElement = getWebElementAtLocationByClassNameAndValueAttributeValueEquals(className, text); }
+                catch (Exception e) { }
+
+                return webElement.getLocation();
+
+        }
+        catch (Exception e) { throw e; }
+
     }
 
     /**
@@ -3606,76 +3512,4 @@ public class BaseScreen {
         
     }
     
-    /**
-     * Get the text from a screenshot of the mobile app screen using OCR
-     * 
-     * @return
-     * 
-     * @throws Exception 
-     */
-    public String getCurrentTextOnScreenUsingOCR() throws Exception {
-        
-        String screenshotFilename = utils.getBaseScreenshotsDirectory() + "ocrimage.png";
-                
-        try { 
-            
-            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
-            
-            OCRProcessor ocrProcessor = new OCRProcessor();
-            
-            ocrProcessor.setDatapath("../framework/resources/tessdata");
-            
-            return ocrProcessor.getTextInImage(screenshotFilename); 
-        
-        }
-        catch(Exception e) { throw e; }
-        
-    }
-    
-    /**
-     * Validate that the expected text appears on the screen using OCR.
-     * 
-     * @param expectedText
-     * 
-     * @throws Exception 
-     */
-    public void validateTextOnScreenUsingOCR(String expectedText) throws Exception {
-        
-        logger.info("Validating expected text on the Screen using OCR");
-        
-        commandList.addToList("validateTextOnScreenUsingOCR|" + expectedText);
-        
-        try { 
-            
-            if(expectedText == null) throw new Exception("Unable to get any text from OCR because expected text to verify is null");
-            
-            String renderedText = getCurrentTextOnScreenUsingOCR();
-            
-            logger.info("Text read from OCR operation on the mobile screen:\n\n" + renderedText + "\n\n");
-            
-            if(renderedText == null) throw new Exception("Unable to get any text from OCR");
-            
-            if(!renderedText.contains(expectedText.trim())) throw new Exception("Expected text: " + expectedText + " does not appear on the screen");
-            
-        }
-        catch(Exception e) { throw e; }
-        
-    }
-    
-    /**
-     * Validate that a set of expected text appears on the screen using OCR.
-     * 
-     * @param expectedText
-     * 
-     * @throws Exception 
-     */
-    public void validateTextOnScreenUsingOCR(String[] expectedText) throws Exception {
-        
-        logger.info("Validating expected text on the Screen using OCR");
-        
-        try { for(int i = 0; i < expectedText.length; i++) validateTextOnScreenUsingOCR(expectedText[i]); }
-        catch(Exception e) { throw e; }
-        
-    }
-
 }

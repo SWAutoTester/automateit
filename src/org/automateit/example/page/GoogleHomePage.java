@@ -48,6 +48,12 @@ public class GoogleHomePage extends BasePage {
         
         try { assertText("Google"); }
         catch(Exception e) { throw e; }
+        finally {
+            
+            try { addScreenshotToReport(); }
+            catch(Exception e) { }
+            
+        }
         
     }
     
