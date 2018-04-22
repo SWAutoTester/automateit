@@ -1,13 +1,11 @@
 Automate It! Web/Mobile Test Automation Framework v1.4 - 22 April 2018
 
-Thank you for downloading and using most flexible and powerful Java-based test automation framework using Selenium/Appium for web/mobile application testing.
-
-Comments for improvement are very welcome.
+Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
 Features:
 
 1) Drive automated tasks using latest and greatest Selenium WebDriver and Appium Mobile Drivers using a configuration file 
-2) Obfuscation of selenium API / no test code changes for testing web and mobile applications
+2) Obfuscation of selenium/appium API's - no test code changes for testing web and mobile applications
 3) Ability to configure mandatory waits in test execution
 4) Handles jquery/prototype page load waiting
 5) Handles complexity of waiting for all ajax call completion
