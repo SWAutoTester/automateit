@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v1.4 - 22 April 2018
+Automate It! Web/Mobile Test Automation Framework v1.5.1 - 12 May 2018
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -52,15 +52,15 @@ Third Party API Dependency Versions:
 
 FirefoxDriver
 -------------
-v0.20.0
+v0.20.1
 https://github.com/mozilla/geckodriver/releases
-https://github.com/mozilla/geckodriver/releases/tag/v0.20.0
+https://github.com/mozilla/geckodriver/releases/tag/v0.20.1
 
 ChromeDriver
 -------------
-v2.37
+v2.38
 https://sites.google.com/a/chromium.org/chromedriver/downloads
-https://chromedriver.storage.googleapis.com/index.html?path=2.37/
+https://chromedriver.storage.googleapis.com/index.html?path=2.38/
 
 SafariDriver
 ------------
@@ -74,7 +74,7 @@ http://www.seleniumhq.org/download/
 
 Appium Drivers
 --------------
-v6.0.0-BETA4
+v6.0.0-BETA5
 http://appium.io/downloads.html
 https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
 
