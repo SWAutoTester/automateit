@@ -43,6 +43,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.touch.offset.PointOption;
+import io.appium.java_client.touch.WaitOptions;
 
 import org.automateit.core.ViewBase;
 import org.automateit.data.DataDrivenInput;
@@ -465,7 +467,7 @@ public class BaseScreen extends ViewBase {
                 
             TouchAction touchAction = new TouchAction(this.driver);
             
-            touchAction.tap(x, y).perform();
+            touchAction.tap(PointOption.point(x, y)).perform();
             
             delay(1500);
             
@@ -506,7 +508,7 @@ public class BaseScreen extends ViewBase {
               
             TouchAction touchAction = new TouchAction(this.driver);
             
-            touchAction.tap(webelement).perform();
+            touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
             
             delay(1500);
             
@@ -531,8 +533,10 @@ public class BaseScreen extends ViewBase {
         try {
             
             TouchAction touchAction = new TouchAction(this.driver);
+            
+            WebElement webelement = getWebElementByXPath(locator);
                 
-            touchAction.tap(getWebElementByXPath(locator)).perform();
+            touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
             
             delay(1500);
             
@@ -595,10 +599,8 @@ public class BaseScreen extends ViewBase {
         try {
                 
             TouchAction touchAction = new TouchAction(this.driver);
-            
-            //touchAction.longPress(startX,startY, Duration.ofSeconds(duration)).moveTo(endX,endY).release().perform(); 
-            
-            touchAction.press(startX,startY).waitAction(Duration.ofSeconds(duration)).moveTo(endX,endY).release().perform(); 
+           
+            touchAction.press(PointOption.point(startX, startY)).waitAction((new WaitOptions()).withDuration(Duration.ofSeconds(duration))).moveTo(PointOption.point(endX, endY)).release().perform(); 
             
             delay(1500);
             
