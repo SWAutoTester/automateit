@@ -18,22 +18,26 @@
 
 package org.automateit.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.FileWriter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.net.URL;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -877,6 +881,39 @@ public class Utils {
         
         }
         catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Returns a List from lines in a file.
+     * 
+     * @param filename
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public List<String> getListFromFile(String filename) throws Exception {
+        
+        List<String> list = new ArrayList<String>();
+        
+        String line = null;
+        
+        try {
+        
+            BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+        
+            while((line = reader.readLine()) != null) { 
+                
+                try { list.add(line.trim()); }
+                catch(Exception le) { }
+                
+            }
+            
+        } 
+        catch ( Exception e ) { throw e; }
+        
+        return list;
         
     }
     

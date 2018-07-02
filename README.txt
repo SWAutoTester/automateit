@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v1.5.2 - 26 May 2018
+Automate It! Web/Mobile Test Automation Framework v1.6.1 - 23 June 2018
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -22,6 +22,7 @@ Features:
 13) OCR (Optical Character Recognition)
 14) Scrolling web pages up/down from Safari, Chrome, Firefox web browsers
 15) Special styled reporting using Extent-based reporting framework for really nice and professional test result reports including easy to include screenshots from web and mobile application
+16) Alert Handlers in Zabbix, Email, and SMS for alerts of specific user-defined special events during or after tests (failed or skipped) 
 
 This framework allows anyone with basic Java programming skills to write automated tests without needing any knowledge of Selenium or Appium WebDrivers.
 
@@ -54,13 +55,13 @@ FirefoxDriver
 -------------
 v0.20.1
 https://github.com/mozilla/geckodriver/releases
-https://github.com/mozilla/geckodriver/releases/tag/v0.20.1
+https://github.com/mozilla/geckodriver/releases/tag/v0.21.0
 
 ChromeDriver
 -------------
-v2.38
+v2.40
 https://sites.google.com/a/chromium.org/chromedriver/downloads
-https://chromedriver.storage.googleapis.com/index.html?path=2.38/
+https://chromedriver.storage.googleapis.com/index.html?path=2.40/
 
 SafariDriver
 ------------
@@ -74,7 +75,7 @@ http://www.seleniumhq.org/download/
 
 Appium Drivers
 --------------
-v6.0.0
+v6.1.0
 http://appium.io/downloads.html
 https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
 
@@ -82,6 +83,10 @@ Log4J
 ------
 Apache Log4j API 2.10.0 API
 https://logging.apache.org/log4j/2.x/download.html
+
+JavaMail
+--------
+ JavaMail API 1.4.5
 
 
 

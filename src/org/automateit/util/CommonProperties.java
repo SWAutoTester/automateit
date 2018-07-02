@@ -63,6 +63,11 @@ public class CommonProperties extends Properties {
     private int browserType = 0;
     
     /**
+     * The target environment we are testing against (Stage, Production, Development, Sandbox, whatever)
+     */
+    private String targetEnvironment = null;
+    
+    /**
      * the properties file path
      */
     public final String PROPERTIESFILEPATH = "./conf/configuration.properties";
@@ -106,12 +111,9 @@ public class CommonProperties extends Properties {
     private boolean recordVideo = false;
     
     /**
-     * Use externally configured Base URL (not in the configuration file)
-     */
-    private boolean useExternallyConfiguredBaseURL = false;
-    
-    /**
      * Reference to this object
+     * 
+     * @return
      */
     private static CommonProperties instance = new CommonProperties();
     
@@ -252,9 +254,25 @@ public class CommonProperties extends Properties {
     public void setForceAppNoReset(boolean forceNoReset) { this.forceNoReset = forceNoReset; }
     
     /**
+     * Set the Target Environment we testing against
+     * 
+     * @param targetEnvironment 
+     */
+    public void setTargetEnvironment(String targetEnvironment) { this.targetEnvironment = targetEnvironment; }
+    
+    /**
      * Get Force app not to be reset/reinstalled 
+     * 
+     * @return
      */
     public boolean getForceAppNoReset() { return this.forceNoReset; }
+    
+    /**
+     * Get the Target Environment we testing against
+     * 
+     * @return
+     */
+    public String getTargetEnvironment() { return this.targetEnvironment; }
     
     /**
      * Set record video of tests
@@ -335,7 +353,7 @@ public class CommonProperties extends Properties {
     }
     
     /**
-     * Save to seleniumconfiguration.properties file.
+     * Save to configuration.properties file.
      * 
      * @throws Exception 
      */
