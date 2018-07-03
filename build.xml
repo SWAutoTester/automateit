@@ -174,7 +174,7 @@
   <target name="android" depends="jar">
       <antcall target="delete_master_configuration_file"/>
       <antcall target="copy_android_configuration_file"/>
-      <testng outputdir="results/" groups="android" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MobileScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
+      <testng outputdir="results/" groups="android" useDefaultListeners="false" listeners="${testng_listeners}">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>
@@ -194,7 +194,7 @@
   <target name="ios" depends="jar">
       <antcall target="delete_master_configuration_file"/>
       <antcall target="copy_ios_configuration_file"/>
-      <testng outputdir="results/" groups="ios" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MobileScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener">
+      <testng outputdir="results/" groups="ios" useDefaultListeners="false" listeners="${testng_listeners}">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>
