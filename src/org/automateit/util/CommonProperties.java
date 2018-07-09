@@ -68,6 +68,11 @@ public class CommonProperties extends Properties {
     private String targetEnvironment = null;
     
     /**
+     * The key name in value pair for product id
+     */
+    private final static String PRODUCT_ID_KEY = "productId";
+    
+    /**
      * the properties file path
      */
     public final String PROPERTIESFILEPATH = "./conf/configuration.properties";
@@ -303,6 +308,27 @@ public class CommonProperties extends Properties {
     public String getBaseURL() throws Exception {
        
         try { return get("baseURL"); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Set the Product Identifier
+     * 
+     * @param productId
+     */
+    public void setProductId(String productId) { setProperty(PRODUCT_ID_KEY, productId); }
+    
+    /**
+     * Get the Product Identifier.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getProductId() throws Exception {
+       
+        try { return get(PRODUCT_ID_KEY); }
         catch(Exception e) { throw e; }
         
     }

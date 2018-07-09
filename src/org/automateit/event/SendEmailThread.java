@@ -79,7 +79,7 @@ public class SendEmailThread extends SendMessageThreadBase {
          
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(props.getProperty("mail.to")));  
          
-            mimeMessage.setSubject("QA: " + CommonProperties.getInstance().getTargetEnvironment() + ": " + result.getName() + " " + props.getProperty("mail.subject"));  
+            mimeMessage.setSubject("QA: " + CommonProperties.getInstance().getTargetEnvironment() + ": " + CommonProperties.getInstance().getProductId() + ": " + result.getName() + " " + props.getProperty("mail.subject"));  
          
             if(result != null) mimeMessage.setText("Test Failed: " + result.getName() + "\n\n" + "--------------" + "\n\n" + result.getThrowable());  
             else mimeMessage.setText("Message: " + message);

@@ -31,6 +31,8 @@ import org.testng.ITestResult;
 
 import org.apache.log4j.Logger;
 
+import org.automateit.util.CommonProperties;
+
 /**
  * This will send an SMS while not interfering with execution of main program
  * 
@@ -72,8 +74,8 @@ public class SendSMSThread_Nexmo extends SendMessageThreadBase {
         
             NexmoClient client = new NexmoClient(auth);
 
-            if(result != null) textMessage = new TextMessage(props.getProperty("sender_phone_number"), props.getProperty("receiver_phone_number"), "Test Failed: " + result.getName());
-            else textMessage = new TextMessage(props.getProperty("sender_phone_number"), props.getProperty("receiver_phone_number"), "Alert Message: " + message);
+            if(result != null) textMessage = new TextMessage(props.getProperty("sender_phone_number"), props.getProperty("receiver_phone_number"), "Test Failed: " + ": "  + CommonProperties.getInstance().getTargetEnvironment() + ": " + CommonProperties.getInstance().getProductId() + ": " + result.getName());
+            else textMessage = new TextMessage(props.getProperty("sender_phone_number"), props.getProperty("receiver_phone_number"), "Alert Message: "  + CommonProperties.getInstance().getTargetEnvironment() + ": " + CommonProperties.getInstance().getProductId() + ": " + message);
 
             SmsSubmissionResult[] responses = client.getSmsClient().submitMessage(textMessage);
 

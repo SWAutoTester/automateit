@@ -75,7 +75,7 @@ public class AlertEventListener extends TestListenerAdapter {
      * @param result 
      */
     @Override
-    public void onTestSuccess(ITestResult result) { sendAlert(result); }
+    public void onTestSuccess(ITestResult result) { }
    
     /**
      * Do actions before a test case execution 
