@@ -35,6 +35,11 @@ import org.apache.log4j.Logger;
 public class SendZabbixMessageThread extends SendMessageThreadBase {
     
     /**
+     * The hostname property key name
+     */
+    public final static String HOSTNAME_PROPERTY_NAME = "host_target"; 
+    
+    /**
      * Logging class
      */
     private Logger logger = Logger.getLogger(SendZabbixMessageThread.class);
@@ -66,9 +71,13 @@ public class SendZabbixMessageThread extends SendMessageThreadBase {
 
             DataObject dataObject = new DataObject();
 		
-            dataObject.setHost(props.getProperty("host_target"));
+            // make this derived from system-wide property or the configuration file
+            if(System.getProperty(HOSTNAME_PROPERTY_NAME) != null) dataObject.setHost(System.getProperty(HOSTNAME_PROPERTY_NAME));
+            else dataObject.setHost(props.getProperty(HOSTNAME_PROPERTY_NAME));
 		
-            dataObject.setKey(props.getProperty("key"));
+            // make key dynamic (test name) if key value is not present
+            if(props.getProperty("key") != null) dataObject.setKey(props.getProperty("key"));
+            else dataObject.setKey(result.getName());
 		
             // we use 0 (false) or 1 (true)
             dataObject.setValue("0");

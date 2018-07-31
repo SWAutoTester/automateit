@@ -46,6 +46,8 @@ public class BingHomePage extends BasePage {
      */
     private void validate() throws Exception {
         
+        info("Validating the Bing homepage");
+        
         try { assertText("Bing"); }
         catch(Exception e) { throw e; }
         finally {
@@ -66,6 +68,8 @@ public class BingHomePage extends BasePage {
      */
     public void enterSearchText(String text) throws Exception {
         
+        info("Entering search text: " + text);
+        
         try { type(ELEMENT_SEARCH_FIELD, text); }
         catch(Exception e) { throw e; }
         
@@ -77,6 +81,8 @@ public class BingHomePage extends BasePage {
      * @throws Exception 
      */
     public void clickOnSearchButton() throws Exception {
+        
+        info("Clicking on the Search button");
         
         try { click(ELEMENT_SEARCH_BUTTON); }
         catch(Exception e) { throw e; }

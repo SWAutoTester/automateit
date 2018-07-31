@@ -23,11 +23,11 @@ import org.testng.ITestResult;
 /**
  * This class is added to testng task to listen for events.
  * 
- * It will handle the sending of alerts if a test fails or is skipped.
+ * It will handle the sending of alerts for any test result status.
  *
  * @author mburnside
  */
-public class AlertEventListener extends AlertEventListenerBase {
+public class AlertAllEventListener extends AlertEventListenerBase {
     
     /**
      * Do actions after a test case execution failure.
@@ -35,7 +35,7 @@ public class AlertEventListener extends AlertEventListenerBase {
      * @param result 
      */
     @Override
-    public void onTestFailure(ITestResult result) { sendAlert(result); }
+    public void onTestFailure(ITestResult result) { sendAlert(result, true); }
 
     /**
      * Do actions after a test case execution skipped.
@@ -43,7 +43,7 @@ public class AlertEventListener extends AlertEventListenerBase {
      * @param result 
      */
     @Override
-    public void onTestSkipped(ITestResult result) { sendAlert(result); }
+    public void onTestSkipped(ITestResult result) { sendAlert(result, true); }
 
     /**
      * Do actions after a test case execution success (no reported fail
@@ -52,8 +52,8 @@ public class AlertEventListener extends AlertEventListenerBase {
      * @param result 
      */
     @Override
-    public void onTestSuccess(ITestResult result) { }
-    
+    public void onTestSuccess(ITestResult result) { sendAlert(result, true); }
+   
 }
 
 

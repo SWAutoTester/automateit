@@ -63,14 +63,14 @@ public class CommonProperties extends Properties {
     private int browserType = 0;
     
     /**
-     * The target environment we are testing against (Stage, Production, Development, Sandbox, whatever)
-     */
-    private String targetEnvironment = null;
-    
-    /**
      * The key name in value pair for product id
      */
     private final static String PRODUCT_ID_KEY = "productId";
+    
+    /**
+     * The key name in value pair for target environment
+     */
+    private final static String TARGET_ENVIRONMENT_KEY = "target_environment";
     
     /**
      * the properties file path
@@ -254,7 +254,7 @@ public class CommonProperties extends Properties {
     /**
      * Force app not to be reset/reinstalled
      * 
-     * @param noReset 
+     * @param forceNoReset 
      */
     public void setForceAppNoReset(boolean forceNoReset) { this.forceNoReset = forceNoReset; }
     
@@ -263,7 +263,7 @@ public class CommonProperties extends Properties {
      * 
      * @param targetEnvironment 
      */
-    public void setTargetEnvironment(String targetEnvironment) { this.targetEnvironment = targetEnvironment; }
+    public void setTargetEnvironment(String targetEnvironment) { setProperty(TARGET_ENVIRONMENT_KEY, targetEnvironment); }
     
     /**
      * Get Force app not to be reset/reinstalled 
@@ -277,7 +277,7 @@ public class CommonProperties extends Properties {
      * 
      * @return
      */
-    public String getTargetEnvironment() { return this.targetEnvironment; }
+    public String getTargetEnvironment() { return get(TARGET_ENVIRONMENT_KEY); }
     
     /**
      * Set record video of tests

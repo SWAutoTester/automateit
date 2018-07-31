@@ -12,21 +12,6 @@ import org.automateit.web.pages.BasePage;
 public class YahooHomePage extends BasePage {
     
     /**
-     * Xpath element locator for the search box
-     */
-    public static final String ELEMENT_SEARCH_FIELD = "//*[@id = 'uh-search-box']";
-    
-    /**
-     * Xpath element locator for the search button
-     */
-    public static final String ELEMENT_SEARCH_BUTTON = "//*[@id = 'uh-search-button')]";
-    
-    /**
-     * Xpath element locator for the validation check
-     */
-    public static final String ELEMENT_VALIDATION = "//*[contains(text(), 'Google')]";
-    
-    /**
      * Default Constructor.
      * 
      * @throws Exception 
@@ -70,7 +55,7 @@ public class YahooHomePage extends BasePage {
         
         info("Entering search text: " + text);
         
-        try { type(ELEMENT_SEARCH_FIELD, text); }
+        try { enterTextIntoWebElementUsingResourceId("uh-search-box", text); }
         catch(Exception e) { throw e; }
         
     }
@@ -82,9 +67,9 @@ public class YahooHomePage extends BasePage {
      */
     public void clickOnSearchButton() throws Exception {
         
-        info("Validating the Search button");
+        info("Clicking on the Search button");
         
-        try { click(ELEMENT_SEARCH_BUTTON); }
+        try { clickOnWebElementWithResourceId("uh-search-button"); }
         catch(Exception e) { throw e; }
         
     }

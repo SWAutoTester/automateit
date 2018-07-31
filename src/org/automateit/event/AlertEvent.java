@@ -17,9 +17,6 @@
  **/
 package org.automateit.event;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.testng.ITestResult;
@@ -41,6 +38,11 @@ public class AlertEvent extends Thread {
     protected List<String> keywordList = null;
     
     /**
+     * The list of exception messages selected as not really something to react to 
+     */
+    protected List<String> ignoreList = null;
+    
+    /**
      * The list of AlertHandler classes to handle the actual physical execution/handling of events
      */
     protected List<AlertHandler> alertHandlers = new ArrayList<AlertHandler>();
@@ -59,6 +61,11 @@ public class AlertEvent extends Thread {
      * the file that contains the list of important keywords (test names) listed as severe
      */
     public final String ALERTFILEPATH = "./conf/alert.txt";
+    
+    /**
+     * the file that contains the list of important keywords (test names) listed as ignore - this list is watching error message in the throwable exception (some exceptions we may want to ignore)
+     */
+    public final String ALERT_IGNORE_FILEPATH = "./conf/alert_ignore.txt";
     
     /**
      * Reference to this object
@@ -82,18 +89,28 @@ public class AlertEvent extends Thread {
         try { keywordList = utils.getListFromFile(ALERTFILEPATH); }
         catch(Exception e) { logger.error(e); }
         
+        try { ignoreList = utils.getListFromFile(ALERT_IGNORE_FILEPATH); }
+        catch(Exception e) { logger.error(e); }
+        
     }
     
     /**
      * Inform the listeners of the details of the event.
      * 
-     * @param result 
+     * @param result
+     * @param ignoreAlertKeywords 
      */
-    public void sendAlert(ITestResult result) {  
-        
+    public void sendAlert(ITestResult result, boolean ignoreAlertKeywords) {  
+       
         // If the test name or other keyword is not in the list of things to alert for, then skip
-        if(!keywordList.contains(result.getName())) return;
-    
+        if(!ignoreAlertKeywords && !keywordList.contains(result.getName())) return;
+       
+        // if the throwable does not contain an error (is null) then do not send
+        if(!ignoreAlertKeywords && (result.getThrowable() == null)) return;
+       
+        // If the error is in the list of errors to ignore then return without doing anything
+        if(!ignoreAlertKeywords && errorMessageIgnore(result.getThrowable().getMessage())) return;
+        
         for(AlertHandler alertHandler : alertHandlers) {
     
             try { alertHandler.execute(result); }
@@ -102,6 +119,13 @@ public class AlertEvent extends Thread {
         }
         
     }
+    
+    /**
+     * Inform the listeners of the details of the event.
+     * 
+     * @param result 
+     */
+    public void sendAlert(ITestResult result) { sendAlert(result, false); }
     
     /**
      * Inform the listeners of the details of the event.
@@ -134,6 +158,22 @@ public class AlertEvent extends Thread {
         
         } 
         catch(Exception e) { logger.error("Unable to register alert event handler|" + alertHandler); }
+        
+    }
+    
+    /**
+     * Check if any part of the error message text is 
+     * 
+     * @param errorMessage
+     * 
+     * @return
+     */
+    protected boolean errorMessageIgnore(String errorMessage) {
+        
+        for(String ignoreText : ignoreList) if(errorMessage.trim().toLowerCase().contains(ignoreText.trim().toLowerCase())) return true;
+      
+        // if we go through the entire list and didnt find it then return false
+        return false;
         
     }
     

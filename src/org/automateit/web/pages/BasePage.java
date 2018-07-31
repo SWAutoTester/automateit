@@ -826,7 +826,7 @@ public class BasePage extends ViewBase {
         
         commandList.addToList("assertTitle: " + s + "|" + getTitle());
         
-        try { Assert.assertEquals(s.trim(),getTitle().trim()); }
+        try { Assert.assertEquals(s.trim(), getTitle().trim()); }
         catch(Exception e) { throw new BasePageException(e); }
         
     }
@@ -840,7 +840,13 @@ public class BasePage extends ViewBase {
      */
     protected String getTitle() throws BasePageException { 
         
-        try { return this.driver.getTitle(); }
+        try { 
+            
+            waitForJSandAjaxToLoad((new Long(this.timeout).longValue())); 
+            
+            return this.driver.getTitle(); 
+        
+        }
         catch(Exception e) { throw new BasePageException(e); }
             
     }
@@ -916,7 +922,7 @@ public class BasePage extends ViewBase {
             throw new BasePageException("After " + this.syncTimeout + " seconds, the text: " + s + " was not found in the HTML DOM or rendered anywhere on the page");
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw e; }
         
     }
     
@@ -1078,7 +1084,7 @@ public class BasePage extends ViewBase {
             waitForPageToLoad(timeout, checkAjax);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
     
@@ -1107,7 +1113,7 @@ public class BasePage extends ViewBase {
             sleep(2000);
              
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
 
@@ -1218,7 +1224,7 @@ public class BasePage extends ViewBase {
             WebElement myDynamicElement = (new WebDriverWait(driver, (new Long(timeout)).longValue())).until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
          
     }
     
@@ -1245,7 +1251,7 @@ public class BasePage extends ViewBase {
             WebElement myDynamicElement = (new WebDriverWait(driver, (new Long(timeout)).longValue())).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
          
     }
     
@@ -1272,7 +1278,7 @@ public class BasePage extends ViewBase {
             WebElement myDynamicElement = (new WebDriverWait(driver, (new Long(timeout)).longValue())).until(ExpectedConditions.presenceOfElementLocated(By.className(classname)));
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
          
     }
     
@@ -1294,7 +1300,7 @@ public class BasePage extends ViewBase {
         commandList.addToList("isTextPresent: " + s); 
         
         try { return getHtmlSource().contains(s); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
     
@@ -1315,7 +1321,7 @@ public class BasePage extends ViewBase {
         commandList.addToList("getText: " + locator);
         
         try { return this.driver.findElement(By.xpath(locator)).getText(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
     
@@ -1336,7 +1342,7 @@ public class BasePage extends ViewBase {
         commandList.addToList("getValue: " + locator);
         
         try { return this.driver.findElement(By.xpath(locator)).getAttribute("value"); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
     
@@ -1581,7 +1587,7 @@ public class BasePage extends ViewBase {
      * 
      * @throws BasePageException 
      */
-    protected void clickOnWebElementContainingText(String text, String className) throws BasePageException {
+    public void clickOnWebElementContainingText(String text, String className) throws BasePageException {
         
         logger.info("Clicking on web element containing text: " + text + "|" + className);
             
@@ -1591,11 +1597,15 @@ public class BasePage extends ViewBase {
           
             List<WebElement> elements = this.driver.findElements(By.className(className));
             
+            logger.info("count:" + elements.size());
+            
             for (WebElement element:elements) {
                 
             	String data = element.getText().trim();
                 
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("haha:" + data + "|" + text);
                    
                 if(data.contains(text)) {
                     
@@ -2894,6 +2904,278 @@ public class BasePage extends ViewBase {
         catch(Exception e) { throw new BasePageException(e); }
               
     }
+    
+    /**
+     * Click on a link containing the text.
+     * 
+     * @param text
+     * 
+     * @throws BasePageException 
+     */
+    protected void clickOnWebElementByPartialLinkText(String text) throws BasePageException {
+        
+        logger.info("Click on a link containing the text: " + text);
+            
+        commandList.addToList("clickOnWebElementByPartialLinkText: " + text);
+        
+        try { driver.findElement(By.partialLinkText(text)).click(); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        
+    }
+    
+    /**
+     * Click on a link matching the text.
+     * 
+     * @param text
+     * 
+     * @throws BasePageException 
+     */
+    protected void clickOnWebElementByLinkText(String text) throws BasePageException {
+        
+        logger.info("Click on a link matching the text: " + text);
+            
+        commandList.addToList("clickOnWebElementByPartialLinkText: " + text);
+        
+        try { driver.findElement(By.linkText(text)).click(); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        
+    }
 
+    /**
+     * Get the element matching css selector. This can be used for many purposes including getting by element tag name
+     * 
+     * @param cssSelector
+     * 
+     * @return
+     * 
+     * @throws BasePageException 
+     */
+    public List<WebElement> getWebElementsWithCSS(String cssSelector) throws BasePageException {
+       
+        logger.info("Preparing to find web element by css selector: " + cssSelector);
+        
+        commandList.addToList("getWebElementWithCSS:" + cssSelector);
+        
+        try { return this.driver.findElements(By.cssSelector(cssSelector)); }
+        catch(Exception e) { throw new BasePageException(e); }
+        
+    }
+    
+    /**
+     * Click on a web element matching the css selector and containing the text.
+     * 
+     * @param text
+     * @param cssSelector
+     * 
+     * @throws BasePageException 
+     */
+    public void clickOnWebElementContainingTextCSSSelector(String text, String cssSelector) throws BasePageException {
+       
+        logger.info("Clicking on web element with css selector and containing text: " + text + "|" + cssSelector);
+        
+        commandList.addToList("clickOnWebElementContainingTextCSSSelector: " + text + "|" + cssSelector);
+        
+        try {
+                    
+            getWebElementWithCSSAndContainsText(text, cssSelector).click();
+                            
+            waitForPageToLoad(timeout);
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get a web element matching the css selector and containing the text.
+     * 
+     * @param text
+     * @param cssSelector
+     * 
+     * @throws BasePageException 
+     */
+    public WebElement getWebElementWithCSSAndContainsText(String text, String cssSelector) throws BasePageException {
+       
+        logger.info("Get the web element with css selector and containing text: " + text + "|" + cssSelector);
+        
+        commandList.addToList("getWebElementWithCSSAndContainsText: " + text + "|" + cssSelector);
+        
+        try {
+            
+            List<WebElement> elements = getWebElementsWithCSS(cssSelector);
+            
+            for (WebElement element:elements) {
+                
+                String data = element.getText().trim();
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking value: " + data);
+                   
+                if(data.contains(text)) return element;
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception    
+            throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
+            
+        }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        
+    }
+    
+    /**
+     * Get a web element matching the css selector and matches a type and containing the text.
+     * 
+     * @param type
+     * @param typeValue
+     * @param cssSelector
+     * 
+     * @throws BasePageException 
+     */
+    public WebElement getWebElementWithCSSAndMatchesTypeAndContainsText(String type, String typeValue, String cssSelector) throws BasePageException {
+       
+        logger.info("Get a web element matching the css selector and matches a type and containing the text: " + type + "|" + typeValue + "|" + cssSelector);
+        
+        commandList.addToList("getWebElementWithCSSAndMatchesTypeAndContainsText: " + type + "|" + typeValue + "|" + cssSelector);
+        
+        try {
+            
+            List<WebElement> elements = getWebElementsWithCSS(cssSelector);
+            
+            for (WebElement element:elements) {
+                
+                String data = element.getAttribute("type");
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking value: " + data);
+                   
+                if(data.contains(typeValue)) return element;
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception    
+            throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + typeValue + " and matching type: " + type);
+            
+        }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        
+    }
+    
+    /**
+     * Get a web element matching the css selector and matches a type and containing the text.
+     * 
+     * @param type
+     * @param text
+     * @param cssSelector
+     * 
+     * @throws BasePageException 
+     */
+    public void clickOnWebElementWithCSSAndMatchesTypeAndContainsText(String type, String text, String cssSelector) throws BasePageException {
+       
+        logger.info("Click on a web element matching the css selector and matches a type and containing the text: " + type + "|" + text + "|" + cssSelector);
+        
+        commandList.addToList("clickOnWebElementWithCSSAndMatchesTypeAndContainsText: " + type + "|" + text + "|" + cssSelector);
+        
+        try { getWebElementWithCSSAndMatchesTypeAndContainsText(type, text, cssSelector).click(); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get the element with the matching resource id attribute.
+     * 
+     * @param resourceId
+     * 
+     * @return
+     * 
+     * @throws BasePageException 
+     */
+    public WebElement getWebElementAtResourceId(String resourceId) throws BasePageException {
+       
+        logger.info("Get the web element at resource id: " + resourceId);
+        
+        commandList.addToList("getWebElementAtResourceId:" + resourceId);
+        
+        try { return this.driver.findElement(By.id(resourceId)); }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        
+    }
+    
+    /**
+     * Click on the element with the matching resource id attribute.
+     * 
+     * @param resourceId
+     * 
+     * @throws BasePageException 
+     */
+    public void clickOnWebElementWithResourceId(String resourceId) throws BasePageException {
+       
+        logger.info("Click on the element with the matching resource id attribute: " + resourceId);
+        
+        commandList.addToList("clickOnWebElementWithResourceId:" + resourceId);
+        
+        try { getWebElementAtResourceId(resourceId).click(); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Type text <code>value</code> into a web element.
+     * 
+     * @param type
+     * @param typeValue
+     * @param cssSelector
+     * @param value
+     * 
+     * @throws BasePageException 
+     */
+    public void enterTextIntoWebElementUsingCSSSelector(String type, String typeValue, String cssSelector, String value) throws BasePageException { 
+        
+        logger.info("Type text value into a web element at the CSS selector: " + cssSelector + "|" + typeValue + "|" + value);
+        
+        commandList.addToList("enterTextIntoWebElementUsingCSSSelector: " + cssSelector + "|" + typeValue + "|" + value);
+        
+        try {
+        
+            WebElement element = getWebElementWithCSSAndMatchesTypeAndContainsText(type, typeValue, cssSelector);
+        	  
+            element.sendKeys(value);
+             
+            sleep(2000);
+             
+        }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+    
+    }
+    
+    /**
+     * Type text <code>value</code> into a web element.
+     * 
+     * @param resourceId
+     * @param value
+     * 
+     * @throws BasePageException
+     */
+    public void enterTextIntoWebElementUsingResourceId(String resourceId, String value) throws BasePageException { 
+        
+        logger.info("Type text value into a web element at the resource id: " + resourceId + "|" + value);
+        
+        commandList.addToList("enterTextIntoWebElementUsingResourceId: " + resourceId + "|" + value);
+        
+        try {
+        
+            WebElement element = getWebElementAtResourceId(resourceId);
+        	  
+            element.sendKeys(value);
+             
+            sleep(2000);
+             
+        }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+    
+    }
+    
 }
 
