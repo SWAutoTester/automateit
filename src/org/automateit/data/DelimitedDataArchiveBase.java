@@ -109,7 +109,6 @@ public class DelimitedDataArchiveBase extends DataArchiveBase {
             
             saveData(filename, true, delimiter);
             
-        
         }
         catch(Exception e) { throw e; }
         

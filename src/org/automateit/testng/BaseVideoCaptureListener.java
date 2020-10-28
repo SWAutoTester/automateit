@@ -120,7 +120,7 @@ public class BaseVideoCaptureListener extends TestListenerAdapter {
             this.videoRecorder = null;
        
         }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
    
     }
     

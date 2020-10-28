@@ -81,8 +81,8 @@ public class SendSMSThread_Nexmo extends SendMessageThreadBase {
 
             for(SmsSubmissionResult response : responses) {
             
-                logger.info("Received response from NexMo:");
-                logger.info(response);
+                logger.debug("Received response from NexMo:");
+                logger.debug(response);
         
             }
             

@@ -84,7 +84,7 @@ public class ExtentReportTestListener extends TestListenerAdapter {
             addToReportsManager(); extentReporter.logFail(result.getName(), result.getThrowable()); 
         
         }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
     
     }
 
@@ -97,7 +97,7 @@ public class ExtentReportTestListener extends TestListenerAdapter {
     public void onTestSkipped(ITestResult result) { 
         
         try { addToReportsManager(); extentReporter.logSkip(result.getName()); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
         
     }
 
@@ -117,7 +117,7 @@ public class ExtentReportTestListener extends TestListenerAdapter {
             addToReportsManager(); extentReporter.logPass(result.getName()); 
         
         }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
         
     }
    
@@ -157,7 +157,7 @@ public class ExtentReportTestListener extends TestListenerAdapter {
     private void addToReportsManager() {
         
         try { reportsManager.addReporter(extentReporter); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
         
     }
     

@@ -16,8 +16,11 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  *  
  **/
-
 package org.automateit.core;
+
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import org.automateit.util.CommonProperties;
 
 /**
  * This class contains constant used in Desired Capabilities for web driver initialization.
@@ -26,40 +29,28 @@ package org.automateit.core;
  */
 public class Capabilities {
     
-   public static final String DEVICE = "device";
+    /**
+     * Default Constructor
+     */
+    public Capabilities() { }
    
-   public static final String DEVICE_NAME = "deviceName";
+    /**
+     * Get all of the configured desired capabilities
+     * 
+     * @return 
+     */
+    public DesiredCapabilities get() {
+       
+       DesiredCapabilities capabilities = new DesiredCapabilities();
+       
+       // add all desired capabilities needing to be set by String value
+       StringCapabilities.addCapabilities(capabilities, CommonProperties.getInstance());
+       
+       // add all desired capabilities needing to be set by String value
+       BooleanCapabilities.addCapabilities(capabilities, CommonProperties.getInstance());
+       
+       return capabilities;
    
-   public static final String AUTOMATION_NAME = "automationName";
-   
-   public static final String VERSION = "version";
-   
-   public static final String PLATFORM_VERSION = "platformVersion";
-   
-   public static final String PLATFORM_NAME = "platformName";
-   
-   public static final String PLATFORM = "platform";
-   
-   public static final String BUNDLE_ID = "bundleId";
-   
-   public static final String REINSTALL_APP = "reInstallApp";
-   
-   public static final String UDID = "udid";
-   
-   public static final String NEW_COMMAND_TIMEOUT = "newCommandTimeout";
-   
-   public static final String WAIT_TIMEOUT = "timeout";
-   
-   public static final String URL = "URL";
-   
-   public static final String APP_PACKAGE = "app-package";
-   
-   public static final String APP_WAIT_PACKAGE = "app-wait-package";
-   
-   public static final String APP_ACTIVITY = "app-activity";
-   
-   public static final String APP_WAIT_ACTIVITY = "app-wait-activity";
-   
-   public static final String APP = "app";
+    }
             
 }

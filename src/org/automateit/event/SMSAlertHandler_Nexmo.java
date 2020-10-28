@@ -84,7 +84,7 @@ public class SMSAlertHandler_Nexmo extends TestListenerAdapter implements AlertH
             (new SendSMSThread_Nexmo(props, result)).start(); 
         
         }
-        catch(Exception e) { logger.error(e); }  
+        catch(Exception e) { logger.debug(e); }  
     
     }
     
@@ -104,7 +104,7 @@ public class SMSAlertHandler_Nexmo extends TestListenerAdapter implements AlertH
             (new SendSMSThread_Nexmo(props, message)).start(); 
         
         }
-        catch(Exception e) { logger.error(e); }  
+        catch(Exception e) { logger.debug(e); }  
     
     }
     
@@ -155,7 +155,7 @@ public class SMSAlertHandler_Nexmo extends TestListenerAdapter implements AlertH
         if(props != null) return;
         
         try { props = utils.loadProperties(PROPERTIES_FILE); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { logger.debug(e); }
         
     }
     

@@ -18,10 +18,13 @@
 
 package org.automateit.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -219,10 +222,63 @@ public class DataDrivenExcel implements DataDrivenInput {
             Iterator itr = c.iterator();
    
             //iterate through HashMap values iterator
-            while(itr.hasNext()) System.out.println(itr.next());
+            while(itr.hasNext()) System.out.println("DataDrivenExcek.printAllInput: " + itr.next());
         
         }
         catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get all keys for the collection
+     * 
+     * @return 
+     */
+    public List<String> getDataIds() {
+        
+        List<String> list = new ArrayList<String>();
+        
+        Set s = inputParameters.keySet();
+        
+        Object[] input =  s.toArray();
+        
+        for(int i = 0; i < input.length; i++) list.add(String.valueOf(input[i]));
+        
+        return list;
+        
+    }
+    
+    /**
+     * Convenience method for obtaining a single reference to data.
+     * 
+     * @param dataId
+     * @param columnNumber
+     * 
+     * @return The reference to data (not a set of data)
+     *  return null if dataId exists but cell for the particular columnNumber is blank
+     *  
+     * @throws Exception 
+     */
+    public String get(int dataId, int columnNumber) throws Exception {
+        
+        return returnInputDataForDataIdAndColumnNumber(dataId, columnNumber);
+       
+    }
+    
+    /**
+     * Convenience method for obtaining a single reference to data.
+     * 
+     * @param dataId
+     * @param columnNumber
+     * 
+     * @return The reference to data (not a set of data)
+     *  return null if dataId exists but cell for the particular columnNumber is blank
+     *  
+     * @throws Exception 
+     */
+    public String get(String dataId, int columnNumber) throws Exception {
+        
+        return returnInputDataForDataIdAndColumnNumber(dataId, columnNumber);
         
     }
 

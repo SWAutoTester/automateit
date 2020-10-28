@@ -34,7 +34,15 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
     @Test(description = "Verify that we can display the correct starting page", groups = { "android" }, priority = 1)
     public void test_A_Validate_Login_Screen() throws Exception {
       
-        try { validateLoginScreen(new LoginScreen_Android()); }
+        try { 
+            
+            loginScreen = new LoginScreen_Android();
+            
+            //validateLoginScreen(loginScreen); 
+            
+            loginScreen.validateNotificationReceivedAndGoBack("⁨AutoBudd");
+        
+        }
         catch(Exception e) { throw e; }
     
     }
@@ -44,7 +52,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that login fails when not providing a password", groups = { "android" }, priority = 2)
+    //@Test(description = "Verify that login fails when not providing a password", groups = { "android" }, priority = 2)
     public void test_B_Validate_Failed_Login_Blank_Password() throws Exception {
       
         try { 
@@ -63,7 +71,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that the user can close the alert message popup window", groups = { "android" }, priority = 3)
+    //@Test(description = "Verify that the user can close the alert message popup window", groups = { "android" }, priority = 3)
     public void test_C_Validate_Close_Alert_Message_Window() throws Exception {
       
         try { closeAlertMessage(); }
@@ -76,7 +84,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that login fails when not providing a username", groups = { "android" }, priority = 4)
+    //@Test(description = "Verify that login fails when not providing a username", groups = { "android" }, priority = 4)
     public void test_D_Validate_Failed_Login_Blank_Username() throws Exception {
       
         try { 
@@ -96,7 +104,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that login fails when providing a valid username and incorrect password", groups = { "android" }, priority = 5)
+    //@Test(description = "Verify that login fails when providing a valid username and incorrect password", groups = { "android" }, priority = 5)
     public void test_E_Validate_Failed_Login_Valid_Username_Invalid_Password() throws Exception {
       
         try { 
@@ -118,7 +126,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that login fails when providing a valid username and incorrect password", groups = { "android" }, priority = 6)
+    //@Test(description = "Verify that login fails when providing a valid username and incorrect password", groups = { "android" }, priority = 6)
     public void test_F_Validate_Failed_Login_Invalid_Username_Valid_Password() throws Exception {
       
         try { 
@@ -138,7 +146,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that login succeeds when providing a valid username and valid password", groups = { "android" }, priority = 7)
+    //@Test(description = "Verify that login succeeds when providing a valid username and valid password", groups = { "android" }, priority = 7)
     public void test_G_Validate_Successful_Login() throws Exception {
       
         try { 
@@ -158,7 +166,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
      *
      * @throws Exception 
      */
-    @Test(description = "Verify that the user can close the app in on the device", groups = { "android" }, priority = 100)
+    //@Test(description = "Verify that the user can close the app in on the device", groups = { "android" }, priority = 100)
     public void test_H_Validate_Close_App() throws Exception {
       
         try { loginScreen.quit(); }

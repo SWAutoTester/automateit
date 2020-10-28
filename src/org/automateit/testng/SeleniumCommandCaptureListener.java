@@ -89,7 +89,7 @@ public class SeleniumCommandCaptureListener extends TestListenerAdapter {
         if (testNGUtils.capturePageLoadPerformance()) {
 	    	
             try { testNGUtils.savePageSummaryPerformance(utils.getBasePagePerformanceDirectory()); }   
-            catch(Exception e) { log.error(e); }
+            catch(Exception e) { }
     	
         }
     
@@ -103,7 +103,7 @@ public class SeleniumCommandCaptureListener extends TestListenerAdapter {
     private void doReporting(ITestResult result) {
             
         try { testNGUtils.appendToReport(result, divIdNumber++); }
-        catch(Exception e) { log.error(e); }
+        catch(Exception e) { }
    
     }
    

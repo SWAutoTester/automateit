@@ -21,6 +21,7 @@ package org.automateit.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
@@ -28,16 +29,26 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.FileWriter;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Random;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.net.URL;
+import java.net.URLConnection;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonArray;
+import javax.json.JsonReader;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -51,6 +62,7 @@ import org.automateit.data.DataDrivenInputFactory;
 import org.automateit.data.DataDrivenInput;
 import org.automateit.data.DataArchive;
 import org.automateit.data.CSVAppendDataArchive;
+import org.automateit.data.CSVDataArchive;
 
 import org.automateit.media.JarvisTextToSpeechConverter;
 import org.automateit.media.JLayerAudioPlayer;
@@ -59,11 +71,8 @@ import org.automateit.media.JavaSoundAPIAudioPlayer;
 
 import org.automateit.reports.ReportsManager;
 
-/**
- * This class is a utility class that can be used by other classes to do stuff.
- * 
- * @author mburnside
- */
+import org.automateit.util.CommonProperties;
+
 public class Utils {
     
     /**
@@ -86,6 +95,11 @@ public class Utils {
      * when adding links to html since we are linking local files.
      */
     public final String LINKIMAGEFILEPREFIX = "file:///";
+    
+    /**
+     * File extensions definitions
+     */
+    public static final String[] FILE_EXTENSIONS = { "jpg", "JPG", "jpeg", "JPEG", "gif", "GIF", "png", "PNG"};
     
     /**
      *  logging object
@@ -235,14 +249,74 @@ public class Utils {
             
             File f = new File(directory);
             
-            if(!f.exists() || !f.isDirectory()) throw new Exception("Unable to get files in directory: " + directory);
-            
+            if(!f.exists()) throw new Exception("Directory does not exist: " + directory);
+        
+            if(!f.isDirectory()) throw new Exception(directory + ": is not a directory");
+              
             File[] files = f.listFiles(getPropertiesFileFilter(f));
             
             return files;
             
         }
         catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get the list of files in the directory.
+     * 
+     * @param directory
+     * 
+     * @return The list of files
+     * 
+     * @throws Exception 
+     */
+    public File[] getListOfAllFilesInDirectory(String directory) throws Exception {
+        
+        try {
+           
+            File f = new File(directory);
+            
+            if(!f.exists()) throw new Exception("Directory does not exist: " + directory);
+        
+            if(!f.isDirectory()) throw new Exception(directory + ": is not a directory");
+              
+            File[] files = f.listFiles();
+            
+            return files;
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get the list of files in the directory.
+     * 
+     * @param directory
+     * @param expectedFilename
+     * 
+     * @return
+     */
+    public boolean isFileInDirectory(String directory, String expectedFilename) {
+        
+        try {
+            
+            File[] files = getListOfAllFilesInDirectory(directory);
+           
+            for(File file : files) {
+                
+                log.debug("Checking for file in directory: " + expectedFilename + "|" + file.getName());
+                
+                if(file.getName().equals(expectedFilename)) return true;
+                
+            }
+            
+            // if we get here, then the file or name was not found
+            return false;
+            
+        }
+        catch(Exception e) { return false; }
         
     }
     
@@ -553,7 +627,7 @@ public class Utils {
         int id = DataDrivenInputFactory.CSV; // default ot type 
         
         try {
-            
+           
             if(dataFile == null) throw new Exception("Unable to load data from file: " + dataFile);
             
             if(dataFile.contains(".csv")) id = DataDrivenInputFactory.CSV;
@@ -585,10 +659,12 @@ public class Utils {
         
         String modifiedURL = ""; 
         
+        log.debug("Constructing a modified start url based on selected target environment: " + originalURL + "|" + replaceDomainName);
+        
         try {
             
-            log.info("Constructing a modified start url based on selected target environment: " + originalURL + "|" + replaceDomainName);
-        
+            if((replaceDomainName == null) || replaceDomainName.contains("prod")) return originalURL; 
+            
             if(originalURL == null) throw new Exception("Unable to return modified URL because original URL is null");
             
             if(replaceDomainName == null) return originalURL; // if the replace domain isn't set, just return the original url
@@ -673,6 +749,8 @@ public class Utils {
                 }
                 
             }
+            
+            log.debug("Returning modified URL: " + modifiedURL);
             
             return modifiedURL;
         
@@ -915,6 +993,568 @@ public class Utils {
         
         return list;
         
+    }
+    
+    /**
+     * Check for matching text existing in a file.
+     * 
+     * @param filename
+     * @param expectedText
+     * 
+     * @return 
+     */
+    public boolean isTextInFile(String filename, String expectedText) {
+        
+        try {
+            
+            List<String> list = getListFromFile(filename);
+            
+            for(String line : list) { if(line.contains(expectedText)) return true; }
+            
+            // if we get here, the text was not found in the file
+            return false;
+            
+            
+        }
+        catch(Exception e) { return false; }
+    }
+    
+    /**
+     * Remove all of the files in a directory with the file extension matching <code>directoryName</code>
+     * 
+     * @param directoryName
+     * @param extension 
+     */
+    public void removeAllFilesInDirectoryWithExtension(String directoryName, String extension) {
+        
+        try {
+            
+            File folder = new File(directoryName);
+                
+            File fList[] = folder.listFiles();
+
+            for(File f: fList) { if(f.getName().endsWith("." + extension)) f.delete(); }
+         
+        }
+        catch(Exception e) { }
+
+    }
+    
+    /**
+     * Remove all image files in a directory
+     * 
+     * @param directoryName 
+     */
+    public void removeAllImageFilesInDirectory(String directoryName) {
+        
+        for(String extension: FILE_EXTENSIONS) {
+            
+            try { removeAllFilesInDirectoryWithExtension(directoryName, extension); }
+            catch(Exception e) { }
+        
+        }
+        
+    }
+    
+    /**
+     * Execute a shell command.
+     * 
+     * @param fullCommand
+     * 
+     * @return output from STDIO
+     * 
+     * @throws Exception 
+     */
+    public String executeShellCommand(String fullCommand) throws Exception {
+        
+        String line = null;
+        
+        String outputString = null;
+        
+        try { 
+            
+            Process p = Runtime.getRuntime().exec(fullCommand);
+            
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
+            StringBuilder output = new StringBuilder();
+	
+            while((line = stdInput.readLine()) != null) output.append(line + "\n");
+            
+            try { outputString = output.toString(); }
+            catch(Exception le) { }
+                
+            if(outputString == null) {
+                    
+                while((line = stdError.readLine()) != null) output.append(line + "\n");
+            
+                outputString = output.toString();
+                
+            }
+                
+            return outputString;
+		
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Open URL Connection 
+     * 
+     * @param url
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public InputStreamReader openURLConnection(String url) throws Exception {
+        
+        try {
+           
+            URL urlObj = new URL(url);
+            
+            log.debug("Attempting to open a URL connection at: " + url);
+           
+            URLConnection connection = (urlObj).openConnection();
+            
+            log.debug("URL connection is open");
+            
+            log.debug("User Authentication info: " + urlObj.getUserInfo());
+            
+            if(urlObj.getUserInfo() != null) {
+                
+                log.debug("The user has the following authentication credentials: " + urlObj.getUserInfo());
+    
+                String basicAuth = "Basic " + new String(Base64.getEncoder().encode(urlObj.getUserInfo().getBytes()));
+    
+                connection.setRequestProperty("Authorization", basicAuth);
+
+            }
+            
+            return new InputStreamReader(connection.getInputStream());
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Access a URL
+     * 
+     * @param url
+     * 
+     * @throws Exception 
+     */
+    public void accessURL(String url) throws Exception {
+        
+        try { openURLConnection(url); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Verify the response for the URL
+     * 
+     * @param url
+     * @param expectedTextInResponse
+     * 
+     * @throws Exception 
+     */
+    public void verifyResponseFromURL(String url, String[] expectedTextInResponse) throws Exception {
+        
+        String urlString = "";
+        
+        try { 
+            
+             BufferedReader in = new BufferedReader(openURLConnection(url));
+             
+             String current;
+         
+             while((current = in.readLine()) != null) urlString += current;
+             
+             for(int i = 0; i < expectedTextInResponse.length; i++) {
+                 
+                 if(!urlString.contains(expectedTextInResponse[i])) throw new Exception("The URL response text does not include the expected text: " + expectedTextInResponse[i]);
+                 
+             }
+            
+        }
+        catch(Exception e) { log.info(urlString); throw e; }
+        
+    }
+    
+    /**
+     * Verify the response for the URL
+     * 
+     * @param url
+     * @param expectedTextMatchInHTMLResponse
+     * 
+     * @throws Exception 
+     */
+    public void verifyResponseFromURL_Regex(String url, String expectedTextMatchInHTMLResponse) throws Exception {
+      
+        try { verifyTextMatch_Regex(new BufferedReader(openURLConnection(url)), expectedTextMatchInHTMLResponse); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Verify the text match using regex
+     * 
+     * @param in
+     * @param expectedTextMatchInHTMLResponse
+     * 
+     * @throws Exception 
+     */
+    public void verifyTextMatch_Regex(BufferedReader in, String expectedTextMatchInHTMLResponse) throws Exception {
+        
+        String urlString = "";
+        
+        try { 
+            
+             String current;
+         
+             while((current = in.readLine()) != null) urlString += current;
+            
+             if(!Pattern.matches("*" + expectedTextMatchInHTMLResponse + "*", urlString)) throw new Exception("The URL response text does not include the expected text: " + expectedTextMatchInHTMLResponse);
+               
+        }
+        catch(Exception e) { log.info(urlString); throw e; }
+        
+    }
+    
+    /**
+     * Verify the text match
+     * 
+     * @param in
+     * @param expectedTextMatchInHTMLResponse
+     * 
+     * @throws Exception 
+     */
+    public void verifyTextMatch(BufferedReader in, String expectedTextMatchInHTMLResponse) throws Exception {
+        
+        String urlString = "";
+        
+        try { 
+            
+             String current;
+         
+             while((current = in.readLine()) != null) urlString += current;
+            
+             if(!urlString.contains(expectedTextMatchInHTMLResponse)) throw new Exception("The URL response text does not include the expected text: " + expectedTextMatchInHTMLResponse);
+               
+        }
+        catch(Exception e) { log.info(urlString); throw e; }
+        
+    }
+    
+    /**
+     * Get a JSON result array
+     * 
+     * @param url
+     * @param rootNodeName
+     * 
+     * @return 
+     * 
+     * @throws Exception 
+     */
+    public JsonArray getJSONResult(String url, String rootNodeName) throws Exception {
+       
+        log.debug("Getting JSON result for node name: " + rootNodeName + " for URL: " + url);
+        
+        try { 
+            
+            JsonReader rdr = Json.createReader(openURLConnection(url));
+            
+            JsonObject obj = rdr.readObject();
+ 
+            return obj.getJsonArray(rootNodeName);
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get a data driven input object from system variable values.
+     * 
+     * @param parameterNames
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public DataDrivenInput getInputFromSystemVariableValues(String[] parameterNames) throws Exception {
+        
+        DataArchive dataArchive = new CSVDataArchive(); 
+        
+        for(String key: parameterNames) {
+           
+            String[] s = { key, System.getProperty(key) };
+            
+            dataArchive.addData(s);
+            
+        }
+       
+        return getDataDrivenInputFromDataArchive(dataArchive);
+        
+    }
+    
+    /**
+     * Get a data driven input object from system variable values.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public DataDrivenInput getInputFromSystemVariableValues() throws Exception {
+        
+        DataArchive dataArchive = new CSVDataArchive(); 
+        
+        Map<String, String> env = System.getenv();
+        
+        for (String envName : env.keySet()) {
+            
+            String[] s = { envName, env.get(envName) };
+            
+            dataArchive.addData(s);
+           
+        }
+       
+        return getDataDrivenInputFromDataArchive(dataArchive);
+        
+    }
+    
+    /**
+     * Get a data driven input object from system variable values.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public DataDrivenInput getInputFromSystemArguments() throws Exception {
+        
+        DataArchive dataArchive = new CSVDataArchive(); 
+        
+        Map<String, String> env = System.getenv();
+        
+        for (String envName : env.keySet()) {
+            
+            String[] s = { envName, env.get(envName) };
+            
+            dataArchive.addData(s);
+           
+        }
+       
+        return getDataDrivenInputFromDataArchive(dataArchive);
+        
+    }
+    
+    /**
+     * Get a data driven object from an archive
+     * 
+     * @param dataArchive
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public DataDrivenInput getDataDrivenInputFromDataArchive(DataArchive dataArchive) throws Exception {
+        
+        String tmpFileName = "autotmp.csv";
+        
+        try {
+        
+            dataArchive.saveData(tmpFileName);
+        
+            return setupDataDrivenInput(tmpFileName);
+            
+        }
+        catch(Exception e) { throw e; }
+        finally {
+            
+            try { deleteFile(tmpFileName); }
+            catch(Exception le) { }
+            
+        }
+        
+    }
+    
+    /**
+     * Get an archive from data driven input
+     * 
+     * @param dataDrivenInput
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public DataArchive getDataArchiveFromDataDrivenInput(DataDrivenInput dataDrivenInput) throws Exception {
+       
+        DataArchive dataArchive = new CSVDataArchive();
+        
+        List<String> keys = dataDrivenInput.getDataIds();
+        
+        Iterator<String> keyIterator = keys.iterator();
+        
+        while (keyIterator.hasNext()) { 
+            
+            String key = keyIterator.next();
+            
+            String[] data = { key, dataDrivenInput.returnInputDataForDataIdAndColumnNumber(key, 1) };
+            
+            dataArchive.addData(data);
+    
+        }
+            
+        return dataArchive;
+            
+    }
+    
+    /**
+     * Get a data driven object from a properties object
+     * 
+     * @param properties
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public DataDrivenInput getDataDrivenInputFromProperties(Properties properties) throws Exception {
+        
+        DataArchive dataArchive = new CSVDataArchive(); 
+       
+        for (String propertyName : properties.stringPropertyNames()) {
+            
+            String[] s = { propertyName, (String)properties.get(propertyName) };
+            
+            dataArchive.addData(s);
+           
+        }
+        
+        return getDataDrivenInputFromDataArchive(dataArchive);
+        
+    }
+    
+    /**
+     * Get a string array from a delimited string
+     * 
+     * @param str
+     * @param delimiter
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String[] getArrayFromDelimitedString(String str, String delimiter) throws Exception { 
+      
+        log.debug("Creating a string array from string: " + str + "|" + delimiter);
+        
+        Vector<String> v = new Vector<String>();
+        
+        StringTokenizer st = new StringTokenizer(str, delimiter);
+       
+        while(st.hasMoreElements()) { 
+            
+            String s = st.nextToken();
+            
+            log.debug("Adding string: " + s);
+            
+            v.add(s); 
+        
+        }
+       
+        return v.toArray(new String[v.size()]);
+        
+    }
+    
+    /**
+     * Convience method for all test needing to know what device is being used
+     * 
+     * @return 
+     */
+    public boolean isIOS() { return CommonProperties.getInstance().isIOS(); }
+    
+    /**
+     * Convience method for all test needing to know what device is being used
+     * 
+     * @return 
+     */
+    public boolean isAndroid() { return CommonProperties.getInstance().isAndroid(); }
+    
+    /**
+     * Reset the app and reinstall
+     * 
+     * 2 methods are called because ios and android have different
+     * desired capabiltiy key names
+     */
+    public void enableResetApp() {
+        
+        CommonProperties.getInstance().setReInstallApp(true);
+        CommonProperties.getInstance().setAppNoReset(false);
+        
+    }
+    
+    /**
+     * Do not reset the app and reinstall
+     * 
+     * 2 methods are called because ios and android have different
+     * desired capabiltiy key names
+     */
+    public void disableResetApp() {
+        
+        CommonProperties.getInstance().setReInstallApp(false);
+        CommonProperties.getInstance().setAppNoReset(true);
+        
+    }
+    
+    public List<String> getRegexPatternMatch(String firstCharacter, String secondCharacter, String s) throws Exception {
+         
+        List<String> matchList = new ArrayList<String>();
+
+        Pattern regex = Pattern.compile("\\" + firstCharacter + "(.*?)\\" + secondCharacter);
+
+        Matcher regexMatcher = regex.matcher(s);
+
+        while (regexMatcher.find()) {//Finds Matching Pattern in String
+   
+            matchList.add(regexMatcher.group(1));//Fetching Group from String
+
+        }
+
+        return matchList;
+    
+    }
+    
+    public void shuffle(String[] array) {
+        
+        Random random = new Random();
+        int count = array.length;
+        for (int i = count; i > 1; i--) swap(array, i - 1, random.nextInt(i));
+        
+    }
+    
+    private static void swap(String[] array, int i, int j) {
+        String temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    
+    public void shuffle(File[] array) {
+        
+        Random random = new Random();
+        int count = array.length;
+        for (int i = count; i > 1; i--) swap(array, i - 1, random.nextInt(i));
+        
+    }
+    
+    private static void swap(File[] array, int i, int j) {
+        File temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
     
 }

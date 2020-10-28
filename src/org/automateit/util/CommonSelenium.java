@@ -18,9 +18,19 @@
 
 package org.automateit.util;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import org.openqa.selenium.WebDriver;
+
+import org.automateit.core.StringCapabilities;
+
+import org.automateit.data.DataDrivenInput;
 
 /**
  * Common class that retrieves the Selenium implementation class configured
@@ -44,7 +54,27 @@ public class CommonSelenium {
     /**
      *  logging object
      */
-    protected static Logger log = Logger.getLogger(CommonSelenium.class);
+    protected static Logger logger = Logger.getLogger(CommonSelenium.class);
+    
+    /**
+     * device information
+     */
+    private Map<String, Properties> deviceInformation = new HashMap<String, Properties>();
+    
+    /**
+     * device information file
+     */
+    private Map<String, String> deviceInformationFiles = new HashMap<String, String>();
+    
+    /**
+     * device information file list
+     */
+    private List<String> deviceInformationFileList = new ArrayList<String>();
+    
+    /**
+     * The utilities object
+     */
+    private Utils utils = new Utils();
     
     /**
      * Default Constructor
@@ -95,5 +125,85 @@ public class CommonSelenium {
         catch(Exception e) { }
         
     }
+    
+    /**
+     * Add device information.
+     * 
+     * If the device info file <code>filename</code> does not contain the key "udid", then it is assumed
+     * that the device info file is invalid and is not added to the list of devices.
+     * 
+     * @param filename 
+     */
+    public void addDeviceInformation(String filename) {
+       
+        try {
+            
+            if(filename.endsWith(".properties")) {
+            
+                Properties props = utils.loadProperties(filename);
+            
+                if(props.containsKey(StringCapabilities.UDID.getCapability())) {
+            
+                    String key = props.getProperty(StringCapabilities.UDID.getCapability());
+                
+                    CommandList.getInstance().addToList("addDeviceInformation:" + filename);
+        
+                    deviceInformation.put(key, props);
+                
+                    deviceInformationFiles.put(key, filename);
+                
+                    deviceInformationFileList.add(filename);
+                    
+                }
+                
+            }
+            else {
+                    
+                 // then we try to add it as a data driven input file   
+                 DataDrivenInput data = utils.setupDataDrivenInput(filename); 
+                       
+                 if(data.hasDataId(StringCapabilities.UDID.getCapability())) {
+                        
+                     String key = data.returnInputDataForDataIdAndColumnNumber(StringCapabilities.UDID.getCapability(), 1);
+                     
+                     deviceInformationFiles.put(key, filename);
+                  
+                     deviceInformationFileList.add(filename);   
+                    
+                 }
+                     
+            }
+                
+        }
+        catch(Exception e) { logger.error("Unable to load properties for: " + filename); }
+        
+    }
+    
+    /**
+     * Get the device information
+     * 
+     * @param udid
+     * 
+     * @return 
+     */
+    public Properties getDeviceInformation(String udid) { return deviceInformation.get(udid); }
+    
+    /**
+     * Get the device information filepath
+     * 
+     * @param udid
+     * 
+     * @return 
+     */
+    public String getDeviceInformationFile(String udid) { return deviceInformationFiles.get(udid); }
+    
+    /**
+     * Get the device information filepath
+     * 
+     * @param index
+     * 
+     * @return 
+     */
+    public String getDeviceInformationFile(int index) { return deviceInformationFileList.get(index); }
     
 }

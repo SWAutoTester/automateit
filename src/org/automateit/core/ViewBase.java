@@ -21,6 +21,10 @@ package org.automateit.core;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -28,11 +32,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.OutputType;
 
 import org.automateit.ocr.OCRProcessor;
+
+import org.automateit.core.StringCapabilities;
 
 import org.automateit.reports.ReportsManager;
 import org.automateit.reports.ExtentReporter;
@@ -47,13 +52,8 @@ import org.automateit.util.Utils;
  * 
  * @author mburnside@Automate It!
  */
-public class ViewBase extends Capabilities {
-    
-    /**
-     * Capture WebDriver commands. Default is <code>false</code>.
-     */
-    protected boolean captureWebDriverCommands = false;
-    
+public class ViewBase {
+     
     /**
      * If the web driver has been initialized
      */
@@ -63,22 +63,12 @@ public class ViewBase extends Capabilities {
      * If the logging mechanism has been initialized
      */
     protected boolean loggingSetup = false;
-    
-    /**
-     * Indicates for the framework to record the video
-     */
-    protected boolean recordVideo = false;
-    
+   
     /**
      * Logging class
      */
     private Logger logger = Logger.getLogger(ViewBase.class);
-    
-    /**
-     * The web driver capabilities object
-     */
-    protected DesiredCapabilities capabilities = new DesiredCapabilities();
-    
+   
     /**
      * Utilities for convenience methods
      */
@@ -296,6 +286,82 @@ public class ViewBase extends Capabilities {
      * 
      * @return 
      */
-    public String getPlatFormType() { return properties.get("platformName"); }
+    public String getPlatFormType() { return properties.get(StringCapabilities.PLATFORM_NAME.getCapability()); }
+    
+    /**
+     * Convience method for all test needing to know what device is being used
+     * 
+     * @return 
+     */
+    public boolean isIOS() { return utils.isIOS(); }
+    
+    /**
+     * Convience method for all test needing to know what device is being used
+     * 
+     * @return 
+     */
+    public boolean isAndroid() { return utils.isAndroid(); }
+    
+    /**
+     * Set the properties up to prepare to load an app with
+     * full reset and and re-install of the app
+     * 
+     * @param reset
+     */
+    public void setForAppReset(boolean reset) {
+            
+        properties.setAppNoReset(!reset);
+            
+        properties.setReInstallApp(reset);
+        
+    }
+    
+    /**
+     * This method save a java serialized object to a file.
+     * 
+     * @param filename
+     * @param obj
+     * 
+     * @throws Exception 
+     */
+    public void saveObjectToFile(String filename, Object obj) throws Exception {
+ 
+        try {
+ 
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            
+            objectOut.writeObject(obj);
+            
+            objectOut.close();
+           
+        } 
+        catch (Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get an object from a file.
+     * 
+     * @param filename
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public Object getObjectFromFile(String filename) throws Exception {
+        
+        try {
+    
+            FileInputStream fis = new FileInputStream(filename);
+    
+            ObjectInputStream ois = new ObjectInputStream(fis);
+    
+            return ois.readObject();
+
+        } 
+        catch (Exception e) { throw e; } 
+
+    }
             
 }

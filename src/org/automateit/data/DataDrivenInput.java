@@ -18,6 +18,7 @@
 
 package org.automateit.data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,6 +95,37 @@ public interface DataDrivenInput {
      * @throws Exception 
      */
     public void printAllInput() throws Exception; 
+    
+    /**
+     * Get all keys for the collection
+     * 
+     * @return 
+     */
+    public List<String> getDataIds();
+    
+    /**
+     * Convenience method for obtaining a single reference to data.
+     * 
+     * @param dataId
+     * @param columnNumber
+     * 
+     * @return The reference to data (not a set of data)
+     * 
+     * @throws Exception 
+     */
+    public String get(String dataId, int columnNumber) throws Exception; 
+    
+    /**
+     * Convenience method for obtaining a single reference to data.
+     * 
+     * @param dataId
+     * @param columnNumber
+     * 
+     * @return The reference to data (not a set of data)
+     * 
+     * @throws Exception 
+     */
+    public String get(int dataId, int columnNumber) throws Exception; 
     
 }
 

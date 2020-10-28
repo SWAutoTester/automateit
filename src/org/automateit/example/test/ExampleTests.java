@@ -1,8 +1,14 @@
 package org.automateit.example.test;
 
+import java.util.List;
+
 import org.testng.annotations.Test;
 
 import org.automateit.test.TestBase;
+
+import org.automateit.data.DataDrivenInput;
+
+import org.automateit.util.Utils;
 
 import org.automateit.example.page.YahooHomePage;
 
@@ -28,6 +34,8 @@ public class ExampleTests extends TestBase {
      * The scroll pixel value (scroll up or down this many pixels)
      */
     public static final int SCROLLPIXELS = 500;
+    
+    private Utils utils = new Utils();
     
     /**
      * Validate that the home page appears and is correct
@@ -133,6 +141,46 @@ public class ExampleTests extends TestBase {
         
         }
         catch(Exception e) { throw e; }
+    
+    }
+    
+    /**
+     * Validate that the framework can read system parameters and extract the values
+     *
+     * @throws Exception 
+     */
+    @Test(description = "Validate that the framework can scroll up a web page", groups = { "example_sys" })
+    public void test_F_Verify_Read_System_Parameters() throws Exception {
+        
+        String[] arr = { "test_environment", "help" };
+        
+        DataDrivenInput ddi  = utils.getInputFromSystemVariableValues(arr);
+  
+        //ddi.printAllInput();
+        
+        ddi  = utils.getInputFromSystemVariableValues();
+  
+        //ddi.printAllInput();
+    
+    }
+    
+    /**
+     * Regex example
+     *
+     * @throws Exception 
+     */
+    @Test(description = "Regex example", groups = { "example_regex" })
+    public void test_G_Regex_Example() throws Exception {
+        
+        String s = "Hello there [1 2 3] and [4 5 6] and also [7 8 9 10]";
+        
+        List<String> matchList = (new Utils()).getRegexPatternMatch("[", "]", s);
+       
+        for(String str:matchList) {
+   
+            System.out.println(str);
+
+        }
     
     }
 	

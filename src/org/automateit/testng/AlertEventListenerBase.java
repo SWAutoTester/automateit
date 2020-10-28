@@ -105,7 +105,7 @@ public class AlertEventListenerBase extends TestListenerAdapter {
             AlertEvent.getInstance().sendAlert(result);
             
         }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { logger.debug(e); }
    
     }
     
@@ -124,7 +124,7 @@ public class AlertEventListenerBase extends TestListenerAdapter {
             AlertEvent.getInstance().sendAlert(result, ignoreAlertKeywords);
             
         }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { logger.debug(e); }
    
     }
     

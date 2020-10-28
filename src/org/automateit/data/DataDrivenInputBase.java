@@ -22,13 +22,23 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 /**
- * This class is the base class for reading data form input files.
+ * This class is the base class for reading data from input files.
  * 
  * @author mburnside
  */
 public class DataDrivenInputBase {
+    
+    /**
+     *  logging object
+     */
+    private static Logger logger = Logger.getLogger(DataDrivenInputBase.class);
    
     /**
      * Map instance that has references to all data sets.
@@ -140,6 +150,25 @@ public class DataDrivenInputBase {
     public boolean hasDataId(String dataId) { return inputParameters.containsKey(dataId); }
     
     /**
+     * Get all keys for the collection
+     * 
+     * @return 
+     */
+    public List<String> getDataIds() {
+        
+        List<String> list = new ArrayList<String>();
+        
+        Set s = inputParameters.keySet();
+        
+        Object[] input =  s.toArray();
+        
+        for(int i = 0; i < input.length; i++) list.add(String.valueOf(input[i]));
+        
+        return list;
+        
+    }
+    
+    /**
      * Print out all input
      * 
      * @throws Exception 
@@ -154,11 +183,45 @@ public class DataDrivenInputBase {
             Iterator itr = c.iterator();
    
             //iterate through HashMap values iterator
-            while(itr.hasNext()) System.out.println(itr.next());
+            while(itr.hasNext()) logger.info("DatadrivenInputBase.printAllInput: " + itr.next());
         
         }
         catch(Exception e) { throw e; }
         
+    }
+    
+    /**
+     * Convenience method for obtaining a single reference to data.
+     * 
+     * @param dataId
+     * @param columnNumber
+     * 
+     * @return The reference to data (not a set of data)
+     *  return null if dataId exists but cell for the particular columnNumber is blank
+     *  
+     * @throws Exception 
+     */
+    public String get(int dataId, int columnNumber) throws Exception {
+        
+        return returnInputDataForDataIdAndColumnNumber(dataId, columnNumber); 
+    
+    }
+    
+    /**
+     * Convenience method for obtaining a single reference to data.
+     * 
+     * @param dataId
+     * @param columnNumber
+     * 
+     * @return The reference to data (not a set of data)
+     *  return null if dataId exists but cell for the particular columnNumber is blank
+     *  
+     * @throws Exception 
+     */
+    public String get(String dataId, int columnNumber) throws Exception {
+        
+        return returnInputDataForDataIdAndColumnNumber(dataId, columnNumber); 
+    
     }
     
 }

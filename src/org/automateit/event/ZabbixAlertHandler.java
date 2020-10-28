@@ -84,7 +84,7 @@ public class ZabbixAlertHandler extends TestListenerAdapter implements AlertHand
             (new SendZabbixMessageThread(props, result)).start(); 
         
         }
-        catch(Exception e) { logger.error(e); }  
+        catch(Exception e) { logger.debug(e); }  
     
     }
     
@@ -104,7 +104,7 @@ public class ZabbixAlertHandler extends TestListenerAdapter implements AlertHand
             (new SendZabbixMessageThread(props, message)).start(); 
         
         }
-        catch(Exception e) { logger.error(e); }  
+        catch(Exception e) { logger.debug(e); }  
     
     }
     
@@ -155,7 +155,7 @@ public class ZabbixAlertHandler extends TestListenerAdapter implements AlertHand
         if(props != null) return;
         
         try { props = utils.loadProperties(PROPERTIES_FILE); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { logger.debug(e); }
         
     }
     

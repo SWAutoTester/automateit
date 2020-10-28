@@ -105,7 +105,7 @@ public class SeleniumScreenCaptureListener extends TestListenerAdapter {
         if (testNGUtils.capturePageLoadPerformance()) {
 	    	
             try { testNGUtils.savePageSummaryPerformance(utils.getBasePagePerformanceDirectory()); }   
-            catch(Exception e) { log.error(e); }
+            catch(Exception e) { }
     	
         }
     
@@ -117,19 +117,25 @@ public class SeleniumScreenCaptureListener extends TestListenerAdapter {
      * @param result 
      */
     private void doReporting(ITestResult result) {
-            
+        /*
+            TODO: not sure if we can do a screenshot here since browser might be closed,
+            TODO: this causes the exception at the end.
+            TODO: cross check FlowExecutor releaseAssets() since the browser is getting closed there.
+
         try {
            
             String path = utils.getBaseScreenshotsDirectory();
-           
+
             String screenshotFilename = path + utils.getFirstToken(result.getName(), " ") + Long.toHexString( System.currentTimeMillis()) + "." + ScreenshotCapture.PNG;
-        
+
             createScreenshot(screenshotFilename);
             
             testNGUtils.appendToReport(result, screenshotFilename, divIdNumber++);
        
         }
         catch(Exception e) { log.error(e); }
+
+        */
    
     }
     

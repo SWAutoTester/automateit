@@ -41,6 +41,11 @@ public class DataDrivenInputFactory {
      */
     public static final int PIPEDELIMITED = 2;
     
+     /**
+     * Properties file.
+     */
+    public static final int DEFAULTDELIMITED = 3;
+    
     /**
      * Default Constructor.
      */
@@ -73,10 +78,14 @@ public class DataDrivenInputFactory {
                 case PIPEDELIMITED:
                 
                     return new DataDrivenPipeDelimited(filename);
+                    
+                case DEFAULTDELIMITED:
+                
+                    return new DataDrivenDefault(filename);
             
                 default:
                         
-                    return new DataDrivenExcel(filename);
+                    return new DataDrivenDefault(filename);
         
             }
             

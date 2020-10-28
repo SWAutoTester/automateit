@@ -30,6 +30,8 @@ public class DataTests extends TestBase {
     
     public static final String DATA_SET_ID_2_NAME = "data_set_id_2";
     
+    public static final String DATA_SET_ID_3_NAME = "data_set_id_3";
+    
     protected static Logger logger = Logger.getLogger(DataTests.class);
     
     /**
@@ -64,7 +66,7 @@ public class DataTests extends TestBase {
       
         try { 
             
-            logger.info("Excel data for data set id: " + DATA_SET_ID_1_NAME + "|" + xlsInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_1_NAME, 1)); 
+            logger.info("Excel data for data set id: " + DATA_SET_ID_1_NAME + "|" + xlsInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_3_NAME, 1)); 
             logger.info("Excel data for data set id: " + DATA_SET_ID_2_NAME + "|" + xlsInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 1) + "|" + xlsInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 2) + "|" + xlsInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 3)); 
         
         }
@@ -82,6 +84,7 @@ public class DataTests extends TestBase {
       
         try { 
             
+            //delay(5000);
             logger.info("CSV data for data set id: " + DATA_SET_ID_1_NAME + "|" +  csvInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_1_NAME, 1)); 
             logger.info("CSV data for data set id: " + DATA_SET_ID_2_NAME + "|" +  csvInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 1) + "|" + xlsInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 2)); 
         
@@ -100,6 +103,7 @@ public class DataTests extends TestBase {
       
         try { 
             
+            //delay(5000);
             logger.info("Pipe Delimited File data for data set id: " + DATA_SET_ID_1_NAME + "|" +  pipeDelimitedFileInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_1_NAME, 1) + "|" + pipeDelimitedFileInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_1_NAME, 2)); 
             logger.info("Pipe Delimited File data for data set id: " + DATA_SET_ID_2_NAME + "|" +  pipeDelimitedFileInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 1) + "|" + pipeDelimitedFileInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 2) + "|" + pipeDelimitedFileInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 3) + "|" + pipeDelimitedFileInput.returnInputDataForDataIdAndColumnNumber(DATA_SET_ID_2_NAME, 4)); 
         

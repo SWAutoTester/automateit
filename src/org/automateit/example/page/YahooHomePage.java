@@ -55,8 +55,13 @@ public class YahooHomePage extends BasePage {
         
         info("Entering search text: " + text);
         
-        try { enterTextIntoWebElementUsingResourceId("uh-search-box", text); }
-        catch(Exception e) { throw e; }
+        try { enterTextIntoWebElementUsingResourceId("ybar-sbq", text); }
+        catch(Exception e) { 
+            
+            try { enterTextIntoWebElementUsingResourceId("header-search-input", text); }
+            catch(Exception le) { throw le; }
+            
+        }
         
     }
     
@@ -69,7 +74,7 @@ public class YahooHomePage extends BasePage {
         
         info("Clicking on the Search button");
         
-        try { clickOnWebElementWithResourceId("uh-search-button"); }
+        try { clickOnWebElementWithResourceId("header-desktop-search-button"); }
         catch(Exception e) { throw e; }
         
     }

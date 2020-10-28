@@ -60,7 +60,7 @@ public class AVIVideoCaptureListener extends BaseVideoCaptureListener {
             videoRecorder.start(); 
         
         }           
-        catch(Exception e) { logger.error("Error while starting the video recorder: " + e.getMessage()); }
+        catch(Exception e) { }
          
     }
     

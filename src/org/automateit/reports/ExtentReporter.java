@@ -31,6 +31,8 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
+import org.automateit.util.Utils;
+
 /**
  * This class manages reports obects for the Eyent Reporting framework
  * 
@@ -68,7 +70,13 @@ public class ExtentReporter implements Reporter {
      */
     public ExtentReporter() { 
         
-        try { startReport(); }
+        try { 
+            
+            (new Utils()).removeAllImageFilesInDirectory(REPORTS_DIRECTORY);
+            
+            startReport(); 
+        
+        }
         catch(Exception e) { logger.error(e); }
     
     }
@@ -82,6 +90,9 @@ public class ExtentReporter implements Reporter {
         
         try {
             
+            File reportsDir = new File(REPORTS_DIRECTORY);
+            reportsDir.mkdir();
+
             ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(REPORTS_DIRECTORY + REPORTS_FILENAME);
             
             extentReports = new ExtentReports();
@@ -186,7 +197,7 @@ public class ExtentReporter implements Reporter {
  
         try { 
             
-            logger.info("Flushing");
+            logger.debug("Flushing");
             
             extentReports.flush(); 
         

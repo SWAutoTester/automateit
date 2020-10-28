@@ -53,7 +53,7 @@ public abstract class LoginScreen extends BaseScreen {
         
         try {
             
-            logger.info("Creating a new instance of: " + SCREEN_NAME);
+            logger.debug("Creating a new instance of: " + SCREEN_NAME);
             
             this.resourceId_title = resourceId_title;
             
@@ -63,7 +63,7 @@ public abstract class LoginScreen extends BaseScreen {
             
             this.resourceId_button_login = resourceId_button_login;
             
-            validate();
+            //validate();
             
         }
         catch(Exception e) { throw e; }

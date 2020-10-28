@@ -18,7 +18,11 @@
 
 package org.automateit.web;
 
+import java.io.File;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -30,6 +34,7 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
 
+import org.automateit.core.StringCapabilities;
 import org.automateit.util.CommonProperties;
 
 /**
@@ -61,6 +66,11 @@ public class WebDriverFactory {
       * Chrome WebDriver identifier key
       */
     public static final String CHROMEWEBDRIVER = "CHROMEWEBDRIVER";
+    
+    /**
+      * Chrome Mobile app WebDriver identifier key
+      */
+    public static final String CHROMEMOBILEBDRIVER = "CHROMEMOBILEDRIVER";
     
      /**
       * Opera WebDriver identifier key
@@ -95,20 +105,26 @@ public class WebDriverFactory {
      */
     public WebDriver getWebDriver(String webDriverId, String browserURL) throws Exception {
         
-        logger.info("Getting a version 3.0 Selenium/WebDriver for webdriver id: " + webDriverId);
+        logger.debug("Getting a version 3.0 Selenium/WebDriver for webdriver id: " + webDriverId);
         
         if(webDriverId == null) throw new Exception("webDriverId cannot be null."); 
         
         if(webDriverId.equals(FIREFOXWEBDRIVER)) {
             
-            logger.info("Creating an instance of Firefox Driver");
+            logger.debug("Creating an instance of Firefox Driver");
             
-            logger.info("Setting system property for Firefox Driver - webdriver.firefox.driver=" + CommonProperties.getInstance().get("webdriver.firefox.driver"));
+            logger.debug("Setting system property for Firefox Driver - webdriver.firefox.driver=" + CommonProperties.getInstance().get("webdriver.firefox.driver"));
             
-            if((CommonProperties.getInstance().get("webdriver.firefox.driver.location") == null) || (CommonProperties.getInstance().get("webdriver.firefox.driver.location").trim().length() == 0))
-                   throw new Exception("The system property 'webdriver.firefox.driver.location' is not configured propertly: " + CommonProperties.getInstance().get("webdriver.firefox.driver.location"));
+            String driverLocation = CommonProperties.getInstance().get("webdriver.firefox.driver.location");
             
-            System.setProperty("webdriver.gecko.driver", CommonProperties.getInstance().get("webdriver.firefox.driver.location"));
+            // now we check if its a real file and where it is expected to be. If not, add another "dot" to the path to back one more dir
+            File f = new File(driverLocation);
+            if(!f.exists() && !f.isFile()) driverLocation = "." + driverLocation;
+            
+            if((driverLocation == null) || (driverLocation.trim().length() == 0))
+                   throw new Exception("The system property 'webdriver.firefox.driver.location' is not configured propertly: " + driverLocation);
+            
+            System.setProperty("webdriver.gecko.driver", driverLocation);
             
             CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().FIREFOX);
             
@@ -118,14 +134,20 @@ public class WebDriverFactory {
         
         else if(webDriverId.equals(IEWEBDRIVER)) {
             
-            logger.info("Creating an instance of WebDriverBackedSelenium using Internet Explorer Driver");
+            logger.debug("Creating an instance of WebDriverBackedSelenium using Internet Explorer Driver");
             
-            logger.info("Setting system property for IE Driver - webdriver.ie.driver.location=" + CommonProperties.getInstance().get("webdriver.ie.driver.location"));
+            String driverLocation = CommonProperties.getInstance().get("webdriver.ie.driver.location");
             
-            if((CommonProperties.getInstance().get("webdriver.ie.driver.location") == null) || (CommonProperties.getInstance().get("webdriver.ie.driver.location").trim().length() == 0))
-                   throw new Exception("The system property 'webdriver.ie.driver' is not configured propertly: " + CommonProperties.getInstance().get("webdriver.ie.driver.location"));
+            // now we check if its a real file and where it is expected to be. If not, add another "dot" to the path to back one more dir
+            File f = new File(driverLocation);
+            if(!f.exists() && !f.isFile()) driverLocation = "." + driverLocation;
             
-            System.setProperty("webdriver.ie.driver", CommonProperties.getInstance().get("webdriver.ie.driver.location"));
+            logger.debug("Setting system property for IE Driver - webdriver.ie.driver.location=" + driverLocation);
+            
+            if((driverLocation == null) || (driverLocation.trim().length() == 0))
+                   throw new Exception("The system property 'webdriver.ie.driver' is not configured propertly: " + driverLocation);
+            
+            System.setProperty("webdriver.ie.driver", driverLocation);
             
             CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().IE);
             
@@ -135,7 +157,7 @@ public class WebDriverFactory {
         
         else if(webDriverId.equals(SAFARIWEBDRIVER)) {
             
-            logger.info("Creating an instance of Safari Driver. Please be sure that the webDriver extension is installed and enabled on Safari.");
+            logger.debug("Creating an instance of Safari Driver. Please be sure that the webDriver extension is installed and enabled on Safari.");
             
             CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().SAFARI);
             
@@ -145,14 +167,20 @@ public class WebDriverFactory {
         
         else if(webDriverId.equals(CHROMEWEBDRIVER)) {
             
-            logger.info("Creating an instance of Chrome Driver");
+            logger.debug("Creating an instance of Chrome Driver");
             
-            logger.info("Setting system property for Chrome Driver - webdriver.chrome.driver.location=" + CommonProperties.getInstance().get("webdriver.chrome.driver"));
+            String driverLocation = CommonProperties.getInstance().get("webdriver.chrome.driver.location");
             
-            if((CommonProperties.getInstance().get("webdriver.chrome.driver.location") == null) || (CommonProperties.getInstance().get("webdriver.chrome.driver.location").trim().length() == 0))
-                   throw new Exception("The system property 'webdriver.chrome.driver.location' is not configured propertly: " + CommonProperties.getInstance().get("webdriver.chrome.driver.location"));
+            // now we check if its a real file and where it is expected to be. If not, add another "dot" to the path to back one more dir
+            File f = new File(driverLocation);
+            if(!f.exists() && !f.isFile()) driverLocation = "." + driverLocation;
             
-            System.setProperty("webdriver.chrome.driver", CommonProperties.getInstance().get("webdriver.chrome.driver.location"));
+            logger.debug("Setting system property for Chrome Driver - webdriver.chrome.driver.location=" + driverLocation);
+            
+            if((driverLocation == null) || (driverLocation.trim().length() == 0))
+                   throw new Exception("The system property 'webdriver.chrome.driver.location' is not configured propertly: " + driverLocation);
+            
+            System.setProperty("webdriver.chrome.driver", driverLocation);
             
             CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().CHROME);
             
@@ -165,9 +193,44 @@ public class WebDriverFactory {
            
         }
         
+        else if(webDriverId.equals(CHROMEMOBILEBDRIVER)) {
+            
+            logger.debug("Creating an instance of Chrome Mobile Web Driver");
+            
+            String driverLocation = CommonProperties.getInstance().get("webdriver.chrome.driver.location");
+            
+            // now we check if its a real file and where it is expected to be. If not, add another "dot" to the path to back one more dir
+            File f = new File(driverLocation);
+            if(!f.exists() && !f.isFile()) driverLocation = "." + driverLocation;
+            
+            logger.debug("Setting system property for Chrome Mobile Web Driver - webdriver.chrome.driver.location=" + driverLocation);
+            
+            if((driverLocation == null) || (driverLocation.trim().length() == 0))
+                   throw new Exception("The system property 'webdriver.chrome.driver.location' is not configured propertly: " + driverLocation);
+            
+            System.setProperty("webdriver.chrome.driver", driverLocation);
+            
+            CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().CHROME);
+            
+            Map<String, String> mobileEmulation = new HashMap<>();
+
+            mobileEmulation.put(StringCapabilities.DEVICE_NAME.getCapability(), CommonProperties.getInstance().get(StringCapabilities.DEVICE_NAME.getCapability()));
+            mobileEmulation.put(StringCapabilities.BROWSER_NAME.getCapability(), CommonProperties.getInstance().get(StringCapabilities.BROWSER_NAME.getCapability()));
+            
+            ChromeOptions options = new ChromeOptions();
+            
+            options.setExperimentalOption("mobileEmulation", mobileEmulation);
+
+            //options.addArguments("disable-infobars");
+            //options.setExperimentalOption("excludeSwitches", Arrays.asList("enable-automation"));
+            
+            return ((WebDriver)new ChromeDriver(options));
+           
+        }
+        
         else if(webDriverId.equals(OPERAWEBDRIVER)) {
             
-            logger.info("Creating an instance of WebDriverBackedSelenium using Opera Driver");
+            logger.debug("Creating an instance of WebDriverBackedSelenium using Opera Driver");
             
             CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().OPERA);
             

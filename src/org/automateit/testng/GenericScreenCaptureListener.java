@@ -106,7 +106,7 @@ public class GenericScreenCaptureListener extends TestListenerAdapter {
         if (testNGUtils.capturePageLoadPerformance()) {
 	    	
             try { testNGUtils.savePageSummaryPerformance(utils.getBasePagePerformanceDirectory()); }	        
-            catch(Exception e) { log.error(e); }
+            catch(Exception e) { }
     	
         }
     
@@ -130,7 +130,7 @@ public class GenericScreenCaptureListener extends TestListenerAdapter {
             testNGUtils.appendToReport(result, screenshotFilename + "." + ScreenshotCapture.JPG, divIdNumber++);
        
         }
-        catch(Exception e) { log.error(e); }
+        catch(Exception e) { }
    
     }
 

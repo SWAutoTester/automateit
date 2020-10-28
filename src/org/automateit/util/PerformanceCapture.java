@@ -68,7 +68,7 @@ public class PerformanceCapture {
         
         if(bean == null) return;
         
-        logger.info("Marking the end time for page loading: " + pageName);
+        logger.debug("Marking the end time for page loading: " + pageName);
         
         this.bean.markEndTime(pageName);
         

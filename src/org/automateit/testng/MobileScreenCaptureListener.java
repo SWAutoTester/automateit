@@ -105,7 +105,7 @@ public class MobileScreenCaptureListener extends TestListenerAdapter {
         if (testNGUtils.capturePageLoadPerformance()) {
 	    	
             try { testNGUtils.savePageSummaryPerformance(utils.getBasePagePerformanceDirectory()); }   
-            catch(Exception e) { log.error(e); }
+            catch(Exception e) { }
     	
         }
     
@@ -128,7 +128,7 @@ public class MobileScreenCaptureListener extends TestListenerAdapter {
             testNGUtils.appendToReport(result, screenshotFilename, divIdNumber++);
        
         }
-        catch(Exception e) { log.error(e); }
+        catch(Exception e) { }
    
     }
     

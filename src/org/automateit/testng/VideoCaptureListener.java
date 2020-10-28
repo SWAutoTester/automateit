@@ -145,7 +145,7 @@ public class VideoCaptureListener extends TestListenerAdapter {
             testNGUtils.appendVideoToReport(result, videoController.getVideoFilepath());
        
         }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
    
     }
     

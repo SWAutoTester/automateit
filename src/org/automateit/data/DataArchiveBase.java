@@ -18,6 +18,7 @@
 
 package org.automateit.data;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -41,13 +42,32 @@ public class DataArchiveBase {
     private static Logger log = Logger.getLogger(DataArchiveBase.class);
     
     /**
-     * Add data to be archived.
+     * Add data to be archived. If a key already exists, the value will be updated.
      * 
      * @param data
      * 
      * @throws Exception 
      */
-    public void addData(String[] data) throws Exception { list.add(data); }
+    public void addData(String[] data) throws Exception { 
+        
+        Iterator<String[]> keyIterator = list.iterator();
+        
+        while(keyIterator.hasNext()) { 
+            
+            String[] oldData = keyIterator.next();
+            
+            if(oldData[0].trim().equals(data[0].trim())) {
+              
+              // remove the previous data and overwrite with new data
+              keyIterator.remove();
+              
+            }
+            
+        }
+        
+        list.add(data); 
+    
+    }
     
     /**
      * Clear/remove all data collected.

@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v1.6.3 - 28 July 2018
+Automate It! Web/Mobile Test Automation Framework v2.1.2 - 15 July 2020
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -23,6 +23,8 @@ Features:
 14) Scrolling web pages up/down from Safari, Chrome, Firefox web browsers
 15) Special styled reporting using Extent-based reporting framework for really nice and professional test result reports including easy to include screenshots from web and mobile application
 16) Alert Handlers in Zabbix, Email, and SMS for alerts of specific user-defined special events during or after tests (failed or skipped) 
+17) Asset objects and management
+18) Jenkins resource locking interface
 
 This framework allows anyone with basic Java programming skills to write automated tests without needing any knowledge of Selenium or Appium WebDrivers.
 
@@ -53,15 +55,15 @@ Third Party API Dependency Versions:
 
 FirefoxDriver
 -------------
-v0.21
+v0.27.0
 https://github.com/mozilla/geckodriver/releases
-https://github.com/mozilla/geckodriver/releases/tag/v0.21.0
+https://github.com/mozilla/geckodriver/releases/tag/v0.27.0
 
 ChromeDriver
 -------------
-v2.40
+86.0.4240.22
 https://sites.google.com/a/chromium.org/chromedriver/downloads
-https://chromedriver.storage.googleapis.com/index.html?path=2.40/
+https://chromedriver.storage.googleapis.com/index.html?path=86.0.4240.22/
 
 SafariDriver
 ------------
@@ -69,15 +71,14 @@ Latest version of SafariDriver comes embedded in latest Safari browser
 
 Selenium Server
 ---------------
-v3.13.0
-https://goo.gl/4g538W
+v3.141.59
 http://www.seleniumhq.org/download/
 
 Appium Drivers
 --------------
-v6.1.0
+v7.3.0
 http://appium.io/downloads.html
-https://search.maven.org/#search%7Cga%7C1%7Cg%3Aio.appium%20a%3Ajava-client
+https://search.maven.org/search?q=g:io.appium
 
 Log4J
 ------
@@ -87,7 +88,6 @@ https://logging.apache.org/log4j/2.x/download.html
 JavaMail
 --------
  JavaMail API 1.4.5
-
 
 
 

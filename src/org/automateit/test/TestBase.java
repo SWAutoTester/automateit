@@ -27,6 +27,8 @@ import org.apache.log4j.Logger;
 
 import org.testng.Assert;
 
+import org.automateit.core.ViewBase;
+
 import org.automateit.data.DataDrivenInput;
 import org.automateit.data.DataArchiveFactory;
 import org.automateit.data.DataArchive;
@@ -37,12 +39,14 @@ import org.automateit.testng.TestNGUtils;
 
 import org.automateit.util.CommonProperties;
 
+import org.automateit.web.pages.BaseMobileWebPage;
+
 /**
  * This is the base testing class.
  * 
  * @author mburnside@Automate It!
  */
-public class TestBase {
+public class TestBase extends ViewBase {
       
     /**
      * The delay we wait for certain actions to be completed.
@@ -65,10 +69,15 @@ public class TestBase {
     TestNGUtils testNGUtils = new TestNGUtils();
     
     /**
+     * This string is the one referenced to when a client previous creates a unique string (so it can be referenced after being created)
+     */
+    public String getCurrentUniqueString = null;
+    
+    /**
      * The data base directory
      */
     public static final String DATADIRECTORY = "." + File.separator + "data" + File.separator;
-   
+    
     /**
      * Logging class
      */
@@ -233,14 +242,63 @@ public class TestBase {
     }
     
     /**
+     * Generate a unique string value based on Date.getTime().
+     * 
+     * @throws Exception 
+     */
+    public void generateUniqueStringValue() throws Exception {
+        
+        try { this.getCurrentUniqueString = String.valueOf((new Date()).getTime()); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Generate a unique string value based on Date.getTime().
+     * 
+     * @throws Exception 
+     */
+    public void generateUniqueStringReverseValue() throws Exception {
+        
+        try { this.getCurrentUniqueString = new StringBuilder(String.valueOf((new Date()).getTime())).reverse().toString(); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Generate a unique string value based on Date.getTime().
+     * 
+     * @throws Exception 
+     */
+    public void generateUniqueStringSubtractedValue() throws Exception {
+        
+        try { 
+            
+            long future = (new Long("3000000000000")).longValue();
+            long now = (new Date()).getTime();
+            
+            this.getCurrentUniqueString = String.valueOf(future - now);
+                     
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
      * Get a unique string value based on Date.getTime().
      * 
      * @return
      * @throws Exception 
      */
-    protected String getUniqueStringValue() throws Exception {
+    public String getUniqueStringValue() throws Exception {
         
-        try { return String.valueOf((new Date()).getTime()); }
+        try { 
+            
+            if(this.getCurrentUniqueString == null) generateUniqueStringSubtractedValue();
+            
+            return this.getCurrentUniqueString; 
+        
+        }
         catch(Exception e) { throw e; }
         
     }
@@ -320,6 +378,21 @@ public class TestBase {
     protected void assertEquals(boolean actual, boolean expected, String errorMessage) throws Exception {
         
         try { Assert.assertEquals(actual, expected, errorMessage); }
+        catch(Exception e) { throw e; }
+        
+        
+    }
+    
+    /**
+     * Verify/Validate the mobile web page.
+     * 
+     * @param baseMobileWebPage
+     * 
+     * @throws Exception 
+     */
+    protected void verifyMobileWebPage(BaseMobileWebPage baseMobileWebPage) throws Exception {
+        
+        try { baseMobileWebPage.validate(); }
         catch(Exception e) { throw e; }
         
         

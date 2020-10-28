@@ -20,13 +20,14 @@ package org.automateit.mobile;
  
 import java.net.URL;
 import java.time.Duration;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-
 
 import org.testng.Assert; 
 
@@ -34,22 +35,29 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement; 
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.touch.offset.PointOption;
 import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.MobileElement;
 
+import org.automateit.core.Capabilities;
 import org.automateit.core.ViewBase;
+import org.automateit.core.BooleanCapabilities;
+import org.automateit.core.StringCapabilities;
 import org.automateit.data.DataDrivenInput;
 import org.automateit.util.CommonSelenium;
-      
+ 
 /**
  * This class is the base class for all other screen classes to use.
  * 
@@ -65,7 +73,12 @@ public class BaseScreen extends ViewBase {
      * The webdriver class to use
      */
     protected AppiumDriver<WebElement> driver = null;
-
+    
+    /**
+     * The default timeout for logcat
+     */
+    private static final int DEFAULT_LINES_LOGCAT = 5000;
+    
     /**
      * Logging class
      */
@@ -149,181 +162,14 @@ public class BaseScreen extends ViewBase {
             return;
         }
        
-        try {
-       
-            logger.info("Loading webdriver property: " + "device" + "|" + properties.get("device"));
-            capabilities.setCapability("device", properties.get("device"));
-            
-            logger.info("Loading webdriver property: " + "deviceName" + "|" + properties.get("deviceName"));
-            capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, properties.get("deviceName"));
-            
-            logger.info("Loading webdriver property: " + CapabilityType.BROWSER_NAME + "|\"\"");
-            capabilities.setCapability(CapabilityType.BROWSER_NAME, "");
-            
-            logger.info("Loading webdriver property: " + "app-package" + "|" + properties.get("app-package"));
-            capabilities.setCapability("app-package", properties.get("app-package"));
-            
-            logger.info("Loading webdriver property: " + "app-wait-package" + "|" + properties.get("app-wait-package"));
-            capabilities.setCapability("app-wait-package", properties.get("app-wait-package"));
-            
-            logger.info("Loading webdriver property: " + "app-activity" + "|" + properties.get("app-activity"));
-            capabilities.setCapability("app-activity", properties.get("app-activity"));
-            
-            logger.info("Loading webdriver property: " + "app-wait-activity" + "|" + properties.get("app-wait-activity"));
-            capabilities.setCapability("app-wait-activity", properties.get("app-wait-activity"));
-            
-            logger.info("Loading webdriver property: " + CapabilityType.VERSION + "|" + properties.get("version"));
-            capabilities.setCapability(CapabilityType.VERSION, properties.get("version"));
-            
-            logger.info("Loading webdriver property: " + CapabilityType.PLATFORM + "|" + properties.get("platform"));
-            capabilities.setCapability(CapabilityType.PLATFORM, properties.get("platform"));
-            
-            logger.info("Loading webdriver property: " + "platformName" + "|" + properties.get("platformName"));
-            capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, properties.get("platformName"));
-            
-            logger.info("Loading webdriver property: " + "app" + "|" + properties.get("app_location"));
-            capabilities.setCapability(MobileCapabilityType.APP, properties.get("app_location"));  
-            
-            if(properties.getProperty("autoGrantPermissions") != null) {
-                
-                logger.info("Loading webdriver property: " + "autoGrantPermissions" + "|" + properties.get("autoGrantPermissions"));
-               
-                boolean autoGrantPermissions = (new Boolean(properties.get("autoGrantPermissions"))).booleanValue();
-                
-                capabilities.setCapability("autoGrantPermissions", autoGrantPermissions);
-                    
-            }
-            else capabilities.setCapability("autoGrantPermissions", "true");
-            
-            if(properties.getProperty("automationName") != null) {
-                
-                logger.info("Loading webdriver property: " + "automationName" + "|" + properties.get("automationName"));
-                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, properties.get("automationName"));
-            
-            }
-            
-            if(properties.getProperty("platformVersion") != null) {
-                
-                logger.info("Loading webdriver property: " + "platformVersion" + "|" + properties.get("platformVersion"));
-                capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, properties.get("platformVersion"));
-            
-            }
-            
-            if(properties.getProperty("bundleId") != null) {
-                
-                logger.info("Loading webdriver property: " + "bundleId" + "|" + properties.get("bundleId"));
-                capabilities.setCapability("bundleId", properties.get("bundleId"));
-            
-            }
-            
-            if(properties.getProperty("realDeviceLogger") != null) {
-                
-                logger.info("Loading webdriver property: " + "realDeviceLogger" + "|" + properties.get("realDeviceLogger"));
-                capabilities.setCapability("realDeviceLogger", properties.get("realDeviceLogger"));
-            
-            }
-            
-            if(properties.getProperty("xcodeConfigFile") != null) {
-                
-                logger.info("Loading webdriver property: " + "xcodeConfigFile" + "|" + properties.get("xcodeConfigFile"));
-                capabilities.setCapability("xcodeConfigFile", properties.get("xcodeConfigFile"));
-            
-            }
-            
-            if(properties.getProperty("reInstallApp") != null) {
-                
-                logger.info("Loading webdriver property: " + "reInstallApp" + "|" + properties.get("reInstallApp"));
-                
-                boolean reset = (new Boolean(properties.get("reInstallApp"))).booleanValue();
-                
-                capabilities.setCapability(MobileCapabilityType.NO_RESET, !reset); // android
-                if(isIOS()) capabilities.setCapability(MobileCapabilityType.FULL_RESET, reset); //ios
-                    
-            }
-            
-            // this code will make sure the app does not get reset if set to true by an outside mechanism/class
-            // that overrides the property
-            if(properties.getForceAppNoReset()) {
-                
-                logger.info("Forcing the app not to be re-installed/reset");
-               
-                capabilities.setCapability("noReset", true);
-                if(isIOS()) capabilities.setCapability("fullReset", false); //ios
-                    
-            }
-            
-            if(properties.getProperty("udid") != null) {
-                
-                logger.info("Loading webdriver property: " + "udid" + "|" + properties.get("udid"));
-                capabilities.setCapability(MobileCapabilityType.UDID, properties.get("udid"));
-            
-            }
-            
-            if(properties.getProperty("newCommandTimeout") != null) {
-                
-                logger.info("Loading webdriver property: " + "newCommandTimeout" + "|" + properties.get("newCommandTimeout"));
-                capabilities.setCapability("newCommandTimeout", properties.get("newCommandTimeout"));
-            
-            }
-            
-            if(properties.getProperty("useNewWDA") != null) {
-                
-                logger.info("Loading webdriver property: " + "useNewWDA" + "|" + properties.get("useNewWDA"));
-                
-                boolean useNewWDA = (new Boolean(properties.get("useNewWDA"))).booleanValue();
-                
-                capabilities.setCapability("useNewWDA", useNewWDA);
-                    
-            }
-            else { if(isIOS()) capabilities.setCapability("useNewWDA", true); }
-            
-            if(properties.getProperty("showXcodeLog") != null) {
-                
-                logger.info("Loading webdriver property: " + "showXcodeLog" + "|" + properties.get("showXcodeLog"));
-                
-                boolean showXcodeLog = (new Boolean(properties.get("showXcodeLog"))).booleanValue();
-                
-                capabilities.setCapability("showXcodeLog", showXcodeLog);
-                    
-            }
-            else { if(isIOS()) capabilities.setCapability("showXcodeLog", false); }
-            
-            logger.info("Loading webdriver property: " + "URL" + "|" + properties.get("URL"));
-              
-            logger.info("Preparing to create a new web driver instance");
-            if(properties.get("device").trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get("URL")), capabilities);
-            else this.driver = new IOSDriver(new URL(properties.get("URL")), capabilities);
-            
-            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get("timeout"));
-            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
-            
-            // set the captureWebDriverCommands
-            if(properties.getProperty("captureWebDriverCommands") != null) { this.captureWebDriverCommands = (new Boolean(properties.getProperty("captureWebDriverCommands"))).booleanValue(); }
-            
-            logger.info("Capture webdriver commands: " + this.captureWebDriverCommands);
-            
-            hasBeenInitialized = true;
-            
-            CommonSelenium.getInstance().setWebDriver(this.driver);
-            
-            logger.info("Setup web driver setup for tests execution");
-            
-        }
+        try { createNewWebDriver(); }
         catch(Exception e) { 
         
             logger.error(e.getMessage());
         
             if(this.driver != null) quit();
-            
-            logger.info("Preparing to create a new web driver instance");
-            
-            if(properties.get("device").trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get("URL")), capabilities);
-            else this.driver = new IOSDriver(new URL(properties.get("URL")), capabilities);
-            
-            CommonSelenium.getInstance().setWebDriver(this.driver);
-            
-            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get("timeout"));
-            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+           
+            createNewWebDriver();
             
         }
       
@@ -338,12 +184,9 @@ public class BaseScreen extends ViewBase {
         
         try {
           
-            if(properties.get("device").trim().equals("ANDROID")) this.driver = new AndroidDriver(new URL(properties.get("URL")), capabilities);
-            else this.driver = new IOSDriver(new URL(properties.get("URL")), capabilities);
+            createNewWebDriver();
             
-            CommonSelenium.getInstance().setWebDriver(this.driver);
-            
-            driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
             
         }
         catch(Exception e) { throw e;}
@@ -708,14 +551,14 @@ public class BaseScreen extends ViewBase {
                 if(!element.isDisplayed() || !element.isEnabled()) continue;
                
                 String data1 = element.getAttribute("name");
-                
+               
                 if(data1 == null) continue;
                 
                 String data = data1.trim();
                
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
                    
-                logger.info("Checking element text value: " + data);
+                logger.info("Checking element text value: " + data + "|" + data.contains(text));
                 
                 if(data.contains(text)) return element;
                 
@@ -728,55 +571,6 @@ public class BaseScreen extends ViewBase {
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
-    
-    /**
-     * Return the web element matching the type and containing the text.
-     * 
-     * @param text1
-     * @param text2
-     * @param className
-     * 
-     * @return
-     * 
-     * @throws Exception 
-     */
-    /*
-    public WebElement getWebElementContainingText(String text1, String text2, String className) throws Exception {
-        
-        logger.info("getWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
-            
-        commandList.addToList("getWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
-        
-        try {
-             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
-            
-            for(WebElement element:elements) {
-                
-                if(!element.isDisplayed() || !element.isEnabled()) continue;
-               
-                String data1 = element.getAttribute("name");
-                
-                if(data1 == null) continue;
-                
-                String data = data1.trim();
-               
-                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
-                   
-                logger.info("Checking element text value: " + data);
-                
-                if(data.contains(text1) || data.contains(text2)) return element;
-                
-            }
-            
-            // if we get here, we could not find the element so throw an exception
-            throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
-            
-        }
-        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
-        
-    }
-    */
     
     /**
      * Get the full displayed value of the web element matching the type and containing the text.
@@ -1310,6 +1104,281 @@ public class BaseScreen extends ViewBase {
     }
     
     /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementMatchingText_ContentDescription(String text, String className) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementMatchingText_ContentDescription:" + text + "|" + className);
+        
+        try { validateWebElementMatchingText_ContentDescription(text, className, false); }
+        catch(Exception e) { printDOM(); throw e; }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public void validateWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+        
+        logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
+            
+        commandList.addToList("validateWebElementMatchingText_ContentDescription:" + text + "|" + className + "|" + ignoreCase);
+        
+        try {
+            
+            List<WebElement> elements = this.driver.findElements(By.className(className));
+           
+            for (WebElement element:elements) {
+                
+                if(element == null) continue;
+                
+                String data1 = element.getAttribute("contentDescription");
+                
+                if(data1 == null) continue;
+                
+                String data = data1.trim();
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking text value of attribute: " + data);
+                   
+                if(ignoreCase) { if(data.toLowerCase().equals(text.toLowerCase())) return; }
+                else { if(data.contains(text)) return; }
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception
+            throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text + " in the Content Description attribute");
+                   
+        }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * 
+     * @returns
+     * 
+     * @throws Exception 
+     */
+    public WebElement getWebElementContainingText_ContentDescription(String text, String className) throws Exception {
+            
+        commandList.addToList("getWebElementContainingText_ContentDescription:" + text + "|" + className );
+        
+        return getWebElementContainingText_ContentDescription(text, className, false);
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * 
+     * @returns
+     * 
+     * @throws Exception 
+     */
+    public WebElement getWebElementMatchingText_ContentDescription(String text, String className) throws Exception {
+            
+        commandList.addToList("getWebElementMatchingText_ContentDescription:" + text + "|" + className );
+        
+        return getWebElementMatchingText_ContentDescription(text, className, false);
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * 
+     * @returns
+     * 
+     * @throws Exception 
+     */
+    public void clickOnWebElementContainingText_ContentDescription(String text, String className) throws Exception {
+            
+        commandList.addToList("clickOnWebElementContainingText_ContentDescription:" + text + "|" + className );
+        
+        getWebElementContainingText_ContentDescription(text, className, false).click();
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     *  
+     * @throws Exception 
+     */
+    public void clickOnWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+            
+        commandList.addToList("clickOnWebElementContainingText_ContentDescription:" + text + "|" + className  + "|" + ignoreCase);
+        
+        getWebElementContainingText_ContentDescription(text, className, ignoreCase).click();
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * 
+     * @returns
+     * 
+     * @throws Exception 
+     */
+    public void clickOnWebElementMatchingText_ContentDescription(String text, String className) throws Exception {
+            
+        commandList.addToList("clickOnWebElementMatchingText_ContentDescription:" + text + "|" + className );
+        
+        getWebElementMatchingText_ContentDescription(text, className, false).click();
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     *  
+     * @throws Exception 
+     */
+    public void clickOnWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+            
+        commandList.addToList("clickOnWebElementMatchingText_ContentDescription:" + text + "|" + className  + "|" + ignoreCase);
+        
+        getWebElementMatchingText_ContentDescription(text, className, ignoreCase).click();
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public WebElement getWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+            
+        commandList.addToList("getWebElementContainingText_ContentDescription:" + text + "|" + className + "|" + ignoreCase);
+        
+        try {
+            
+            List<WebElement> elements = this.driver.findElements(By.className(className));
+           
+            for (WebElement element:elements) {
+                
+                if(element == null) continue;
+                
+                String data1 = element.getAttribute("contentDescription");
+                
+                if(data1 == null) continue;
+                
+                String data = data1.trim();
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking text value of attribute: " + data);
+                   
+                if(ignoreCase) { if(data.toLowerCase().contains(text.toLowerCase())) return element; }
+                else { if(data.contains(text)) return element; }
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception
+            throw new Exception("Could not find a screen component with text in any screen element matching type: " + className + " and text: " + text + " in the Content Description attribute");
+                   
+        }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Validate that there is a web element matching the type and containing the text - the Content Description attribute.
+     * 
+     * @param text
+     * @param className
+     * @param ignoreCase
+     * 
+     * @throws Exception 
+     */
+    public WebElement getWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+            
+        commandList.addToList("getWebElementMatchingText_ContentDescription:" + text + "|" + className + "|" + ignoreCase);
+        
+        try {
+            
+            List<WebElement> elements = this.driver.findElements(By.className(className));
+           
+            for (WebElement element:elements) {
+                
+                if(element == null) continue;
+                
+                String data1 = element.getAttribute("contentDescription");
+                
+                if(data1 == null) continue;
+                
+                String data = data1.trim();
+                
+                if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
+                
+                logger.info("Checking text value of attribute: " + data);
+                   
+                if(ignoreCase) { 
+                    
+                    if(data.toLowerCase().equals(text.toLowerCase())) {
+                        
+                        return element;
+                    
+                    } 
+                    
+                }
+                else { 
+                    
+                    if(data.equals(text)) {
+        
+                        return element;
+                
+                    }
+                    
+                }
+                
+            }
+            
+            // if we get here, we could not find the element so throw an exception
+            throw new Exception("Could not find a screen component with text in any screen element matching type: " + className + " and text: " + text + " in the Content Description attribute");
+                   
+        }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
      * Validate that there is a web element matching the type and containing the text.
      * 
      * @param text
@@ -1605,7 +1674,7 @@ public class BaseScreen extends ViewBase {
                    
                 if(ignoreCase) { 
                 
-                    if(data.toLowerCase().contains(text.toLowerCase())) {
+                    if(data.toLowerCase().equals(text.toLowerCase())) {
                     
                         element.click();
                     
@@ -1618,7 +1687,7 @@ public class BaseScreen extends ViewBase {
                 }
                 else {
                     
-                    if(data.contains(text)) {
+                    if(data.equals(text)) {
                     
                         element.click();
                     
@@ -1970,7 +2039,24 @@ public class BaseScreen extends ViewBase {
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
-    
+
+    /**
+     * Get a list of web elements using xpath.
+     * 
+     * @param xpath 
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    protected List<WebElement> getWebElementsByXPath(String xpath) throws Exception {
+
+        try { return this.driver.findElements(By.xpath(xpath)); }
+
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+
     /**
      * Get a web element matching the exact "name" attribute value.
      * 
@@ -1983,6 +2069,22 @@ public class BaseScreen extends ViewBase {
     protected WebElement getWebElementByName(String name) throws Exception {
         
         try { return this.driver.findElement(By.name(name)); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Get a web element matching the exact "name" attribute value.
+     * 
+     * @param name
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    protected List<WebElement> getWebElementsByClassName(String name) throws Exception {
+        
+        try { return this.driver.findElements(By.className(name)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
@@ -2041,13 +2143,15 @@ public class BaseScreen extends ViewBase {
             
             List<WebElement> elements = this.driver.findElements(By.className(className));    
             
-            for (WebElement element:elements) {
+            for(WebElement element:elements) {
                 
                 String data = element.getText().trim();
                 
+                //logger.info("Data found1: " + value + "|" + data);
+                
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
                    
-                if(data.contains(value)) return element;
+                if(data.trim().contains(value.trim())) return element;
                 
             }
             
@@ -2083,7 +2187,7 @@ public class BaseScreen extends ViewBase {
                 
                 if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
                    
-                if(data.equals(value)) return element;
+                if(data.trim().equals(value.trim())) return element;
                 
             }
             
@@ -2140,7 +2244,7 @@ public class BaseScreen extends ViewBase {
             
             this.driver.navigate().back();
             
-            delay(2000); 
+            delay(2000); // the reason for the DELAYS is because the OS may not respond to super-fast back clicks - found issues during unit testing.
         
         }
         catch(Exception e) { throw new BaseScreenException(e); }
@@ -2160,7 +2264,13 @@ public class BaseScreen extends ViewBase {
     
         try { 
             
-            Runtime.getRuntime().exec("adb shell input keyevent 66"); 
+            String commandPrefix = "";
+            
+            String androidHome = System.getenv("ANDROID_HOME");
+        
+            if(androidHome != null) commandPrefix = androidHome + File.separator + "platform-tools" + File.separator;
+            
+            Runtime.getRuntime().exec(commandPrefix + "adb shell input keyevent 66"); 
             
             delay(2000); 
         
@@ -2178,14 +2288,14 @@ public class BaseScreen extends ViewBase {
      */
     public void clearWebElement(WebElement element) throws BaseScreenException { 
         
-        logger.info("Clear web element");
+        logger.debug("Clear web element");
         
-        //commandList.addToList("clearWebElement");
+        commandList.addToList("clearWebElement");
         
         try { element.clear(); }
         catch(Exception e) { 
             
-            if(isIOS()) throw new BaseScreenException(e); 
+            if(properties.isIOS()) throw new BaseScreenException(e); 
             else { //android nexus 6 dictionary)
                 
                 try { clickOnWebElementContainingTextValueAttribute("DELETE", "android.widget.TextView"); }
@@ -2206,7 +2316,7 @@ public class BaseScreen extends ViewBase {
      */
     public void clearWebElement(String locator) throws BaseScreenException { 
         
-        logger.info("Clear web element: " + locator);
+        logger.debug("Clear web element: " + locator);
         
         commandList.addToList("clearWebElement:" + locator);
     
@@ -2224,7 +2334,7 @@ public class BaseScreen extends ViewBase {
      */
     public void clearWebElementByResourceId(String resourceId) throws Exception { 
         
-        logger.info("Clear web element by resource id: " + resourceId);
+        logger.debug("Clear web element by resource id: " + resourceId);
         
         commandList.addToList("clearWebElementByResourceId:" + resourceId);
     
@@ -2243,7 +2353,7 @@ public class BaseScreen extends ViewBase {
      */
     public void clearWebElementByValueAndClassname(String value, String classname) throws Exception { 
         
-        logger.info("Clear web element by value and classname: " + value + "|" + classname);
+        logger.debug("Clear web element by value and classname: " + value + "|" + classname);
         
         commandList.addToList("clearWebElementByValueAndClassname:" + value + "|" + classname);
     
@@ -2335,6 +2445,28 @@ public class BaseScreen extends ViewBase {
     }
     
     /**
+     * Get the element by Name.
+     * 
+     * @param name
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    /*
+    public WebElement getWebElementByName(String name) throws Exception {
+       
+        logger.info("Get the web element with name: " + name);
+        
+        commandList.addToList("getWebElementByName:" + name);
+        
+        try { return this.driver.findElementByName(name); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    */
+    
+    /**
      * Click on the web element at xpath locator.
      * 
      * @param xpath
@@ -2366,6 +2498,24 @@ public class BaseScreen extends ViewBase {
         commandList.addToList("clickUsingResourceId:" + id);
         
         try { getWebElementAtResourceId(id).click(); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
+        
+    }
+    
+    /**
+     * Click on the web element using the name of the name of the element
+     * 
+     * @param name
+     * 
+     * @throws Exception 
+     */
+    public void clickUsingElementName(String name) throws Exception {
+        
+        logger.info("Clicking on web element with name: " + name);
+             
+        commandList.addToList("clickUsingElementName:" + name);
+        
+        try { getWebElementByName(name).click(); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
@@ -2428,7 +2578,7 @@ public class BaseScreen extends ViewBase {
             
             if(text == null) return;
             
-            if(isAndroid()) webElement.click();
+            if(properties.isAndroid()) webElement.click();
             
             try { Thread.sleep(1000); } catch(Exception e) { }
             
@@ -2558,7 +2708,7 @@ public class BaseScreen extends ViewBase {
             
             if(text == null) return;
             
-            if(isAndroid()) webElement.click();
+            if(properties.isAndroid()) webElement.click();
             
             try { Thread.sleep(1000); } catch(Exception e) { }
             
@@ -2586,30 +2736,17 @@ public class BaseScreen extends ViewBase {
         logger.info("minimize keyboard");
         
         //android
-        if(isAndroid()) {
+        if(properties.isAndroid()) {
             
             try { driver.hideKeyboard(); }
             catch(Exception e) { }
             
         }
-        else if(isIOS()) {
+        else if(properties.isIOS()) {
             
-            // this is a very special case because I tried all of the other techniques from webdriver/appium before and nothing 
-            // was working, so for xcode 8 and 9, for now explicity click on the Done button
-            // we will change this when the traditional methods of hide keyboard strategies work again (3rd party api dependent)
-            try { clickOnWebElementMatchingText("Next", "Done", "XCUIElementTypeButton"); return; }    
+            try { clickUsingResourceId("Done"); }    
             catch(Exception e2) { }
             
-            try { clickOnWebElementContainingText("Done", "XCUIElementTypeButton"); return; }    
-            catch(Exception e2) { }
-            //catch(Exception e2) { }
-            
-            try { clickOnWebElementMatchingText("Return", "XCUIElementTypeButton"); return; }    
-            catch(Exception e2) { }
-                
-            try { click("//XCUIElementTypeApplication[1]/XCUIElementTypeWindow[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeToolbar/XCUIElementTypeButton[3]"); }  
-            catch(Exception le) { }
-             
         }   
          
     }
@@ -2690,30 +2827,6 @@ public class BaseScreen extends ViewBase {
         
         }
         catch(Exception e) { return false; }
-        
-    }
-    
-    /**
-     * Indicates this is an android device.
-     * 
-     * @return 
-     */
-    public boolean isAndroid() {
-        
-        if(getPlatFormType() == null) return false;
-        else return (getPlatFormType().toLowerCase().trim().equals("android"));
-        
-    }
-    
-    /**
-     * Indicates this is an IOS device.
-     * 
-     * @return 
-     */
-    public boolean isIOS() {
-        
-        if(getPlatFormType() == null) return false;
-        else return (getPlatFormType().toLowerCase().trim().equals("ios"));
         
     }
     
@@ -2830,7 +2943,7 @@ public class BaseScreen extends ViewBase {
         
         logger.info("Perform scroll to top into drop down");
    
-        commandList.addToList("scrollToTopInDropDown|" + className + "|" + elements);
+        commandList.addToList("scrollToTopInDropDown|" + className);
 
         try {
 
@@ -2875,7 +2988,7 @@ public class BaseScreen extends ViewBase {
         
         logger.info("Perform scroll one step into drop down");
  
-        commandList.addToList("scrollNextInDropDown|" + className + "|" + elements);
+        commandList.addToList("scrollNextInDropDown|" + className);
 
         try {
 
@@ -2929,7 +3042,7 @@ public class BaseScreen extends ViewBase {
                 
                 List<WebElement> elements = this.driver.findElements(By.className(className));
 
-		try { webElement = getWebElementAtLocationByClassNameAndValueAttributeValueEquals(className, text); }
+		try { webElement = getWebElementAtLocationByClassNameAndValueAttributeValue(className, text); }
                 catch (Exception e) { }
 
                 if(webElement != null) break;
@@ -2991,7 +3104,7 @@ public class BaseScreen extends ViewBase {
             // fetch all visible options found in drop down
             List<WebElement> elements = this.driver.findElements(By.className(className));
 
-	    try { webElement = getWebElementAtLocationByClassNameAndValueAttributeValueEquals(className, text); }
+	    try { webElement = getWebElementAtLocationByClassNameAndValueAttributeValue(className, text); }
             catch (Exception e) { }
 
             // If option with required text is not present then try to scroll and check
@@ -3006,7 +3119,7 @@ public class BaseScreen extends ViewBase {
             // Select the option if found in dropdown
             if(webElement != null) {
                 
-                logger.info("text to be select is " + webElement.getText().trim());
+                logger.info("Text From drop down list to be chosen: " + webElement.getText().trim());
                 
                 webElement.click();
             
@@ -3509,9 +3622,682 @@ public class BaseScreen extends ViewBase {
      */
     public void setTimeout(String timeout) throws Exception {
         
-        try { this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS); }
+        try { 
+            
+            logger.info("The timeout value is set to (seconds): " + timeout);
+            this.driver.manage().timeouts().implicitlyWait((new Long(timeout)).longValue(), TimeUnit.SECONDS);
+        
+        }
         catch(Exception e) { throw e; }
         
     }
     
+    /**
+     * Allow for setting the timeout manually (if needed)
+     * 
+     * @throws Exception 
+     */
+    public void setTimeout() throws Exception {
+        
+        try { setTimeout(properties.get(StringCapabilities.TIMEOUT.getCapability())); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * This method does the actual creation of the web driver (appium driver)
+     * 
+     * @throws Exception 
+     */
+    protected void createNewWebDriver() throws Exception {
+        
+        // we need to get the noreset and reinstallapp properties before they get potentially overwritten
+        // by the next load of properties
+        boolean noReset = false;
+        
+        boolean reInstallApp = true;
+        
+        if(properties.getForceAppResetInstall()) {
+          
+            noReset = (new Boolean(properties.get(BooleanCapabilities.NO_RESET.getCapability()))).booleanValue();
+        
+            reInstallApp = (new Boolean(properties.get(BooleanCapabilities.REINSTALL_APP.getCapability()))).booleanValue();
+          
+        }
+            
+        try {
+            
+            if(properties.isAndroid()) {
+            
+                String androidPropertiesFilePath = "./conf/app.android.csv";
+            
+                if(properties.getModule() != null) androidPropertiesFilePath = "./" + properties.getModule() + "/" +  androidPropertiesFilePath;
+            
+                logger.info("Adding Android app specific properties:" + androidPropertiesFilePath);
+            
+                properties.addProperties(androidPropertiesFilePath);
+            
+            }
+            
+            if(properties.isIOS()) {
+            
+                String iosPropertiesFilePath = "./conf/app.ios.csv";
+            
+                if(properties.getModule() != null) iosPropertiesFilePath = "./" + properties.getModule() + "/" +  iosPropertiesFilePath;
+            
+                logger.info("Adding iOS app specific properties:" + iosPropertiesFilePath);
+            
+                properties.addProperties(iosPropertiesFilePath);
+            
+            }
+            
+            commandList.addToList("createNewWebDriver: " + properties.get(StringCapabilities.DEVICE.getCapability()));
+            
+            logger.info("Preparing to create a new web driver instance for device type: " + properties.get(StringCapabilities.DEVICE.getCapability()));
+            logger.info("Preparing to create a new web driver instance at URL: " + properties.get(StringCapabilities.URL.getCapability()));
+            
+            
+            
+            Capabilities capabilities = new Capabilities();
+            
+            DesiredCapabilities desiredCapabilities = capabilities.get();
+            
+            // now we override the noReset and reInstallApp
+            if(properties.getForceAppResetInstall()) {
+            
+                desiredCapabilities.setCapability(BooleanCapabilities.NO_RESET.getCapability(), noReset);
+            
+                desiredCapabilities.setCapability(BooleanCapabilities.REINSTALL_APP.getCapability(), reInstallApp);
+                
+            }
+            
+            if(properties.isAndroid()) this.driver = new AndroidDriver(new URL(properties.get(StringCapabilities.URL.getCapability())), desiredCapabilities);
+            else this.driver = new IOSDriver(new URL(properties.get(StringCapabilities.URL.getCapability())), desiredCapabilities);
+            
+            setTimeout();
+            
+            CommonSelenium.getInstance().setWebDriver(this.driver);
+            
+            hasBeenInitialized = true;
+            
+            logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get("timeout"));
+            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+          
+            logger.info("New webdriver created successfully: " + this.driver);
+            
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Dial a phone number on the device.
+     * 
+     * @param number
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String dialPhoneNumber(String number) throws Exception {
+        
+        try { 
+            
+            if(properties.isAndroid()) return utils.executeShellCommand("adb shell service call phone 2 s16 " + "+" + number); 
+            else return null;
+        
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Answer an active (ringing) phone call on the device.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String answerActivePhoneCall() throws Exception {
+        
+        try { 
+            
+            if(properties.isAndroid()) return utils.executeShellCommand("adb shell input keyevent 5"); 
+            else return null;
+        
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get most recent call info in the call logs on the device.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getMostRecentCallInfo() throws Exception {
+        
+        try { 
+            
+            if(properties.isAndroid()) return utils.executeShellCommand("adb shell sqlite3 /data/data/com.android.providers.contacts/databases/contacts2.db \"SELECT * FROM calls order by _id desc limit 1;\""); 
+            else return null;
+        
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get most recent call info in the call logs on the device.
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getAllCallInfo() throws Exception {
+        
+        try { 
+            
+            if(properties.isAndroid()) return utils.executeShellCommand("adb shell sqlite3 /data/data/com.android.providers.contacts/databases/contacts2.db \"select * from calls;\""); 
+            else return null;
+        
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get logcat data from last N number of lines in the log
+     * 
+     * @param deviceId
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getLogcatData(String deviceId) throws Exception {
+        
+        try { return getLogcatData(deviceId, DEFAULT_LINES_LOGCAT); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Get logcat data from last N number of lines in the log
+     * 
+     * @param deviceId
+     * @param lines
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public String getLogcatData(String deviceId, int lines) throws Exception {
+        
+        try { 
+            
+            if(properties.isAndroid()) return utils.executeShellCommand("adb -s " + deviceId + " logcat -t " + String.valueOf(lines)); 
+            else return null;
+        
+        }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Verify text in logcat data
+     * 
+     * @param deviceId
+     * @param expectedText
+     * @param lines
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public boolean verifyLogcatData(String deviceId, int lines, String expectedText) throws Exception {
+        
+        try { return getLogcatData(deviceId, lines).contains(expectedText); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Verify text in logcat data - default lines checked is 5000
+     * 
+     * @param deviceId
+     * @param expectedText
+     * 
+     * @return
+     * 
+     * @throws Exception 
+     */
+    public boolean verifyLogcatData(String deviceId, String expectedText) throws Exception {
+        
+        try { return verifyLogcatData(deviceId, DEFAULT_LINES_LOGCAT, expectedText); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    public void androidClickHome() throws Exception { ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.HOME)); }
+    
+    /**
+     * Verify that the Notification with expected text in thew title has been received.
+     * 
+     * Note: There are random times where the notification pulldown does not always
+     * stay visible (auto-retracts), so there is an attempt to open the Messages area
+     * of the OS and search there.
+     * 
+     * @param messageText
+     * 
+     * @throws Exception 
+     */
+    public void validateNotificationReceived(String messageText) throws Exception {
+        
+        commandList.addToList("validateNotificationReceived|" + messageText);
+        
+        if(isAndroid()) {
+            
+            androidClickHome();
+            
+            ((AndroidDriver) driver).openNotifications();
+            
+            delay(5000);
+   
+            List<WebElement> allnotifications = this.driver.findElements(By.id("android:id/title"));
+   
+            logger.info("Number of notifications: " + allnotifications.size());
+ 
+            for(WebElement webElement : allnotifications) {
+       
+                logger.info("Notification text to search: " + webElement.getText());
+       
+                if(((MobileElement)webElement).getText().contains(messageText)) return;
+          
+            }
+            
+            printDOM();
+            
+            validateMessageReceived(messageText);
+        
+        }
+        else throw new BaseScreenException("Verifications of Notifications received on iOS not yet supported");
+        
+    }
+    
+    /**
+     * Verify that the Messages with expected text in the title has been received.
+     * 
+     * @param messageText
+     * 
+     * @throws Exception 
+     */
+    public void validateMessageReceived(String messageText) throws Exception {
+        
+        commandList.addToList("validateMessageReceived|" + messageText);
+        
+        if(isAndroid()) {
+            
+            androidClickHome();
+            
+            try { clickOnWebElementContainingTextValueAttribute("Apps", "android.widget.TextView"); }
+            catch(Exception le) { }
+            
+            delay(1000);
+            
+            addScreenshotToReport();
+            
+            clickOnWebElementContainingTextValueAttribute("Messages", "android.widget.TextView");
+   
+            delay(2000);
+            
+            addScreenshotToReport();
+      
+            clickOnWebElementContainingTextValueAttribute(messageText, "android.widget.TextView");
+            
+            delay(2000);
+            
+            addScreenshotToReport();
+            
+            try { clickOnWebElementContainingTextValueAttribute("CANCEL", "android.widget.Button"); }
+            catch(Exception le) { }
+            
+            addScreenshotToReport();
+           
+        }
+
+        else throw new BaseScreenException("Verifications of Notification received on iOS not yet supported");
+        
+    }
+    
+    /**
+     * Delete the Messages with expected text in the title has been received.
+     * 
+     * @param messageText
+     * 
+     * @throws Exception 
+     */
+    public void deleteMessage(String messageText) throws Exception {
+        
+        commandList.addToList("validateMessageReceived|" + messageText);
+        
+        if(isAndroid()) {
+            
+            clickOnWebElementContainingText_ContentDescription("More options",  "android.widget.Button");
+            
+            delay(2000);
+            
+            addScreenshotToReport();
+            
+            clickOnWebElementContainingText_ContentDescription("Delete",  "android.widget.TextView");
+            
+            delay(2000);
+            
+            addScreenshotToReport();
+            
+            try { 
+                
+                clickOnWebElementContainingTextValueAttribute("All",  "android.widget.TextView");  
+                
+                delay(2000); 
+                
+                addScreenshotToReport();
+                
+                clickOnWebElementContainingText_ContentDescription("DELETE",  "android.widget.Button");
+                
+                delay(2000);
+                
+                addScreenshotToReport();
+            
+            }
+            catch(Exception le) { }
+            
+            clickOnWebElementContainingTextValueAttribute("DELETE", "android.widget.Button");
+            
+            delay(2000);
+            
+            addScreenshotToReport();
+          
+        }
+
+        else throw new BaseScreenException("Verifications of Notification received on iOS not yet supported");
+        
+    }
+    
+    /**
+     * Validate the Notification is received and return to Message Menu.
+     * 
+     * @param messageText
+     * 
+     * @throws Exception 
+     */
+    public void validateNotificationReceivedAndGoBack(String messageText) throws Exception {
+        
+        info("Validating notification message: " + messageText);
+        
+        try { validateMessageReceived(messageText); }
+        catch(Exception e) { throw e; }
+        finally {
+            // go back twice to get to original Notifications/Message screen
+            try { androidGoBack(); addScreenshotToReport(); androidGoBack(); addScreenshotToReport(); }
+            catch(Exception le) { }
+            
+        }
+        
+    }
+    
+    /**
+     * Validate the Notification is received and then delete it from the device.
+     * 
+     * @param messageText
+     * 
+     * @throws Exception 
+     */
+    public void validateNotificationReceivedAndDelete(String messageText) throws Exception {
+           
+        validateMessageReceived(messageText); 
+            
+        deleteMessage(messageText);
+        
+    }
+    
+    /**
+     * Navigate to the Settings menu
+     * 
+     * @throws Exception 
+     */
+    protected void navigateToSettingsAndroid() throws Exception {
+        
+        info("Navigating to Settings menu");
+        
+        String locatorSettingsButton = "//android.widget.TextView[@content-desc=\"Settings\"]";
+        
+        try { click(locatorSettingsButton); }
+        catch(Exception e) { 
+            
+            // we try to scroll down and find it
+            //scrollDown();
+            
+            // click on it again
+            try { click(locatorSettingsButton); }
+            catch(Exception le) {
+                
+                try { clickOnWebElementMatchingText_ContentDescription("Settings", "android.widget.TextView"); }
+                catch(Exception  e2) {
+                    
+                    try { clickOnWebElementMatchingTextValueAttribute("Settings", "android.widget.TextView"); }
+                    catch(Exception e3) {
+                        
+                        boolean clicked = false;
+                        
+                        for(int i = 0; (i <= 5) && !clicked; i++) {
+                        
+                            scroll("100", "400", "100", "50");
+                        
+                            try { clickOnWebElementMatchingTextValueAttribute("Settings", "android.widget.TextView"); clicked = true; }
+                            catch(Exception e4) {
+                            
+                                try { clickOnWebElementMatchingText_ContentDescription("Settings", "android.widget.TextView"); clicked = true; }
+                                catch(Exception be) { if(i == 5) throw be; }
+                        
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    /**
+     * Navigate to the WiFi Settings menu
+     * 
+     * @throws Exception 
+     */
+    protected void navigateToWiFiSettingsAndroid() throws Exception {
+        
+        final String WIFI = "Wi-Fi";
+        
+        try { 
+            
+            info("Clicking on " + WIFI);
+            clickOnWebElementContainingTextValueAttribute(WIFI, "android.widget.TextView"); 
+        
+        }
+        catch(Exception e) { 
+            
+            // we try to scroll down and find it
+            //scrollDown();
+            
+            // click on it again
+            info("Clicking on WiFi");
+            try { clickOnWebElementContainingTextValueAttribute("WiFi", "android.widget.TextView"); }
+            catch(Exception le) { throw le; }
+                
+                //info("Clicking on Wi‑Fi");
+                clickOnWebElementContainingTextValueAttribute("Wi", "android.widget.TextView");
+                
+            //}
+            
+        }
+        
+    }
+    
+    /**
+     * Run the command on an android device OS terminal
+     * 
+     * @param command
+     * 
+     * @return The console output from the command
+     * 
+     * @throws Exception 
+     */
+    public String runCommandOnAndroidDevice(String command) throws Exception {
+        
+        int MAX_ATTEMPTS = 5;
+        
+        info("Running command on android device terminal prompt: " + command);
+        
+        logger.info("Running command on android device terminal prompt: " + command);
+        
+        Map<String, Object> args = new HashMap<>();
+        
+        // the command string comes in as a space-separated string exactly as a user would enter in a command line terminal prompt.
+        String[] exeCommand = command.split(" ");
+        
+        // first part of the string is the actual executable command, the remainder are parameters
+        String commandString = exeCommand[0];
+        
+        List<String> params = new ArrayList<String>();
+        
+        // now add to the parameeters to send to the command.
+        for(int i = 1; i < exeCommand.length; i++) params.add(i - 1, exeCommand[i]);
+
+        args.put("command", commandString);
+
+        args.put("args", params);
+
+        // note mgb 12 July 2020: I am seeing where sometimes (not always) the execute script fails
+        // to run. so , I am adding extra handling to make a few extra attempts before indicating fail
+        // the command line exeuctor should run with no issues, but mobile devices can act
+        // in a very unpredictable way.
+        // 
+        // trying a few extra times should limit the false-fails we see in the tests because of these
+        // android OS errors
+        for(int i = 0; i < MAX_ATTEMPTS; i++) {
+            
+            logger.info("Executing command: mobile: shell" + args);
+            
+            try { return this.driver.executeScript("mobile: shell", args).toString(); }
+            catch(Exception e) { logger.error(e); delay(5000); } // wait 5 seconds and try again
+            
+        }
+        
+        throw new Exception("Unable to successfully run command after " + MAX_ATTEMPTS + " attempts: " + command);
+
+    }
+    
+    /**
+     * Enter text into the element with text that is contained in the Content Description attribute value.
+     * 
+     * @param text
+     * @param contentDescriptionText
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    public void enterTextInWebElementContainingText_ContentDescription(String text, String contentDescriptionText, String className) throws Exception {
+            
+        commandList.addToList("enterTextInWebElementContainingText_ContentDescription:" + text + "|" + contentDescriptionText + "|" + className );
+        
+        WebElement webElement = getWebElementContainingText_ContentDescription(contentDescriptionText, className, false);
+        
+        webElement.click();
+            
+        delay(1000);
+            
+        webElement.sendKeys(text);
+            
+        minimizeKeyboard();
+        
+    }
+    
+    /**
+     * Clear the text in the element with text that is contained in the Content Description attribute value
+     * 
+     * @param contentDescriptionText
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    public void clearTextInWebElementContainingText_ContentDescription(String contentDescriptionText, String className) throws Exception {
+            
+        commandList.addToList("clearTextInWebElementContainingText_ContentDescription:" + contentDescriptionText + "|" + className );
+        
+        clearWebElement(getWebElementContainingText_ContentDescription(contentDescriptionText, className));
+        
+    }
+    
+    /**
+     * Enter text into the element with text that is matching in the Content Description attribute value.
+     * 
+     * @param text
+     * @param contentDescriptionText
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    public void enterTextInWebElementMatchingText_ContentDescription(String text, String contentDescriptionText, String className) throws Exception {
+            
+        commandList.addToList("enterTextInWebElementMatchingText_ContentDescription:" + text + "|" + contentDescriptionText + "|" + className );
+        
+        WebElement webElement = getWebElementMatchingText_ContentDescription(contentDescriptionText, className, false);
+        
+        webElement.click();
+            
+        delay(1000);
+            
+        webElement.sendKeys(text);
+            
+        minimizeKeyboard();
+        
+    }
+    
+    /**
+     * Clear the text in the element with text that is matching in the Content Description attribute value
+     * 
+     * @param contentDescriptionText
+     * @param className
+     * 
+     * @throws Exception 
+     */
+    public void clearTextInWebElementMatchingText_ContentDescription(String contentDescriptionText, String className) throws Exception {
+            
+        commandList.addToList("clearTextInWebElementMatchingText_ContentDescription:" + contentDescriptionText + "|" + className );
+        
+        clearWebElement(getWebElementMatchingText_ContentDescription(contentDescriptionText, className));
+        
+    }
+    
+    /**
+     * Android simulate a key press
+     * 
+     * mburnside: This method is necessary because on some android devices, previously existing method does not actually click the Enter key
+     * 
+     * @param key 
+     */
+    public void androidSendKey(AndroidKey key) { ((AndroidDriver)this.driver).pressKey(new KeyEvent(key)); }
+    
+    /**
+     * Android simulate Enter key press on keyboard
+     */
+    public void androidPressEnterKey() { androidSendKey(AndroidKey.ENTER); }
+     
 }

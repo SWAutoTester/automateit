@@ -1,0 +1,7 @@
+endpoint_url,<url>
+#ttl,600000
+lock_uri,/lockable-resources/reserve?resource=
+unlock_uri,/lockable-resources/unreserve?resource=
+wait_time,30000
+#wait_timeout,60000
+status_uri,/plugin/lockable-resources/api/json

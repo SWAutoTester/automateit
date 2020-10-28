@@ -84,13 +84,13 @@ public class AlertEvent extends Thread {
      */
     protected AlertEvent() { 
         
-        logger.info("Creating new instance of AlertEvent");
+        logger.debug("Creating new instance of AlertEvent");
         
         try { keywordList = utils.getListFromFile(ALERTFILEPATH); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { logger.debug(e); }
         
         try { ignoreList = utils.getListFromFile(ALERT_IGNORE_FILEPATH); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { logger.debug(e); }
         
     }
     
@@ -100,7 +100,9 @@ public class AlertEvent extends Thread {
      * @param result
      * @param ignoreAlertKeywords 
      */
-    public void sendAlert(ITestResult result, boolean ignoreAlertKeywords) {  
+    public void sendAlert(ITestResult result, boolean ignoreAlertKeywords) { 
+        
+        logger.info("Sending alert to alert handlers: " + alertHandlers.size() + "|" + ignoreAlertKeywords);
        
         // If the test name or other keyword is not in the list of things to alert for, then skip
         if(!ignoreAlertKeywords && !keywordList.contains(result.getName())) return;
@@ -114,7 +116,7 @@ public class AlertEvent extends Thread {
         for(AlertHandler alertHandler : alertHandlers) {
     
             try { alertHandler.execute(result); }
-            catch(Exception e) { logger.error(e); }
+            catch(Exception e) { logger.info(e); }
             
         }
         
@@ -134,7 +136,11 @@ public class AlertEvent extends Thread {
      */
     public void sendAlert(String message) {  
        
+        logger.info("Sending alert to alert handlers: " + alertHandlers.size());
+        
         for(AlertHandler alertHandler : alertHandlers) {
+            
+            logger.info("Sending alert to alert handler: " + alertHandler);
     
             try { alertHandler.execute(message); }
             catch(Exception e) { logger.error(e); }
@@ -154,7 +160,13 @@ public class AlertEvent extends Thread {
             
             if(alertHandler == null) return;
             
-            if(!alertHandlers.contains(alertHandler)) alertHandlers.add(alertHandler);
+            if(!alertHandlers.contains(alertHandler)) {
+                
+                logger.debug("Adding a registered alert handler implementation: " + alertHandler);
+                
+                alertHandlers.add(alertHandler);
+                
+            }
         
         } 
         catch(Exception e) { logger.error("Unable to register alert event handler|" + alertHandler); }

@@ -205,7 +205,7 @@ public class SummaryPerformanceBean  {
      */
     public String generatePagePerformanceFile(String path) {
         
-        logger.info("Generating page performance file: " + path);
+        logger.debug("Generating page performance file: " + path);
 
     	String savefile = null;
     	

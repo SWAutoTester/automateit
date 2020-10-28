@@ -72,8 +72,8 @@ public class SendZabbixMessageThread extends SendMessageThreadBase {
             DataObject dataObject = new DataObject();
 		
             // make this derived from system-wide property or the configuration file
-            if(System.getProperty(HOSTNAME_PROPERTY_NAME) != null) dataObject.setHost(System.getProperty(HOSTNAME_PROPERTY_NAME));
-            else dataObject.setHost(props.getProperty(HOSTNAME_PROPERTY_NAME));
+            if(System.getProperty(HOSTNAME_PROPERTY_NAME) != null) dataObject.setHost(System.getProperty(HOSTNAME_PROPERTY_NAME) + "." + getDeviceInfo());
+            else dataObject.setHost(props.getProperty(HOSTNAME_PROPERTY_NAME) + getDeviceInfo());
 		
             // make key dynamic (test name) if key value is not present
             if(props.getProperty("key") != null) dataObject.setKey(props.getProperty("key"));

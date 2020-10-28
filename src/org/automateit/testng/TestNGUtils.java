@@ -168,7 +168,7 @@ public class TestNGUtils {
         savePerformanceToCSVFile(screenshotFile + "_DataArchive.txt");
         
         try { dataArchive.clearData(); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
         
     }
     
@@ -245,7 +245,7 @@ public class TestNGUtils {
      */
     public void savePageSummaryPerformance(String performancePath) {
         
-        logger.info("Saving page summary performance: " + capturePageLoadPerformance() + "|" + performancePath);
+        logger.debug("Saving page summary performance: " + capturePageLoadPerformance() + "|" + performancePath);
     	
     	if (capturePageLoadPerformance()) {    		
     		
@@ -341,25 +341,11 @@ public class TestNGUtils {
                 pageSummaryArchive.saveData(performancePath + "PerformanceSummary.xlsx");
 	    	
                 // Generate page over Threshold
-                String avgLoadThresholdFile = null;
+                String avgLoadThresholdFile = performancePath + "AverageTimeOverThreshold.xlsx";
+                String maxLoadThresholdFile = performancePath + "MaxTimeOverThreshold.xlsx";
 	    	
-                String maxLoadThresholdFile = null;
-	    	
-                if(getAveragePageLoadTimeThreshold() > 0) {
-	    			
-                    avgLoadThresholdFile = performancePath + "AverageTimeOverThreshold.xlsx";
-	    	
-                    averageTimeOverThresholdArchive.saveData(avgLoadThresholdFile);
-	    	
-                }
-	    	
-                if (getMaxPageLoadTimeThreshold() > 0) {
-	    		
-                    maxLoadThresholdFile = performancePath + "MaxTimeOverThreshold.xlsx";
-	    	
-                    maxTimeOverThresholdArchive.saveData(maxLoadThresholdFile);
-	    	
-                }
+                if (getAveragePageLoadTimeThreshold() > 0) averageTimeOverThresholdArchive.saveData(avgLoadThresholdFile);
+                if (getMaxPageLoadTimeThreshold() > 0) maxTimeOverThresholdArchive.saveData(maxLoadThresholdFile);
 	    	
                 // Generate HTML report
                 Collections.sort(individualPageLoadFile);
@@ -372,7 +358,7 @@ public class TestNGUtils {
                         maxLoadThresholdFile,		    	
                         individualPageLoadFile);
 	    	}
-	        catch(Exception e) { logger.error(e); }
+	        catch(Exception e) { }
     	
         }
         
@@ -431,7 +417,7 @@ public class TestNGUtils {
      */
     private void printPerformanceNumbers(String filename, int divId, String testMethod) {
         
-        logger.info("Printing performance numbers: " + testMethod + "+" + filename);
+        logger.debug("Printing performance numbers: " + testMethod + "+" + filename);
         
         if(PerformanceCapture.getInstance().isEmpty() || !capturePageLoadPerformance()) {
             
@@ -475,7 +461,7 @@ public class TestNGUtils {
                 csvDataArchive.addData(dataToArchive);
                 SummaryPerformance.getInstance().add(bean);
             }
-            catch(Exception e) { logger.error(e); }
+            catch(Exception e) { }
         
         }
         
@@ -558,7 +544,7 @@ public class TestNGUtils {
     public void savePerformanceToXLSXFile(String filename) {
         
         try { dataArchive.saveData(filename); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) { }
         
     }
     
@@ -570,7 +556,7 @@ public class TestNGUtils {
     public void savePerformanceToCSVFile(String filename) {
         
         try { csvDataArchive.saveData(filename); }
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) {  }
         
     }
     
@@ -584,7 +570,7 @@ public class TestNGUtils {
      */
     private void generatePieChart(DefaultPieDataset dataset, int datarowcount, String filename, String chartTitle) {
         
-        logger.info("Generating Pie Chart: " + chartTitle + "|" + filename);
+        logger.debug("Generating Pie Chart: " + chartTitle + "|" + filename);
     	
     	JFreeChart chart = ChartFactory.createPieChart(chartTitle, dataset, true, true, true);
     	
@@ -598,7 +584,7 @@ public class TestNGUtils {
     			size = 800;
     		ImageIO.write(chart.createBufferedImage(size,size), "png", new File(filename)); 
     	}    	
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) {  }
         
     }
     
@@ -612,7 +598,7 @@ public class TestNGUtils {
      */
     private void generateBarChart(DefaultCategoryDataset dataset, int datarowcount, String filename, String chartTitle) {
     	
-        logger.info("Generating Bar Chart: " + chartTitle + "|" + filename);
+        logger.debug("Generating Bar Chart: " + chartTitle + "|" + filename);
         
     	   JFreeChart chart = ChartFactory.createBarChart(chartTitle, // chart title	 
                 "Page", // domain axis label
@@ -648,7 +634,7 @@ public class TestNGUtils {
         if(datarowcount > 7) width += ((datarowcount - 7) * 25);
 		
     	try { ImageIO.write(chart.createBufferedImage(width,400), "png", new File(filename)); }    	
-        catch(Exception e) { logger.error(e); }
+        catch(Exception e) {  }
         
     }
     
@@ -671,7 +657,7 @@ public class TestNGUtils {
             String maxLoadThresholdFile,
             ArrayList<String> pageLoadFiles) {
         
-        logger.info("Generating Page Summary Report: " + filename);
+        logger.debug("Generating Page Summary Report: " + filename);
     	
     	String totalTimeImageURL = null;
     	String averageTimeImageURL = null;
