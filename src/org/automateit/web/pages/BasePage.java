@@ -892,46 +892,18 @@ public class BasePage extends ViewBase {
      */
     public void click(String locator, boolean checkAjax) throws BasePageException { 
 
-        Exception clickE = null;
-
         logger.debug("Clicking on element with locator: " + locator + " turning off ajax completion checking");
 
         commandList.addToList("click: " + locator + "|ajaxCheck:" + checkAjax);
+        
+        PerformanceCapture.getInstance().start(getPageName());
 
-        int retryCount = 3;
+        waitForConditionElementXPathPresent(locator, timeout);
+              
+        this.driver.findElement(By.xpath(locator)).click();
 
-        for (int retries = 0; retries < retryCount; retries++) {
-           try {
+        waitForPageToLoad(timeout, checkAjax);
 
-              PerformanceCapture.getInstance().start(getPageName());
-
-              waitForConditionElementXPathPresent(locator, timeout);
-
-              this.driver.findElement(By.xpath(locator)).click();
-
-              waitForPageToLoad(timeout, checkAjax);
-
-              clickE = null;
-           }
-           catch(StaleElementReferenceException e) {
-               clickE = e;
-               logger.debug("click(locator=" + locator + ", checkAjax=" + checkAjax + ") caught StaleElementReferenceException, try (" + (retries + 1) + "/" + retryCount + ")");
-               sleep(1000);
-               continue;
-           }
-           catch(ElementClickInterceptedException e) {
-               clickE = e;
-               logger.debug("click(locator=" + locator + ", checkAjax=" + checkAjax + ") caught ElementClickInterceptedException, try (" + (retries + 1) + "/" + retryCount + ")");
-               sleep(1000);
-               continue;
-           }
-           catch(Exception e) { printDOM(); throw new BasePageException(e); }
-
-           break;
-        }
-
-        /* raise exception if we have reached max retries */
-        if (clickE != null) { printDOM(); throw new BasePageException(clickE); }
     }
 
     /**
@@ -4133,13 +4105,7 @@ public class BasePage extends ViewBase {
             
         Actions builder = new Actions(driver); 
           
-        builder.moveToElement(element).click().build().perform();
-        
-        //Point location = element.getLocation();
-        
-        //System.out.println("loc:" + location.getX() + "|" + location.getY());
-        
-        //new Actions(driver).moveByOffset(location.getX(), location.getY()).click().build().perform();    
+        builder.moveToElement(element).click().build().perform();  
        
     }
     

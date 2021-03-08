@@ -14,6 +14,8 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * @author mburnside@Automate It!
  **/
 
 package org.automateit.mobile;
@@ -46,7 +48,6 @@ import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.touch.offset.PointOption;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.MobileElement;
@@ -4299,5 +4300,17 @@ public class BaseScreen extends ViewBase {
      * Android simulate Enter key press on keyboard
      */
     public void androidPressEnterKey() { androidSendKey(AndroidKey.ENTER); }
+    
+    /**
+     * Minimize/dismiss the keyboard from view.
+     */
+    public void androidMinimizeKeyboard() { ((AndroidDriver)driver).hideKeyboard(); }
+    
+    /**
+     * Get the device model
+     * 
+     * @return 
+     */
+    public String getDeviceModel() { return ((AndroidDriver)driver).getCapabilities().getCapability("deviceModel").toString(); }
      
 }

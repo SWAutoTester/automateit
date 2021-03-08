@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -32,12 +33,18 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import org.automateit.ocr.OCRProcessor;
-
-import org.automateit.core.StringCapabilities;
 
 import org.automateit.reports.ReportsManager;
 import org.automateit.reports.ExtentReporter;
@@ -83,6 +90,47 @@ public class ViewBase {
      * Command List
      */
     protected CommandList commandList = CommandList.getInstance();
+    
+    /**
+     * The web driver wait object
+     */
+    protected WebDriverWait wait = null;
+    
+    /**
+     * Web Driver object.
+     * 
+     * It is designated as "protected" in case child classes need access to it.
+     */
+    protected WebDriver driver = null;
+    
+    /**
+     * Copy Constructor
+     * 
+     * @param driver 
+     */
+    public ViewBase(WebDriver driver) { this.driver = driver; }
+    
+    /**
+     * Default Constructor 
+     */
+    public ViewBase() { }
+    
+    /**
+     * Sets the driver for all instances of page/screen classes,
+     * and other utilities not directly related to UI interaction 
+     * (reports, events, testng, etc)
+     * 
+     * @param driver 
+     */
+    public void setWebDriver(WebDriver driver) {  
+    
+        // this makes the webdriver instance available to all non-view relates objects
+        // (reports, events, testng, etc)
+        CommonWebDriver.getInstance().setWebDriver(driver); 
+        
+        this.driver = driver;
+        this.wait = new WebDriverWait(this.driver, 10);
+    }
     
     /**
      * Log a message at level INFO to the reporting framework.
@@ -363,5 +411,35 @@ public class ViewBase {
         catch (Exception e) { throw e; } 
 
     }
+    
+    /*****************************************************************************
+     * 
+     * This code block defines element finding methods
+     * 
+     *****************************************************************************/
+    
+    /**
+     * Find a WebElement
+     * 
+     * Example usage by client:
+     * 
+     * by = By.xpath("//*[contains(text(),'Login')]");
+     * by = By.id("loginButton");
+     * by = By.name("loginButton");
+     *
+     * @param by
+     * 
+     * @return The web element
+     */
+    public WebElement find(By by) { return wait.until(presenceOfElementLocated(by)); }
+
+    /**
+     * Find WebElements
+     *
+     * @param by
+     * 
+     * @return The web element
+     */
+    public List<WebElement> findElements(By by) { return this.driver.findElements(by); } 
             
 }
