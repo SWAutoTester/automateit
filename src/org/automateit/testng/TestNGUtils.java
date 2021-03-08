@@ -154,7 +154,7 @@ public class TestNGUtils {
         
         logger.debug("useLocalFilePathForReporting: " + useLocalFilePathForReporting());
         logger.debug("screenshotFileURL: " + screenshotFileURL);
-            
+          
         Reporter.log("<p><a href='" + screenshotFileURL + "'>" + "<img src='" + screenshotFileURL + "' height='100' width='100'/></a>");
                            
         Reporter.log("<p>");   
@@ -203,6 +203,8 @@ public class TestNGUtils {
      */
     protected void appendVideoToReport(ITestResult result, String filename) {
         
+        final String VIDEO_IMAGE_ICON = "video.png";
+        
         Reporter.setCurrentTestResult(result);
          
         Object[] parameters = result.getParameters();
@@ -214,18 +216,21 @@ public class TestNGUtils {
         Reporter.log("</b><br>");
         
         String videoFileURL = null;
+        String videoImageFile = null;
         
         if(useLocalFilePathForReporting()) { 
             
             videoFileURL = utils.LINKIMAGEFILEPREFIX + filename;
+            videoImageFile = utils.LINKIMAGEFILEPREFIX + "results/html/" + VIDEO_IMAGE_ICON;
            
         }
         else {
             
             videoFileURL = getScreenshotsDirectory() + "/" + getFilenameWithoutPath(filename);
+            videoImageFile = getScreenshotsDirectory() + "/" + VIDEO_IMAGE_ICON;
             
         }
-        
+       
         logger.debug("useLocalFilePathForReporting: " + useLocalFilePathForReporting());
         logger.debug("screenshotFileURL: " + videoFileURL);
                          

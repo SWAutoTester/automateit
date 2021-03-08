@@ -22,7 +22,7 @@
   <property name="screenshots" value="screenshots"/>
   <property name="master_configuration_file" value="automateit.properties"/>
   <property name="report" value="report"/>
-  <property name="testng_listeners_full_set" value="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener,org.automateit.testng.ExtentReportTestListener,org.automateit.testng.AlertEventListener,org.automateit.event.EmailAlertHandler,org.automateit.event.ZabbixAlertHandler,org.automateit.event.SMSAlertHandler_Nexmo"/>
+  <property name="testng_listeners_full_set" value="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener,org.automateit.testng.ExtentReportTestListener,org.automateit.testng.AlertEventListener"/>
   
   
   <property environment="env" />
@@ -125,6 +125,8 @@
           <sysproperty key="org.uncommons.reportng.title" value="Example Tests"/>
           <sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
       </testng>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
   </target>
   
   <target name="example_firefox" depends="jar">
