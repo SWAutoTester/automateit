@@ -51,7 +51,6 @@ import org.automateit.reports.ExtentReporter;
 
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
-import org.automateit.util.CommonSelenium;
 import org.automateit.util.Utils;
 
 /**
@@ -108,7 +107,7 @@ public class ViewBase {
      * 
      * @param driver 
      */
-    public ViewBase(WebDriver driver) { this.driver = driver; }
+    public ViewBase(WebDriver driver) { setWebDriver(driver); }
     
     /**
      * Default Constructor 
@@ -130,6 +129,7 @@ public class ViewBase {
         
         this.driver = driver;
         this.wait = new WebDriverWait(this.driver, 10);
+        
     }
     
     /**
@@ -217,7 +217,7 @@ public class ViewBase {
                 
         try { 
             
-            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
+            FileUtils.copyFile(((TakesScreenshot)CommonWebDriver.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
             
             OCRProcessor ocrProcessor = new OCRProcessor();
             
@@ -431,7 +431,7 @@ public class ViewBase {
      * 
      * @return The web element
      */
-    public WebElement find(By by) { return wait.until(presenceOfElementLocated(by)); }
+    protected WebElement find(By by) { return wait.until(presenceOfElementLocated(by)); }
 
     /**
      * Find WebElements
@@ -440,6 +440,6 @@ public class ViewBase {
      * 
      * @return The web element
      */
-    public List<WebElement> findElements(By by) { return this.driver.findElements(by); } 
+    protected List<WebElement> findElements(By by) { return this.driver.findElements(by); } 
             
 }

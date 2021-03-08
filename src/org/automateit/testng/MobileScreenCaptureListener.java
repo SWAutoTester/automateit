@@ -30,7 +30,7 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-import org.automateit.util.CommonSelenium;
+import org.automateit.core.CommonWebDriver;
 import org.automateit.util.ScreenshotCapture;
 import org.automateit.util.Utils;
 
@@ -145,7 +145,7 @@ public class MobileScreenCaptureListener extends TestListenerAdapter {
            
             log.debug("Filename to save mobile screenshot to: " + screenshotFilename);
           
-            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename)); 
+            FileUtils.copyFile(((TakesScreenshot)CommonWebDriver.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename)); 
            
         }
         catch(Exception e) { throw e; }

@@ -71,7 +71,7 @@ import org.automateit.media.JavaSoundAPIAudioPlayer;
 
 import org.automateit.reports.ReportsManager;
 
-import org.automateit.util.CommonProperties;
+import org.automateit.core.CommonWebDriver;
 
 public class Utils {
     
@@ -952,7 +952,7 @@ public class Utils {
             
             String screenshotFilename = destinationDirectory + File.separator + filename;
             
-            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
+            FileUtils.copyFile(((TakesScreenshot)CommonWebDriver.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
             
             if(title == null) ReportsManager.getInstance().addImageToReport(filename);
             else ReportsManager.getInstance().addImageToReport(filename, title);

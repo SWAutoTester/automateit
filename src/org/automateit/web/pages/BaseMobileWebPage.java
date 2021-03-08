@@ -29,7 +29,7 @@ import io.appium.java_client.android.AndroidElement;
 
 import org.apache.log4j.Logger;
 
-import org.automateit.util.CommonSelenium;
+import org.automateit.core.CommonWebDriver;
 
 import org.automateit.core.StringCapabilities;
 import org.automateit.core.BooleanCapabilities;
@@ -269,9 +269,7 @@ public class BaseMobileWebPage extends BasePage {
             if(goToURL) driver.get(startURL);
             
             setWebDriver(driver);
-            
-            CommonSelenium.getInstance().setWebDriver(driver);
-            
+           
             hasBeenInit = true;
             
             logger.info("Finished initializing Selenium/WebDriver: " + driver);
@@ -306,8 +304,6 @@ public class BaseMobileWebPage extends BasePage {
             if(!hasBeenInit) initSetup(this.url); 
             
             driver.get(this.url); 
-            
-            delay(5000);
             
             info("Go To URL successfully loaded in Mobile Browser: " + this.url);
             logger.info("Go To URL successfully loaded in Mobile Browser: " + this.url);

@@ -30,7 +30,8 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-import org.automateit.util.CommonSelenium;
+import org.automateit.core.CommonWebDriver;
+
 import org.automateit.util.ScreenshotCapture;
 import org.automateit.util.Utils;
 
@@ -117,11 +118,7 @@ public class SeleniumScreenCaptureListener extends TestListenerAdapter {
      * @param result 
      */
     private void doReporting(ITestResult result) {
-        /*
-            TODO: not sure if we can do a screenshot here since browser might be closed,
-            TODO: this causes the exception at the end.
-            TODO: cross check FlowExecutor releaseAssets() since the browser is getting closed there.
-
+        
         try {
            
             String path = utils.getBaseScreenshotsDirectory();
@@ -135,8 +132,6 @@ public class SeleniumScreenCaptureListener extends TestListenerAdapter {
         }
         catch(Exception e) { log.error(e); }
 
-        */
-   
     }
     
     /**
@@ -150,9 +145,9 @@ public class SeleniumScreenCaptureListener extends TestListenerAdapter {
        
         try { 
            
-            log.debug("Filename to save screenshot to: " + screenshotFilename + "|" + CommonSelenium.getInstance().getWebDriver());
+            log.debug("Filename to save screenshot to: " + screenshotFilename + "|" + CommonWebDriver.getInstance().getWebDriver());
            
-            FileUtils.copyFile(((TakesScreenshot)CommonSelenium.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
+            FileUtils.copyFile(((TakesScreenshot)CommonWebDriver.getInstance().getWebDriver()).getScreenshotAs(OutputType.FILE), new File(screenshotFilename));
            
         }
         catch(Exception e) { throw e; }

@@ -48,10 +48,10 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.apache.log4j.Logger;
 
 import org.automateit.core.ViewBase;
+import org.automateit.core.CommonWebDriver;
 
 import org.automateit.util.CommandList;
 import org.automateit.util.CommonProperties;
-import org.automateit.util.CommonSelenium;
 import org.automateit.util.PerformanceCapture;
 import org.automateit.util.ScreenshotCapture;
 import org.automateit.util.Utils;
@@ -105,11 +105,6 @@ public class BasePage extends ViewBase {
      */
     protected long extraWaitTimeAfterAjaxComplete = 2000; 
     
-    /**
-     * The web driver instance (if using selenium 2.0
-     */
-    protected WebDriver driver = null;
-
     /**
      * Properties that can be used for any class extending this class
      */
@@ -365,13 +360,6 @@ public class BasePage extends ViewBase {
      * @return The webdriver interface
      */
     public WebDriver getWebDriver() { return driver; }
-    
-    /**
-     * Set the web driver
-     * 
-     * @param driver 
-     */
-    public void setWebDriver(WebDriver driver) { this.driver = driver; }
     
     /**
      * Return if we are forcing a sleep/delay and bypass ajax library to determine
@@ -666,7 +654,7 @@ public class BasePage extends ViewBase {
         
         commandList.addToList("isTextPresent: " + s);
         
-        try { return this.driver.getPageSource().contains(s); }
+        try { return driver.getPageSource().contains(s); }
         catch(Exception e) { return false; }
         
     }
@@ -680,7 +668,7 @@ public class BasePage extends ViewBase {
         
         commandList.addToList("close");
         
-        try { if(this.driver != null) this.driver.quit(); }
+        try { if(driver != null) driver.quit(); }
         catch(Exception e) { }
         
     }
@@ -694,7 +682,7 @@ public class BasePage extends ViewBase {
         
         logger.debug("Inheriting session from previous page: " + basePage);
        
-        this.driver = basePage.getWebDriver();
+        driver = basePage.getWebDriver();
        
         timeout = basePage.getTimeout();
         
@@ -724,7 +712,7 @@ public class BasePage extends ViewBase {
      */
     protected String getHtmlSource() throws BasePageException { 
         
-        try { return this.driver.getPageSource(); }
+        try { return driver.getPageSource(); }
         catch(Exception e) { throw new BasePageException(e); }
         
     }
@@ -789,7 +777,7 @@ public class BasePage extends ViewBase {
 
         try {
             
-            WebElement element = driver.findElement(By.xpath(locator));
+            WebElement element = find(By.xpath(locator));
 
             JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -900,7 +888,7 @@ public class BasePage extends ViewBase {
 
         waitForConditionElementXPathPresent(locator, timeout);
               
-        this.driver.findElement(By.xpath(locator)).click();
+        find(By.xpath(locator)).click();
 
         waitForPageToLoad(timeout, checkAjax);
 
@@ -1078,7 +1066,7 @@ public class BasePage extends ViewBase {
     
         commandList.addToList("getText: " + locator);
         
-        try { return this.driver.findElement(By.xpath(locator)).getText(); }
+        try { return find(By.xpath(locator)).getText(); }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
@@ -1099,7 +1087,7 @@ public class BasePage extends ViewBase {
     
         commandList.addToList("getValue: " + locator);
         
-        try { return this.driver.findElement(By.xpath(locator)).getAttribute("value"); }
+        try { return find(By.xpath(locator)).getAttribute("value"); }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
     
     }
@@ -1135,7 +1123,7 @@ public class BasePage extends ViewBase {
     
         commandList.addToList("isChecked: " + locator);
         
-        try { return this.driver.findElement(By.xpath(locator)).isSelected(); }
+        try { return find(By.xpath(locator)).isSelected(); }
         catch(Exception e) { throw new BasePageException(e); }
         
     }
@@ -1169,7 +1157,7 @@ public class BasePage extends ViewBase {
         
         commandList.addToList("check: " + locator);
         
-        try { if(!this.driver.findElement(By.xpath(locator)).isSelected()) this.driver.findElement(By.xpath(locator)).click(); }
+        try { if(!find(By.xpath(locator)).isSelected()) find(By.xpath(locator)).click(); }
         catch(Exception e) { throw new BasePageException(e); }
     
     }
@@ -1225,7 +1213,7 @@ public class BasePage extends ViewBase {
     
         commandList.addToList("isElementPresent: " + locator);
         
-        try { this.driver.findElement(By.xpath(locator)); return true; }
+        try { find(By.xpath(locator)); return true; }
         catch(Exception e) { return false; }
         
     
@@ -1356,7 +1344,7 @@ public class BasePage extends ViewBase {
         
         try {
           
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             logger.info("count:" + elements.size());
             
@@ -1405,7 +1393,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for(WebElement element:elements) {
                 
@@ -1449,7 +1437,7 @@ public class BasePage extends ViewBase {
         
         try {
         
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for(WebElement element:elements) {
                 
@@ -1493,7 +1481,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             logger.info("Elements size: " + elements.size());
            
@@ -1537,7 +1525,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for(WebElement element:elements) {
                 
@@ -1573,7 +1561,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for(WebElement element:elements) {
                 
@@ -1609,7 +1597,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for(WebElement element:elements) {
                 
@@ -1645,7 +1633,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
           
             for(WebElement element:elements) {
                 
@@ -1689,7 +1677,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for(WebElement element:elements) {
                 
@@ -1732,7 +1720,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            WebElement element = this.driver.findElement(By.name(name));
+            WebElement element = find(By.name(name));
             
             // if we get here, we could not find the element so throw an exception
             if(element == null) throw new Exception("Could not validate a screen component with screen element matching name: " + name);
@@ -1758,7 +1746,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for(WebElement element:elements) {
                 
@@ -1791,7 +1779,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for(WebElement element:elements) {
                 
@@ -1821,7 +1809,7 @@ public class BasePage extends ViewBase {
         
         try {
           
-            List<WebElement> elements = this.driver.findElements(By.xpath(xpath));
+            List<WebElement> elements = findElements(By.xpath(xpath));
             
             List<String> values = new ArrayList<String>();
            
@@ -1911,7 +1899,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             int index = 1;
             
@@ -1953,7 +1941,7 @@ public class BasePage extends ViewBase {
         
         try {
            
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             int index = 1;
             
@@ -1998,7 +1986,7 @@ public class BasePage extends ViewBase {
        
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for(WebElement element:elements) {
                    
@@ -2045,7 +2033,7 @@ public class BasePage extends ViewBase {
         
         try { 
             
-            this.driver.findElement(By.linkText(value)).click();
+            find(By.linkText(value)).click();
             
             waitForPageToLoad(timeout);
         
@@ -2126,7 +2114,7 @@ public class BasePage extends ViewBase {
             
             if(disableImplicitWait) disableImplicitWait();
             
-            return this.driver.findElement(By.id(id)); 
+            return find(By.id(id)); 
         
         }
         catch(Exception e) { throw new BasePageException(e); }
@@ -2176,7 +2164,7 @@ public class BasePage extends ViewBase {
             
             if(disableImplicitWait) disableImplicitWait();
             
-            return this.driver.findElement(By.xpath(locator)); 
+            return find(By.xpath(locator)); 
         
         }
         catch(Exception e) { throw new BasePageException(e); }
@@ -2205,12 +2193,14 @@ public class BasePage extends ViewBase {
         commandList.addToList("enterTextIntoRichTextEditor:" + xpath + "|" + text);
         
         try { 
-            
-            String CurrentWindowHandle = driver.getWindowHandle();
+           
+            WebElement element = find(By.tagName("body"));
        
-            driver.findElement(By.tagName("body")).clear();
-            driver.findElement(By.tagName("body")).sendKeys(text);
-            driver.switchTo().window(CurrentWindowHandle); 
+            element.clear();
+            
+            element.sendKeys(text);
+            
+            driver.switchTo().window(driver.getWindowHandle()); 
         
         }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
@@ -2236,7 +2226,7 @@ public class BasePage extends ViewBase {
        
         try {
             
-            WebElement element = this.driver.findElement(By.xpath(xpath));
+            WebElement element = find(By.xpath(xpath));
            
             return element.getAttribute(attributeLocator);
 
@@ -2265,7 +2255,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.xpath(xpath));
+            List<WebElement> elements = findElements(By.xpath(xpath));
             
             List<String> values = new ArrayList<String>();
             
@@ -2295,7 +2285,7 @@ public class BasePage extends ViewBase {
             
             driver.switchTo().defaultContent();
         
-            WebElement frame = getWebDriver().findElement(By.xpath(xpath));
+            WebElement frame = find(By.xpath(xpath));
        
             driver.switchTo().frame(frame);
         
@@ -2343,7 +2333,7 @@ public class BasePage extends ViewBase {
             
             for(int i = 0; i < intSyncTimeout; i++) {
                 
-                if(this.driver.findElement(By.xpath(locator)).isDisplayed()) return;
+                if(find(By.xpath(locator)).isDisplayed()) return;
                 
             }
             
@@ -2387,7 +2377,7 @@ public class BasePage extends ViewBase {
                  
             Actions actions = new Actions(driver);
                   
-            actions.keyDown(Keys.CONTROL).click(driver.findElement(By.xpath(locator))).keyUp(Keys.CONTROL).build().perform();
+            actions.keyDown(Keys.CONTROL).click(find(By.xpath(locator))).keyUp(Keys.CONTROL).build().perform();
                  
         }
         catch(Exception e) { throw new BasePageException(e); }
@@ -2409,7 +2399,7 @@ public class BasePage extends ViewBase {
         
         commandList.addToList("getSelectedOptionValue: " + xpathLocator);
         
-        try { return new Select(driver.findElement(By.xpath(xpathLocator))).getFirstSelectedOption().getText(); }
+        try { return new Select(find(By.xpath(xpathLocator))).getFirstSelectedOption().getText(); }
         catch(Exception e) { throw new BasePageException(e); }
         
     }
@@ -2433,7 +2423,7 @@ public class BasePage extends ViewBase {
            
         try {
         
-            WebElement objectName = driver.findElement(By.xpath(object));
+            WebElement objectName = find(By.xpath(object));
          
             return objectName.getAttribute(attributeLocator);
         
@@ -2455,7 +2445,7 @@ public class BasePage extends ViewBase {
 
         try {
             
-            WebElement element = driver.findElement(By.xpath(xpath));
+            WebElement element = find(By.xpath(xpath));
             
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
             
@@ -2478,7 +2468,7 @@ public class BasePage extends ViewBase {
 
         try {
 
-            WebElement drag = driver.findElement(By.xpath(xpath));
+            WebElement drag = find(By.xpath(xpath));
 
             Actions action = new Actions(driver);
 
@@ -2504,7 +2494,7 @@ public class BasePage extends ViewBase {
             
             WebDriverWait wait = new WebDriverWait(driver, 5);
             
-            WebElement element = driver.findElement(By.xpath(xpath));
+            WebElement element = find(By.xpath(xpath));
             
             wait.until(ExpectedConditions.elementToBeClickable(element));
             
@@ -2766,7 +2756,7 @@ public class BasePage extends ViewBase {
             
         commandList.addToList("clickOnWebElementByPartialLinkText: " + text);
         
-        try { driver.findElement(By.partialLinkText(text)).click(); }
+        try { find(By.partialLinkText(text)).click(); }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
@@ -2784,7 +2774,7 @@ public class BasePage extends ViewBase {
             
         commandList.addToList("validateLinkIsVisible: " + text);
         
-        try { driver.findElement(By.linkText(text)); }
+        try { find(By.linkText(text)); }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
@@ -2802,7 +2792,7 @@ public class BasePage extends ViewBase {
             
         commandList.addToList("clickOnWebElementByPartialLinkText: " + text);
         
-        try { driver.findElement(By.linkText(text)).click(); }
+        try { find(By.linkText(text)).click(); }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
@@ -2818,34 +2808,13 @@ public class BasePage extends ViewBase {
      */
     public List<WebElement> getWebElementsWithCSS(String cssSelector) throws BasePageException {
 
-        Exception elementE = null;
         logger.debug("Preparing to find web element by css selector: " + cssSelector);
 
         commandList.addToList("getWebElementWithCSS:" + cssSelector);
-
-        int retryCount = 3;
-
-        for (int retries = 0; retries < retryCount; retries++) {
-            try {
-                elementE = null;
-                return this.driver.findElements(By.cssSelector(cssSelector));
-            }
-            catch(StaleElementReferenceException e) {
-                elementE = e;
-                logger.debug("getWebElementsWithCSS(cssSelector=" + cssSelector + ") caught StaleElementReferenceException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(ElementClickInterceptedException e) {
-                elementE = e;
-                logger.debug("getWebElementsWithCSS(cssSelector=" + cssSelector + ") caught ElementClickInterceptedException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(Exception e) { throw new BasePageException(e); }
-        }
-
-        throw new BasePageException(elementE);
+        
+        try { return findElements(By.cssSelector(cssSelector)); }
+        catch(Exception e) { throw new BasePageException(e); }
+        
     }
 
     /**
@@ -2905,6 +2874,8 @@ public class BasePage extends ViewBase {
      * @param cssSelector
      * 
      * @throws BasePageException 
+     * 
+     * @return
      */
     public WebElement getWebElementWithCSSAndContainsText(String text, String cssSelector) throws BasePageException {
 
@@ -2912,13 +2883,7 @@ public class BasePage extends ViewBase {
 
         commandList.addToList("getWebElementWithCSSAndContainsText: " + text + "|" + cssSelector);
 
-        Exception elementE = null;
-        int retryCount = 3;
-
-        for (int retries = 0; retries < retryCount; retries++) {
-            try {
-
-                elementE = null;
+         try {
 
                 List<WebElement> elements = getWebElementsWithCSS(cssSelector);
 
@@ -2933,29 +2898,15 @@ public class BasePage extends ViewBase {
                     if(data.contains(text)) return element;
 
                 }
-
+                
                 // if we get here, we could not find the element so throw an exception
-                throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
+               throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
+        
+         }
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
 
-            }
-            catch(StaleElementReferenceException e) {
-                elementE = e;
-                logger.debug("getWebElementWithCSSAndContainsText(text=" + text + ", cssSelector=" + cssSelector + ") caught StaleElementReferenceException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(ElementClickInterceptedException e) {
-                elementE = e;
-                logger.debug("getWebElementWithCSSAndContainsText(text=" + text + ", cssSelector=" + cssSelector + ") caught ElementClickInterceptedException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        
 
-        }
-
-        printDOM();
-        throw new BasePageException(elementE);
     }
     
     /**
@@ -2963,6 +2914,8 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * @param cssSelector
+     * 
+     * @return
      * 
      * @throws BasePageException 
      */
@@ -2972,13 +2925,7 @@ public class BasePage extends ViewBase {
 
         commandList.addToList("getWebElementWithCSSAndContainsText: " + text + "|" + cssSelector);
 
-        Exception elementE = null;
-        int retryCount = 3;
-
-        for (int retries = 0; retries < retryCount; retries++) {
-            try {
-
-                elementE = null;
+        try {
 
                 List<WebElement> elements = getWebElementsWithCSS(cssSelector);
                 
@@ -2996,27 +2943,12 @@ public class BasePage extends ViewBase {
 
                 // if we get here, we could not find the element so throw an exception
                 throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
+   
+        }    
+        catch(Exception e) { printDOM(); throw new BasePageException(e); }
 
-            }
-            catch(StaleElementReferenceException e) {
-                elementE = e;
-                logger.debug("getWebElementWithCSSAndContainsText(text=" + text + ", cssSelector=" + cssSelector + ") caught StaleElementReferenceException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(ElementClickInterceptedException e) {
-                elementE = e;
-                logger.debug("getWebElementWithCSSAndContainsText(text=" + text + ", cssSelector=" + cssSelector + ") caught ElementClickInterceptedException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(Exception e) { printDOM(); throw new BasePageException(e); }
-
-        }
-
-        printDOM();
-        throw new BasePageException(elementE);
     }
+
 
     /**
      * Get a web element matching the css selector and matches a type and containing the text.
@@ -3024,6 +2956,8 @@ public class BasePage extends ViewBase {
      * @param type
      * @param typeValue
      * @param cssSelector
+     * 
+     * @return
      * 
      * @throws BasePageException 
      */
@@ -3062,6 +2996,8 @@ public class BasePage extends ViewBase {
      * 
      * @param value
      * @param cssSelector
+     * 
+     * @return
      * 
      * @throws BasePageException 
      */
@@ -3149,7 +3085,7 @@ public class BasePage extends ViewBase {
         
         commandList.addToList("getWebElementAtResourceId:" + resourceId);
         
-        try { return this.driver.findElement(By.id(resourceId)); }
+        try { return find(By.id(resourceId)); }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
         
     }
@@ -3679,7 +3615,7 @@ public class BasePage extends ViewBase {
         
         this.timeout = "0";
         
-        try { this.driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS); }
+        try { driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS); }
         catch(Exception e) { throw e; }
         
     }
@@ -3703,7 +3639,7 @@ public class BasePage extends ViewBase {
             
             logger.debug("Timeout is set to: " + this.timeout);
             
-            this.driver.manage().timeouts().implicitlyWait((new Long(this.timeout)).longValue(), TimeUnit.SECONDS); 
+            driver.manage().timeouts().implicitlyWait((new Long(this.timeout)).longValue(), TimeUnit.SECONDS); 
         
         }
         catch(Exception e) { throw e; }
@@ -3727,7 +3663,7 @@ public class BasePage extends ViewBase {
             
             Actions actions = new Actions(driver);
 
-            WebElement element = driver.findElement(By.linkText(text));
+            WebElement element = find(By.linkText(text));
 
             actions.moveToElement(element).perform();
             
@@ -3769,7 +3705,7 @@ public class BasePage extends ViewBase {
                 
             logger.debug("Finished initializing Selenium/WebDriver 3.0: " + this.driver);
                 
-            CommonSelenium.getInstance().setWebDriver(driver);
+            setWebDriver(this.driver);
             
             // extra time wait ajax complete if needed
             if(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { addExtraWaitTimeAfterAjaxComplete = (new Boolean(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability()))).booleanValue(); }
@@ -3815,8 +3751,6 @@ public class BasePage extends ViewBase {
     /**
      * Allow for setting the timeout manually (if needed)
      * 
-     * @param timeout
-     * 
      * @throws Exception 
      */
     public void setTimeout() throws Exception {
@@ -3843,7 +3777,7 @@ public class BasePage extends ViewBase {
             
             Actions builder = new Actions(driver);
             
-            builder.moveToElement(driver.findElement(By.linkText(text))).build().perform();
+            builder.moveToElement(find(By.linkText(text))).build().perform();
             
         }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
@@ -3865,7 +3799,7 @@ public class BasePage extends ViewBase {
       
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        WebElement element = driver.findElement(By.xpath("//*[contains(text(),'" + text + "')]"));
+        WebElement element = find(By.xpath("//*[contains(text(),'" + text + "')]"));
         
         logger.info("found element to scroll to: " + element);
 
@@ -3887,7 +3821,7 @@ public class BasePage extends ViewBase {
             
         commandList.addToList("selectOptionContainingText_XPATH: " + xpath + "|" + text);
             
-        WebElement mySelectElement = driver.findElement(By.xpath("//*[contains(text(),'" + text + "')]"));
+        WebElement mySelectElement = find(By.xpath("//*[contains(text(),'" + text + "')]"));
  
         Select dropdown = new Select(mySelectElement);
  
@@ -3917,51 +3851,6 @@ public class BasePage extends ViewBase {
 
     }
     
-    /**
-     * Scroll to an element that may be hidden in a select list or something else
-     * 
-     * @param resourceId
-     * @param text
-     * 
-     * @throws Exception 
-     */
-    protected void pleaseWork(String resourceId, String text) throws Exception {
-        
-        List<WebElement> optionList = getWebElementsWithCSS("span");
-        
-        logger.info("000: " + optionList.size());
-        
-        WebElement target = null;
-        
-        for (WebElement element:optionList) {
-
-                    String data = element.getText().trim();
-
-                    if((data == null) || (data.trim().length() == 0)) continue; // blank, so ignore
-
-                    logger.debug("Checking value: " + data);
-
-                    if(data.contains(text)) {
-                        
-                        target = element;
-                        
-                        break;
-                    }
-
-                }
-        
-        Actions action = new Actions(driver);
-        //action.moveToElement(target).pause(10000).moveToElement(target).perform();
-        
-        //action.contextClick(target);
-        action.dragAndDrop(getWebElementWithCSSAndMatchesDataAtIdAndContainsText(resourceId, "span"), target);
-        
-        //JavascriptExecutor js = (JavascriptExecutor) driver;
-        
-        //js.executeScript("arguments[0].scrollIntoView(true);", target );
-
-    }
-    
     public void clickAtCoordinates(int x, int y) throws Exception {
      
         new Actions(driver).moveByOffset(x, y).click().build().perform();
@@ -3973,6 +3862,8 @@ public class BasePage extends ViewBase {
      *
      * @param text
      * @param cssSelector
+     * 
+     * @return
      *
      * @throws BasePageException
      */
@@ -3981,14 +3872,8 @@ public class BasePage extends ViewBase {
         logger.debug("Get the web element with css selector and starts with text: " + text + "|" + cssSelector);
 
         commandList.addToList("getWebElementWithCSSAndStartsWithText: " + text + "|" + cssSelector);
-
-        Exception elementE = null;
-        int retryCount = 3;
-
-        for (int retries = 0; retries < retryCount; retries++) {
-            try {
-
-                elementE = null;
+        
+        try {
 
                 List<WebElement> elements = getWebElementsWithCSS(cssSelector);
 
@@ -4008,24 +3893,8 @@ public class BasePage extends ViewBase {
                 throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
 
             }
-            catch(StaleElementReferenceException e) {
-                elementE = e;
-                logger.debug("getWebElementWithCSSAndStartsWithText(text=" + text + ", cssSelector=" + cssSelector + ") caught StaleElementReferenceException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(ElementClickInterceptedException e) {
-                elementE = e;
-                logger.debug("getWebElementWithCSSAndContainsText(text=" + text + ", cssSelector=" + cssSelector + ") caught ElementClickInterceptedException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
             catch(Exception e) { printDOM(); throw new BasePageException(e); }
 
-        }
-
-        printDOM();
-        throw new BasePageException(elementE);
     }
 
     /**
@@ -4042,15 +3911,9 @@ public class BasePage extends ViewBase {
 
         commandList.addToList("clickOnOnWebElementWithXpathAndStartsWithText: " + locator + "|" + text);
 
-        Exception elementE = null;
-        int retryCount = 3;
+        try {
 
-        for (int retries = 0; retries < retryCount; retries++) {
-            try {
-
-                elementE = null;
-
-                List<WebElement> elements = this.driver.findElements(By.xpath(locator));
+                List<WebElement> elements = findElements(By.xpath(locator));
 
                 for (WebElement element:elements) {
 
@@ -4063,34 +3926,21 @@ public class BasePage extends ViewBase {
                     // if more matching is required, this can be enhanced using regular
                     //  expressions or longest match approach
                     if(data.startsWith(text)) {
+                        
                         element.click();
+                        
                         return;
+                    
                     }
+                
                 }
 
                 // if we get here, we could not find the element so throw an exception
                 throw new Exception("Could not find text in any screen element matching locator: " + locator + " and starting with text: " + text);
 
             }
-            catch(StaleElementReferenceException e) {
-                elementE = e;
-                logger.debug("clickOnWebElementWithXpathAndStartsWithText(text=" + text + ", locator=" + locator + ") caught StaleElementReferenceException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
-            catch(ElementClickInterceptedException e) {
-                elementE = e;
-                logger.debug("clickOnWebElementWithXpathAndStartsWithText(text=" + text + ", locator=" + locator + ") caught ElementClickInterceptedException, try (" + (retries + 1) + "/" + retryCount + ")");
-                sleep(1000);
-                continue;
-            }
             catch(Exception e) { printDOM(); throw new BasePageException(e); }
 
-        }
-
-        printDOM();
-        throw new BasePageException(elementE);
-        
     }
     
     /**

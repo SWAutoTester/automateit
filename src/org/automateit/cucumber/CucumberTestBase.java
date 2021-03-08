@@ -8,6 +8,8 @@ import cucumber.api.testng.TestNGCucumberRunner;
 
 import org.automateit.test.TestBase;
 
+import org.automateit.core.CommonWebDriver;
+
 public class CucumberTestBase extends TestBase { 
     
     protected TestNGCucumberRunner testNGCucumberRunner = null;
@@ -19,6 +21,12 @@ public class CucumberTestBase extends TestBase {
     public Object[][] features() { return this.testNGCucumberRunner.provideFeatures(); }
     
     @AfterClass(alwaysRun = true)
-    public void tearDownClass() throws Exception { this.testNGCucumberRunner.finish(); }
+    public void tearDownClass() throws Exception { 
+        
+        try { this.testNGCucumberRunner.finish();}
+        catch(Exception e) { }
+        finally { CommonWebDriver.getInstance().getWebDriver().quit(); }
+    
+    }
 
 }

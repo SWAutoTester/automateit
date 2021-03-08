@@ -57,7 +57,7 @@ import org.automateit.core.ViewBase;
 import org.automateit.core.BooleanCapabilities;
 import org.automateit.core.StringCapabilities;
 import org.automateit.data.DataDrivenInput;
-import org.automateit.util.CommonSelenium;
+import org.automateit.core.CommonWebDriver;
  
 /**
  * This class is the base class for all other screen classes to use.
@@ -2446,28 +2446,6 @@ public class BaseScreen extends ViewBase {
     }
     
     /**
-     * Get the element by Name.
-     * 
-     * @param name
-     * 
-     * @return
-     * 
-     * @throws Exception 
-     */
-    /*
-    public WebElement getWebElementByName(String name) throws Exception {
-       
-        logger.info("Get the web element with name: " + name);
-        
-        commandList.addToList("getWebElementByName:" + name);
-        
-        try { return this.driver.findElementByName(name); }
-        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
-        
-    }
-    */
-    
-    /**
      * Click on the web element at xpath locator.
      * 
      * @param xpath
@@ -3717,7 +3695,7 @@ public class BaseScreen extends ViewBase {
             
             setTimeout();
             
-            CommonSelenium.getInstance().setWebDriver(this.driver);
+            setWebDriver(this.driver);
             
             hasBeenInitialized = true;
             
