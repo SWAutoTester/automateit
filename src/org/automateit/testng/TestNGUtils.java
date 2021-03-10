@@ -122,7 +122,7 @@ public class TestNGUtils {
      * @param screenshotFile 
      */
     protected void appendToReport(ITestResult result, String screenshotFile, int divId) {
-        
+       
         Reporter.setCurrentTestResult(result);
          
         Object[] parameters = result.getParameters();

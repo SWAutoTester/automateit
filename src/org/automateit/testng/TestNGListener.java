@@ -138,7 +138,7 @@ public class TestNGListener extends TestListenerAdapter {
            Reporter.setCurrentTestResult(null);
            
        }
-       catch(Exception e) { log.error(e); }
+       catch(Exception e) { e.printStackTrace(); log.error(e); }
    
    }
 

@@ -11,6 +11,7 @@ import org.automateit.cucumber.CucumberTestBase;
 @CucumberOptions(
         features = {"resources/cucumber/demo"}, 
         glue = { "org.automateit.example.cucumber" },
+        plugin = { "pretty" },
         strict = true)
 public class ExampleTest extends CucumberTestBase { 
   

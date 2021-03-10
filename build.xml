@@ -22,7 +22,7 @@
   <property name="screenshots" value="screenshots"/>
   <property name="master_configuration_file" value="automateit.properties"/>
   <property name="report" value="report"/>
-  <property name="testng_listeners_full_set" value="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener,org.automateit.testng.ExtentReportTestListener,org.automateit.testng.AlertEventListener"/>
+  <property name="testng_listeners_full_set" value="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener,org.automateit.testng.ExtentReportTestListener,org.automateit.testng.AlertEventListener,org.automateit.testng.JXCaptureVideoCaptureListener"/>
   
   
   <property environment="env" />
@@ -408,7 +408,7 @@
   </target>
   
   <target name="cucumber_demo" depends="jar">
-      <testng outputdir="results/" groups="cucumber_demo" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.ExtentReportTestListener">
+      <testng outputdir="results/" groups="cucumber_demo" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.automateit.testng.TestNGListener,org.uncommons.reportng.JUnitXMLReporter,org.automateit.testng.ExtentReportTestListener,org.automateit.testng.SeleniumCommandCaptureListener,org.automateit.testng.SeleniumScreenCaptureListener,org.automateit.testng.GenericScreenCaptureListener,org.automateit.testng.MOVVideoCaptureListener,org.automateit.testng.AVIVideoCaptureListener,org.automateit.testng.ExtentReportTestListener">
           <classpath>
               <fileset dir="${lib}">
                   <include name="**/*.jar"/>

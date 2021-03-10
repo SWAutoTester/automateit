@@ -16,7 +16,7 @@ public class CucumberTestBase extends TestBase {
     
     @BeforeClass(alwaysRun = true)
     public void setUpClass() throws Exception { this.testNGCucumberRunner = new TestNGCucumberRunner(this.getClass()); }
-    
+
     @DataProvider
     public Object[][] features() { return this.testNGCucumberRunner.provideFeatures(); }
     
@@ -28,5 +28,5 @@ public class CucumberTestBase extends TestBase {
         finally { CommonWebDriver.getInstance().getWebDriver().quit(); }
     
     }
-
+   
 }
