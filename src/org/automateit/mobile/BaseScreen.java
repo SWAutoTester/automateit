@@ -545,7 +545,7 @@ public class BaseScreen extends ViewBase {
         
         try {
              
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for(WebElement element:elements) {
                 
@@ -631,7 +631,7 @@ public class BaseScreen extends ViewBase {
         
         try {
              
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for(WebElement element:elements) {
                 
@@ -688,7 +688,7 @@ public class BaseScreen extends ViewBase {
        
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for (WebElement element:elements) {
                 
@@ -754,7 +754,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for (WebElement element:elements) {
                 
@@ -819,7 +819,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for (WebElement element:elements) {
                 
@@ -886,7 +886,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                
@@ -1010,7 +1010,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                 
@@ -1075,7 +1075,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                 
@@ -1140,7 +1140,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                 
@@ -1290,7 +1290,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                 
@@ -1334,7 +1334,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                 
@@ -1415,7 +1415,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                 
@@ -1578,7 +1578,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
           
             for (WebElement element:elements) {
                 
@@ -1663,7 +1663,7 @@ public class BaseScreen extends ViewBase {
         
         try {
           
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for (WebElement element:elements) {
                 
@@ -1725,7 +1725,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            WebElement element = this.driver.findElement(By.name(name));
+            WebElement element = find(By.name(name));
             
             // if we get here, we could not find the element so throw an exception
             if(element == null) throw new Exception("Could not validate a screen component with screen element matching name: " + name);
@@ -1749,7 +1749,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for (WebElement element:elements) {
                 
@@ -1780,7 +1780,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             for (WebElement element:elements) {
                 
@@ -1811,7 +1811,7 @@ public class BaseScreen extends ViewBase {
         
         try {
            
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             int index = 1;
             
@@ -1849,7 +1849,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             int index = 1;
             
@@ -1894,7 +1894,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
            
             for (WebElement element:elements) {
                    
@@ -1934,7 +1934,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(elementType));
+            List<WebElement> elements = findElements(By.className(elementType));
            
             for (WebElement element:elements) {
                    
@@ -1971,7 +1971,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(elementType));    
+            List<WebElement> elements = findElements(By.className(elementType));    
             
             for (WebElement element:elements) {
                 
@@ -2006,7 +2006,7 @@ public class BaseScreen extends ViewBase {
         
         try {
             
-            List<WebElement> elements = this.driver.findElements(By.className(elementType));    
+            List<WebElement> elements = findElements(By.className(elementType));    
             
             for (WebElement element:elements) {
                 
@@ -2036,7 +2036,7 @@ public class BaseScreen extends ViewBase {
      */
     protected WebElement getWebElementByXPath(String xpath) throws Exception {
         
-        try { return this.driver.findElement(By.xpath(xpath)); }
+        try { return find(By.xpath(xpath)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
@@ -2052,7 +2052,7 @@ public class BaseScreen extends ViewBase {
      */
     protected List<WebElement> getWebElementsByXPath(String xpath) throws Exception {
 
-        try { return this.driver.findElements(By.xpath(xpath)); }
+        try { return findElements(By.xpath(xpath)); }
 
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
@@ -2069,7 +2069,7 @@ public class BaseScreen extends ViewBase {
      */
     protected WebElement getWebElementByName(String name) throws Exception {
         
-        try { return this.driver.findElement(By.name(name)); }
+        try { return find(By.name(name)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
@@ -2085,7 +2085,7 @@ public class BaseScreen extends ViewBase {
      */
     protected List<WebElement> getWebElementsByClassName(String name) throws Exception {
         
-        try { return this.driver.findElements(By.className(name)); }
+        try { return findElements(By.className(name)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
@@ -2106,7 +2106,7 @@ public class BaseScreen extends ViewBase {
             
             commandList.addToList("getWebElementAtLocationByClassNameAndNameAttributeValue:" + className + "|" + name);
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));    
+            List<WebElement> elements = findElements(By.className(className));    
             
             for (WebElement element:elements) {
                 
@@ -2142,7 +2142,7 @@ public class BaseScreen extends ViewBase {
             
             commandList.addToList("getWebElementAtLocationByClassNameAndValueAttributeValue:" + className + "|" + value);
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));    
+            List<WebElement> elements = findElements(By.className(className));    
             
             for(WebElement element:elements) {
                 
@@ -2180,7 +2180,7 @@ public class BaseScreen extends ViewBase {
             
             commandList.addToList("getWebElementAtLocationByClassNameAndValueAttributeValue:" + className + "|" + value);
             
-            List<WebElement> elements = this.driver.findElements(By.className(className));    
+            List<WebElement> elements = findElements(By.className(className));    
             
             for (WebElement element:elements) {
                 
@@ -2382,7 +2382,7 @@ public class BaseScreen extends ViewBase {
         
         try {
           
-            List<WebElement> elements = this.driver.findElements(By.className(elementType));
+            List<WebElement> elements = findElements(By.className(elementType));
             
             for (WebElement element:elements) {
                    
@@ -2440,7 +2440,7 @@ public class BaseScreen extends ViewBase {
         
         commandList.addToList("getWebElementAtResourceId:" + resourceId);
         
-        try { return this.driver.findElement(By.id(resourceId)); }
+        try { return find(By.id(resourceId)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
@@ -2800,7 +2800,7 @@ public class BaseScreen extends ViewBase {
             
         try { 
             
-            this.driver.findElement(By.xpath(locator));
+            find(By.xpath(locator));
             
             return true;
         
@@ -2938,7 +2938,7 @@ public class BaseScreen extends ViewBase {
                     elements.get(elements.size() - 1).getLocation().getY());
 
             // get text of all elements after scroll down
-            List<WebElement> newElements = this.driver.findElements(By.className(className));
+            List<WebElement> newElements = findElements(By.className(className));
             
             List<String> newOptions = new ArrayList<String>();
             
@@ -3019,7 +3019,7 @@ public class BaseScreen extends ViewBase {
             // Scroll and check if the required text is present
             do {
                 
-                List<WebElement> elements = this.driver.findElements(By.className(className));
+                List<WebElement> elements = findElements(By.className(className));
 
 		try { webElement = getWebElementAtLocationByClassNameAndValueAttributeValue(className, text); }
                 catch (Exception e) { }
@@ -3040,7 +3040,7 @@ public class BaseScreen extends ViewBase {
     /**
      * Get coordinates of given element
      *
-     * @param classname
+     * @param className
      * @param text
      *
      * @throws Exception
@@ -3135,186 +3135,6 @@ public class BaseScreen extends ViewBase {
     }
     
     /**
-     * Background the app (like clicking on the Home button).
-     * 
-     * @param seconds
-     * 
-     * @throws Exception 
-     */
-    public void backgroundApp(String seconds) throws Exception { 
-        
-        try { backgroundApp((new Integer(seconds)).intValue()); }
-        catch(Exception e) { throw new BaseScreenException(e); }
-    
-    }
-    
-    /**
-     * Click on Settings Icon
-     * 
-     * @throws Exception 
-     */
-    public void clickOnSettingsIcon() throws Exception { 
-        
-        try {
-            
-            clickOnWebElementMatchingText("Settings", "XCUIElementTypeIcon");
-        
-            delay(2000);
-            
-        }
-        catch(Exception e) { throw e; }
-    
-    }
-    
-    /**
-     * Click on Settings -> Wi-Fi
-     * 
-     * @throws Exception 
-     */
-    public void clickOnWiFiSection() throws Exception { 
-        
-        try { 
-            
-            clickOnWebElementMatchingText("Wi-Fi", "XCUIElementTypeStaticText");
-        
-            delay(2000);
-            
-        }
-        catch(Exception e) { throw e; }
-    
-    }
-    
-    /**
-     * Click on Settings -> Wi-Fi
-     */
-    public void clickOnSettingsSection_WiFi() throws Exception { 
-        
-        try {
-            
-            clickOnWebElementMatchingText("Wi-Fi", "XCUIElementTypeStaticText");
-        
-            delay(2000);
-    
-        }
-        catch(Exception e) { throw e; }
-    }
-    
-    /**
-     * Click on the Wi-Fi toggle button
-     * 
-     * @throws Exception 
-     */
-    public void turnOnWiFi() throws Exception { 
-        
-        try {
-            
-            clickOnWebElementMatchingText("Wi-Fi", "XCUIElementTypeSwitch");
-        
-            delay(2000);
-            
-        }
-        catch(Exception e) { throw e; }
-    
-    }
-    
-    /**
-     * Determine if wifi is enabled and turned on
-     * 
-     * @throws Exception 
-     */
-    public void isWiFiOn() throws Exception { 
-        
-        try {
-            
-            validateWebElementContainingText("Location accuracy is improved when Wi-Fi is turned on", "XCUIElementTypeOther");
-        
-            delay(2000);
-            
-        }
-        catch(Exception e) { throw e; }
-    
-    }
-    
-    /**
-     * Click on the WiFi selected button
-     * 
-     * @param wifiName 
-     * @throws Exception 
-     */
-    public void clickOnButtonForWiFiSelected(String wifiName) throws Exception { 
-        
-        try {
-            
-            clickOnWebElementMatchingText(wifiName, "XCUIElementTypeStaticText");
-        
-            delay(2000);
-            
-        }
-        catch(Exception e) { throw e; }
-    
-    }
-    
-    /**
-     * Click on Forget This Network
-     * 
-     * @throws Exception 
-     */
-    public void clickOnForgetThisNetwork() throws Exception { 
-        
-        try { clickOnWebElementMatchingText("Forget This Network", "XCUIElementTypeStaticText"); }
-        catch(Exception e) { throw new BaseScreenException(e); }
-    
-    }
-    
-    /**
-     * Click on Forget This Network - Confirm
-     * 
-     * @throws Exception 
-     */
-    public void clickOnForgetThisNetworkConfirm() throws Exception { 
-        
-        try { clickOnWebElementMatchingText("Forget", "XCUIElementTypeButton"); }
-        catch(Exception e) { throw new BaseScreenException(e); }
-    
-    }
-    
-    /**
-     * Click on Forget This Network - Cancel
-     * 
-     * @throws Exception 
-     */
-    public void clickOnForgetThisNetworkCancel() throws Exception { 
-        
-        try { clickOnWebElementMatchingText("Cancel", "XCUIElementTypeButton"); }
-        catch(Exception e) { throw new BaseScreenException(e); }
-    
-    }
-    
-    /**
-     * Click on WiFi Name Screen - Back button
-     * 
-     * @throws Exception 
-     */
-    public void clickOnWiFiNameScreenBackButton() throws Exception { 
-        
-        try { clickOnWebElementMatchingText("Wi-Fi", "XCUIElementTypeButton"); }
-        catch(Exception e) { throw new BaseScreenException(e); }
-    
-    }
-    
-    /**
-     * Click on WiFi Screen - Back to Settings button
-     * 
-     * @throws Exception 
-     */
-    public void clickOnWiFiScreenBackToSettingsButton() throws Exception { 
-        
-        try { clickOnWebElementMatchingText("Settings", "XCUIElementTypeButton"); }
-        catch(Exception e) { throw new BaseScreenException(e); }
-    
-    }
-    
-    /**
      * Get the entire element hierarchy.
      * 
      * @return
@@ -3323,7 +3143,7 @@ public class BaseScreen extends ViewBase {
      */
     public String getElementDOM() throws Exception {
         
-        try { return this.driver.getPageSource(); }
+        try { return driver.getPageSource(); }
         catch(Exception e) { throw new BaseScreenException(e); }
         
     }
@@ -3351,7 +3171,7 @@ public class BaseScreen extends ViewBase {
      */
     public void open(String url) throws Exception {
         
-        try { if(this.driver != null) this.driver.get(url); }
+        try { if(driver != null) driver.get(url); }
         catch(Exception e) { throw new BaseScreenException(e); }
         
     }
@@ -3373,7 +3193,7 @@ public class BaseScreen extends ViewBase {
         
         try {
              
-            List<WebElement> elements = this.driver.findElements(By.className(className));
+            List<WebElement> elements = findElements(By.className(className));
             
             logger.debug("Elements found for classname: " + className + "|" + elements);
             logger.debug("Number of elements found for classname: " + className + "|" + elements.size());
@@ -3604,7 +3424,7 @@ public class BaseScreen extends ViewBase {
         try { 
             
             logger.info("The timeout value is set to (seconds): " + timeout);
-            this.driver.manage().timeouts().implicitlyWait((new Long(timeout)).longValue(), TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait((new Long(timeout)).longValue(), TimeUnit.SECONDS);
         
         }
         catch(Exception e) { throw e; }
@@ -4039,93 +3859,6 @@ public class BaseScreen extends ViewBase {
         validateMessageReceived(messageText); 
             
         deleteMessage(messageText);
-        
-    }
-    
-    /**
-     * Navigate to the Settings menu
-     * 
-     * @throws Exception 
-     */
-    protected void navigateToSettingsAndroid() throws Exception {
-        
-        info("Navigating to Settings menu");
-        
-        String locatorSettingsButton = "//android.widget.TextView[@content-desc=\"Settings\"]";
-        
-        try { click(locatorSettingsButton); }
-        catch(Exception e) { 
-            
-            // we try to scroll down and find it
-            //scrollDown();
-            
-            // click on it again
-            try { click(locatorSettingsButton); }
-            catch(Exception le) {
-                
-                try { clickOnWebElementMatchingText_ContentDescription("Settings", "android.widget.TextView"); }
-                catch(Exception  e2) {
-                    
-                    try { clickOnWebElementMatchingTextValueAttribute("Settings", "android.widget.TextView"); }
-                    catch(Exception e3) {
-                        
-                        boolean clicked = false;
-                        
-                        for(int i = 0; (i <= 5) && !clicked; i++) {
-                        
-                            scroll("100", "400", "100", "50");
-                        
-                            try { clickOnWebElementMatchingTextValueAttribute("Settings", "android.widget.TextView"); clicked = true; }
-                            catch(Exception e4) {
-                            
-                                try { clickOnWebElementMatchingText_ContentDescription("Settings", "android.widget.TextView"); clicked = true; }
-                                catch(Exception be) { if(i == 5) throw be; }
-                        
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-    
-    /**
-     * Navigate to the WiFi Settings menu
-     * 
-     * @throws Exception 
-     */
-    protected void navigateToWiFiSettingsAndroid() throws Exception {
-        
-        final String WIFI = "Wi-Fi";
-        
-        try { 
-            
-            info("Clicking on " + WIFI);
-            clickOnWebElementContainingTextValueAttribute(WIFI, "android.widget.TextView"); 
-        
-        }
-        catch(Exception e) { 
-            
-            // we try to scroll down and find it
-            //scrollDown();
-            
-            // click on it again
-            info("Clicking on WiFi");
-            try { clickOnWebElementContainingTextValueAttribute("WiFi", "android.widget.TextView"); }
-            catch(Exception le) { throw le; }
-                
-                //info("Clicking on Wi‑Fi");
-                clickOnWebElementContainingTextValueAttribute("Wi", "android.widget.TextView");
-                
-            //}
-            
-        }
         
     }
     
