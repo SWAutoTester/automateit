@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v2.1.2 - 15 July 2020
+Automate It! Web/Mobile Test Automation Framework v2.1.3 - 10 Mar 2021
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -23,8 +23,7 @@ Features:
 14) Scrolling web pages up/down from Safari, Chrome, Firefox web browsers
 15) Special styled reporting using Extent-based reporting framework for really nice and professional test result reports including easy to include screenshots from web and mobile application
 16) Alert Handlers in Zabbix, Email, and SMS for alerts of specific user-defined special events during or after tests (failed or skipped) 
-17) Asset objects and management
-18) Jenkins resource locking interface
+17) Cucumber/Gherkin support (see examples: ant cucumber_demo)
 
 This framework allows anyone with basic Java programming skills to write automated tests without needing any knowledge of Selenium or Appium WebDrivers.
 
