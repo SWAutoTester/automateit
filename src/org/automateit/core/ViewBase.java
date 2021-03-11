@@ -128,7 +128,7 @@ public class ViewBase {
         CommonWebDriver.getInstance().setWebDriver(driver); 
         
         this.driver = driver;
-        this.wait = new WebDriverWait(this.driver, 10);
+        this.wait = new WebDriverWait(this.driver, 60);
         
     }
     
