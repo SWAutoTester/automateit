@@ -87,43 +87,22 @@ public class BaseScreen extends ViewBase {
     
     /**
      * Default Constructor. The first screen that appears on the app must use this constructor
-     * 
-     * @throws Exception 
      */
-    public BaseScreen() throws Exception {
-    
-        try { init(); }
-        catch(Exception e) { throw e; }
-    
-    }
+    public BaseScreen() { init(); }
     
     /**
      * Default Constructor. The first screen that appears on the app must use this constructor
      * 
      * @param init
-     * 
-     * @throws Exception 
      */
-    public BaseScreen(boolean init) throws Exception {
-    
-        try { if(init) init(); }
-        catch(Exception e) { throw e; }
-    
-    }
-    
+    public BaseScreen(boolean init) { if(init) init(); }
+       
     /**
      * Copy Constructor. Each screen class must use this constructor.
      * 
      * @param baseScreen
-     * 
-     * @throws Exception 
      */
-    public BaseScreen(BaseScreen baseScreen) throws Exception {
-    
-        try { inheritSession(baseScreen); }
-        catch(Exception e) { throw e; }
-    
-    }
+    public BaseScreen(BaseScreen baseScreen) { inheritSession(baseScreen); }
     
     /**
      * Get the web driver object.
@@ -135,32 +114,23 @@ public class BaseScreen extends ViewBase {
     /**
      * Inherit all session values from the previous screen.
      * 
-     * @param baseScreen
-     * 
-     * @throws Exception 
+     * @param baseScreen 
      */
-    protected void inheritSession(BaseScreen baseScreen) throws Exception {
-        
-        try { this.driver = baseScreen.getWebDriver(); }
-        catch(Exception e) { throw e; }
-        
-    }
-    
+    protected void inheritSession(BaseScreen baseScreen) { this.driver = baseScreen.getWebDriver(); }
     
     /**
      * Setup the web driver to use for this set of tests.
-     * 
-     * @throws Exception 
      */
-    public void init() throws Exception { 
+    public void init() { 
         
         if(!loggingSetup) setupLogging();
         
         if(hasBeenInitialized) {
             
-            logger.info("Returning from setup - already has been initialized - did not do a total reset");
+            logger.debug("Returning from setup - already has been initialized");
             
             return;
+            
         }
        
         try { createNewWebDriver(); }
@@ -177,21 +147,14 @@ public class BaseScreen extends ViewBase {
     } 
     
     /**
-     * Finish the setup after capabilities have been added.
-     * 
-     * @throws Exception 
+     * Finish the setup after capabilities have been added
      */
-    protected void finishSetup() throws Exception {
+    protected void finishSetup() {
         
-        try {
-          
-            createNewWebDriver();
+        createNewWebDriver();
             
-            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
-            
-        }
-        catch(Exception e) { throw e;}
-        
+        this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+       
     }
     
     /**
@@ -199,18 +162,13 @@ public class BaseScreen extends ViewBase {
      * 
      * Use this method to re-enter the app in a logged-out state. Gives more control
      * when starting tests.
-     * 
-     * @throws Exception 
      */
-    protected void resetSetup() throws Exception {
+    protected void resetSetup() {
         
         this.hasBeenInitialized = false;
         
-        try { init(); } 
-        catch(Exception e) { throw e; }
-        
-        delay(3000);
-        
+        init();
+       
     }
     
     /**
@@ -238,14 +196,7 @@ public class BaseScreen extends ViewBase {
     /**
      * Stop the session.
      */
-    public void stop() { 
-       
-        try { stopSession(); }
-        catch(Exception e) { }
-        
-    }
-    
-    
+    public void stop() { stopSession(); }
   
     /**
      * Perform a swipe on the screen.
@@ -255,24 +206,15 @@ public class BaseScreen extends ViewBase {
      * @param endX
      * @param endY
      * @param duration
-     * 
-     * @throws Exception 
      */
-    public void swipe(int startX, int startY, int endX, int endY, int duration) throws Exception {
+    public void swipe(int startX, int startY, int endX, int endY, int duration) {
         
         logger.info("Attempting to perform swipe on screen at: start(" + startX + "," + startY + ") finish:(" + endX + "," + endY + ") for duration of: " + duration + " seconds");
             
         commandList.addToList("swipe: " + startX + "," + startY + "-" + endX + "," + endY);
         
-        try { 
-            
-            scroll(startX, startY, endX, endY, duration);
-            
-            delay(1500);   
-            
-        }
-        catch(Exception e) { throw e; }
-        
+        scroll(startX, startY, endX, endY, duration);
+       
     }
     
     /**
@@ -283,41 +225,25 @@ public class BaseScreen extends ViewBase {
      * @param endX
      * @param endY
      * @param duration
-     * 
-     * @throws Exception 
      */
-    public void swipe(String startX, String startY, String endX, String endY, String duration) throws Exception {
+    public void swipe(String startX, String startY, String endX, String endY, String duration) { swipe((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(duration)).intValue()); }
         
-        try { swipe((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(duration)).intValue()); }
-        catch(Exception e) { throw e; }
-        
-    }
- 
     /**
      * Perform a tap/click on the screen.
      * 
      * @param x
      * @param y
-     * 
-     * @throws Exception 
      */
-    public void tap(int x, int y) throws Exception {
+    public void tap(int x, int y) {
         
         logger.info("Attempting to perform tap on screen at: " + x + "," + y);
             
         commandList.addToList("tap: " + x + "," + y);
         
-        try {
-                
-            TouchAction touchAction = new TouchAction(this.driver);
+        TouchAction touchAction = new TouchAction(this.driver);
             
-            touchAction.tap(PointOption.point(x, y)).perform();
-            
-            delay(1500);
-            
-        }
-        catch(Exception e) { throw e; }
-        
+        touchAction.tap(PointOption.point(x, y)).perform();
+       
     }
     
     /**
@@ -325,39 +251,23 @@ public class BaseScreen extends ViewBase {
      * 
      * @param x
      * @param y
-     * 
-     * @throws Exception 
      */
-    public void tap(String x, String y) throws Exception {
-        
-        try { tap((new Integer(x)).intValue(), (new Integer(y)).intValue()); }
-        catch(Exception e) { throw e; }
-        
-    }
+    public void tap(String x, String y) { tap((new Integer(x)).intValue(), (new Integer(y)).intValue()); }
        
     /**
      * Perform a tap/click on the screen.
      * 
      * @param webelement
-     * 
-     * @throws Exception 
      */
-    public void tap(WebElement webelement) throws Exception {
+    public void tap(WebElement webelement) {
         
         logger.info("Attempting to perform tap on screen at web element: " + webelement);
             
         commandList.addToList("tap: " + webelement);
         
-        try {
-              
-            TouchAction touchAction = new TouchAction(this.driver);
-            
-            touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
-            
-            delay(1500);
-            
-        }
-        catch(Exception e) { throw e; }
+        TouchAction touchAction = new TouchAction(this.driver);
+           
+        touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
         
     }
     
@@ -365,8 +275,6 @@ public class BaseScreen extends ViewBase {
      * Perform a tap/click on the screen.
      * 
      * @param locator xpath/css locator
-     * 
-     * @throws Exception 
      */
     public void tap(String locator) throws Exception {
         
@@ -374,19 +282,12 @@ public class BaseScreen extends ViewBase {
             
         commandList.addToList("tap: " + locator);
         
-        try {
+        TouchAction touchAction = new TouchAction(this.driver);
             
-            TouchAction touchAction = new TouchAction(this.driver);
-            
-            WebElement webelement = getWebElementByXPath(locator);
-                
-            touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
-            
-            delay(1500);
-            
-        }
-        catch(Exception e) { throw e; }
-        
+        WebElement webelement = getWebElementByXPath(locator);
+           
+        touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
+         
     }
     
     /**
@@ -396,15 +297,8 @@ public class BaseScreen extends ViewBase {
      * @param startY
      * @param endX
      * @param endY
-     * 
-     * @throws Exception 
      */
-    public void scroll(int startX, int startY, int endX, int endY) throws Exception {
-        
-        try { scroll(startX, startY, endX, endY, 3); }
-        catch(Exception e) { throw e; }
-        
-    }
+    public void scroll(int startX, int startY, int endX, int endY) { scroll(startX, startY, endX, endY, 3); }
     
     /**
      * Perform a scroll with duration of 3 seconds.
@@ -413,15 +307,8 @@ public class BaseScreen extends ViewBase {
      * @param startY
      * @param endX
      * @param endY
-     * 
-     * @throws Exception 
      */
-    public void scroll(String startX, String startY, String endX, String endY) throws Exception {
-        
-        try { scroll((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(3)).intValue()); }
-        catch(Exception e) { throw e; }
-        
-    }
+    public void scroll(String startX, String startY, String endX, String endY) { scroll((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(3)).intValue()); }
     
     /**
      * Perform a scroll.
@@ -431,26 +318,17 @@ public class BaseScreen extends ViewBase {
      * @param endX
      * @param endY
      * @param duration
-     * 
-     * @throws Exception 
      */
-    public void scroll(int startX, int startY, int endX, int endY, int duration) throws Exception {
+    public void scroll(int startX, int startY, int endX, int endY, int duration) {
         
         logger.info("Attempting to perform scroll on mobile screen; start: " + startX + ":" + startY + ", end: " + endX + ":" + endY + ", duration: " + duration);
             
         commandList.addToList("scroll: start: " + startX + ":" + startY + ", end: " + endX + ":" + endY + ", duration: " + duration);
         
-        try {
-                
-            TouchAction touchAction = new TouchAction(this.driver);
+        TouchAction touchAction = new TouchAction(this.driver);
            
-            touchAction.press(PointOption.point(startX, startY)).waitAction((new WaitOptions()).withDuration(Duration.ofSeconds(duration))).moveTo(PointOption.point(endX, endY)).release().perform(); 
-            
-            delay(1500);
-            
-        }
-        catch(Exception e) { throw e; }
-        
+        touchAction.press(PointOption.point(startX, startY)).waitAction((new WaitOptions()).withDuration(Duration.ofSeconds(duration))).moveTo(PointOption.point(endX, endY)).release().perform(); 
+       
     }
     
     /**
@@ -461,42 +339,26 @@ public class BaseScreen extends ViewBase {
      * @param endX
      * @param endY
      * @param duration
-     * 
-     * @throws Exception 
      */
-    public void scroll(String startX, String startY, String endX, String endY, String duration) throws Exception {
-        
-        try { scroll((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(duration)).intValue()); }
-        catch(Exception e) { throw e; }
-        
-    }
+    public void scroll(String startX, String startY, String endX, String endY, String duration) { scroll((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(duration)).intValue()); }
     
     /**
      * Scroll down one entire screen length.
-     * 
-     * @throws Exception 
      */
-    public void scrollDown() throws Exception {
+    public void scrollDown() {
         
         logger.info("Scroll Down");
             
         commandList.addToList("Scroll Down");
         
-        try {
-             
-            JavascriptExecutor js = (JavascriptExecutor) driver;
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+ 
+        HashMap<String, String> scrollObject = new HashMap<String, String>();
 
-            HashMap<String, String> scrollObject = new HashMap<String, String>();
+        scrollObject.put("direction", "down");
+   
+        js.executeScript("mobile: scroll", scrollObject);
 
-            scrollObject.put("direction", "down");
-
-            js.executeScript("mobile: scroll", scrollObject);
-
-            delay(1500);
-            
-        }
-        catch(Exception e) { throw e; }
-        
     }
     
     /**
@@ -3445,10 +3307,8 @@ public class BaseScreen extends ViewBase {
     
     /**
      * This method does the actual creation of the web driver (appium driver)
-     * 
-     * @throws Exception 
      */
-    protected void createNewWebDriver() throws Exception {
+    protected void createNewWebDriver() {
         
         // we need to get the noreset and reinstallapp properties before they get potentially overwritten
         // by the next load of properties
@@ -3463,7 +3323,7 @@ public class BaseScreen extends ViewBase {
             reInstallApp = (new Boolean(properties.get(BooleanCapabilities.REINSTALL_APP.getCapability()))).booleanValue();
           
         }
-            
+       
         try {
             
             if(properties.isAndroid()) {
@@ -3525,7 +3385,7 @@ public class BaseScreen extends ViewBase {
             logger.info("New webdriver created successfully: " + this.driver);
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { logger.error(e); }
         
     }
     

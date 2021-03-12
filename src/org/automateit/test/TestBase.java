@@ -204,31 +204,14 @@ public class TestBase extends ViewBase {
     /**
      * Setup logging with log4j.
      * 
-     * Default location id at <code>./conf/log4j.properties</code>
-     * 
-     * @throws Exception 
-     */
-    protected void setupLogging() throws Exception {
-        
-        try { setupLogging("." + File.separator + "conf" + File.separator + "log4j.properties"); }
-        catch(Exception e) { throw e; }
-
-    }
-    
-    /**
-     * Setup logging with log4j.
-     * 
      * @param log4jPropertiesFile
-     * 
-     * @throws Exception 
      */
-    protected void setupLogging(final String log4jPropertiesFile) throws Exception {
+    protected void setupLogging(final String log4jPropertiesFile) { 
         
         try { CommonProperties.getInstance().setupLogging(log4jPropertiesFile); }
-        catch(Exception e) { throw e; }
-
+        catch(Exception e) { }
     }
-    
+ 
     /**
      * Allow a test class to invoke the creation of performance data.
      * 

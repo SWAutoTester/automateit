@@ -278,10 +278,8 @@ public class ViewBase {
     
     /**
      * Setup logging with log4j.
-     * 
-     * @throws Exception 
      */
-    protected void setupLogging() throws Exception {
+    protected void setupLogging() {
         
         try {
             
@@ -292,7 +290,7 @@ public class ViewBase {
             loggingSetup = true;
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { logger.error(e); }
 
     }
     
