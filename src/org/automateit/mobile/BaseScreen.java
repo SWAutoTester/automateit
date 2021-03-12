@@ -3326,30 +3326,6 @@ public class BaseScreen extends ViewBase {
        
         try {
             
-            if(properties.isAndroid()) {
-            
-                String androidPropertiesFilePath = "./conf/app.android.csv";
-            
-                if(properties.getModule() != null) androidPropertiesFilePath = "./" + properties.getModule() + "/" +  androidPropertiesFilePath;
-            
-                logger.info("Adding Android app specific properties:" + androidPropertiesFilePath);
-            
-                properties.addProperties(androidPropertiesFilePath);
-            
-            }
-            
-            if(properties.isIOS()) {
-            
-                String iosPropertiesFilePath = "./conf/app.ios.csv";
-            
-                if(properties.getModule() != null) iosPropertiesFilePath = "./" + properties.getModule() + "/" +  iosPropertiesFilePath;
-            
-                logger.info("Adding iOS app specific properties:" + iosPropertiesFilePath);
-            
-                properties.addProperties(iosPropertiesFilePath);
-            
-            }
-            
             commandList.addToList("createNewWebDriver: " + properties.get(StringCapabilities.DEVICE.getCapability()));
             
             logger.info("Preparing to create a new web driver instance for device type: " + properties.get(StringCapabilities.DEVICE.getCapability()));
