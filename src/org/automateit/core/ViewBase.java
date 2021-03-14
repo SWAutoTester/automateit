@@ -102,6 +102,8 @@ public class ViewBase {
      */
     protected WebDriver driver = null;
     
+    protected int timeoutInSeconds = 60;
+    
     /**
      * Copy Constructor
      * 
@@ -128,7 +130,7 @@ public class ViewBase {
         CommonWebDriver.getInstance().setWebDriver(driver); 
         
         this.driver = driver;
-        this.wait = new WebDriverWait(this.driver, 60);
+        this.wait = new WebDriverWait(this.driver, timeoutInSeconds);
         
     }
     
@@ -429,7 +431,23 @@ public class ViewBase {
      * 
      * @return The web element
      */
-    protected WebElement find(By by) { return wait.until(presenceOfElementLocated(by)); }
+    protected WebElement find(By by) { 
+        
+        try { 
+            
+            if(this.wait == null) this.wait = new WebDriverWait(this.driver, timeoutInSeconds);
+            return wait.until(presenceOfElementLocated(by));
+            
+        }
+        catch(Exception e) { throw e; }
+        finally { 
+            
+            try { addScreenshotToReport(); }
+            catch(Exception le) { }
+            
+        }
+        
+    }
 
     /**
      * Find WebElements
@@ -438,6 +456,17 @@ public class ViewBase {
      * 
      * @return The web element
      */
-    protected List<WebElement> findElements(By by) { return this.driver.findElements(by); } 
+    protected List<WebElement> findElements(By by) { 
+        
+        try { return this.driver.findElements(by); } 
+        catch(Exception e) { throw e; }
+        finally { 
+            
+            try { addScreenshotToReport(); }
+            catch(Exception le) { }
+            
+        }
+        
+    } 
             
 }

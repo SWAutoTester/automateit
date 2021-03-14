@@ -1,7 +1,5 @@
 package org.automateit.example.cucumber;
 
-import cucumber.api.PendingException;
-
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
@@ -12,6 +10,9 @@ import org.automateit.example.page.YahooHomePage;
 
 import cucumber.api.Scenario;
 import cucumber.api.java.Before;
+import cucumber.api.java.After;
+
+import org.automateit.core.CommonWebDriver;
 
 /**
  * This class shows an example of how to use the AutomateIt! framework - and various useful features
@@ -22,11 +23,6 @@ import cucumber.api.java.Before;
 public class Stepdefs extends TestBase {
     
     private Scenario scenario = null;
-
-    @Before
-    public void before(Scenario scenario) {
-        this.scenario = scenario;
-    }
     
     YahooHomePage yahooHomePage = null;
    
@@ -38,12 +34,6 @@ public class Stepdefs extends TestBase {
         
         try { this.yahooHomePage = new YahooHomePage(); }
         catch(Exception e) { throw e; }
-        finally { 
-            
-            try { this.yahooHomePage.addScreenshotToReport(); }
-            catch(Exception le) { }
-        
-        }
         
     }
 
@@ -60,12 +50,6 @@ public class Stepdefs extends TestBase {
             
         }
         catch(Exception e) { throw e; }
-        finally { 
-            
-            try { this.yahooHomePage.addScreenshotToReport(); }
-            catch(Exception le) { }
-        
-        }
         
     }
 
@@ -74,14 +58,26 @@ public class Stepdefs extends TestBase {
         
         info("I will see the Search results and close the browser");
         
-        try { this.yahooHomePage.close(); }
-        catch(Exception e) { throw e; }
-        finally { 
-            
-            try { this.yahooHomePage.addScreenshotToReport(); }
-            catch(Exception le) { }
-        
-        }
+        delay(2000); // pretend to see the search results, in reality would add validation
+        // to verify certain text is visible (search returned expected results)
         
     }
+    
+    @Before
+    public void before(Scenario scenario) {
+        this.scenario = scenario;
+    }
+    
+    @After
+    public void after(Scenario scenario) {
+        
+        try { addScreenshotToReport(); }
+        catch(Exception le) { }
+        
+        scenario.write("Scenario finished - closing the mobile app / web browser");
+        
+        CommonWebDriver.getInstance().close();
+        
+    }
+    
 }

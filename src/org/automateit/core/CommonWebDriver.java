@@ -62,4 +62,16 @@ public class CommonWebDriver {
      */
     public WebDriver getWebDriver() { return this.driver; }
     
+    /**
+     * Close the web driver (quit)
+     */
+    public void close() {
+        
+        if(driver == null) return;
+        
+        try { driver.quit(); }
+        catch(Exception e) { }
+        
+    }
+    
 }
