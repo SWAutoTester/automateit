@@ -5,7 +5,9 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class StepDefinitions {
+import org.automateit.cucumber.StepDefinitionsBase;
+
+public class StepDefinitions extends StepDefinitionsBase {
 
     @Given("^I have a configured cucumber jvm project$")
     public void i_have_a_configured_cucumber_jvm_project()/* throws Exception*/ {

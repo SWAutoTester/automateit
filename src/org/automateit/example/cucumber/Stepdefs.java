@@ -3,16 +3,16 @@ package org.automateit.example.cucumber;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
+//import cucumber.api.java.Before;
+//import cucumber.api.java.After;
 
-import org.automateit.test.TestBase;
+//import cucumber.api.Scenario;
+
+import org.automateit.cucumber.StepDefinitionsBase;
 
 import org.automateit.example.page.YahooHomePage;
 
-import cucumber.api.Scenario;
-import cucumber.api.java.Before;
-import cucumber.api.java.After;
-
-import org.automateit.core.CommonWebDriver;
+//import org.automateit.core.CommonWebDriver;
 
 /**
  * This class shows an example of how to use the AutomateIt! framework - and various useful features
@@ -20,17 +20,15 @@ import org.automateit.core.CommonWebDriver;
  * 
  * @author mburnside
  */
-public class Stepdefs extends TestBase {
-    
-    private Scenario scenario = null;
-    
+public class Stepdefs extends StepDefinitionsBase {
+   
     YahooHomePage yahooHomePage = null;
    
     @Given("^I open my browser to Yahoo homepage$")
     public void I_open_my_browser_to_Yahoo_homepage() throws Exception {
         
         info("I open my browser to Yahoo homepage");
-        scenario.write( "I open my browser to Yahoo homepage" );
+        writeToScenario( "I open my browser to Yahoo homepage" );
         
         try { this.yahooHomePage = new YahooHomePage(); }
         catch(Exception e) { throw e; }
@@ -62,7 +60,7 @@ public class Stepdefs extends TestBase {
         // to verify certain text is visible (search returned expected results)
         
     }
-    
+    /*
     @Before
     public void before(Scenario scenario) {
         this.scenario = scenario;
@@ -79,5 +77,6 @@ public class Stepdefs extends TestBase {
         CommonWebDriver.getInstance().close();
         
     }
+*/
     
 }
