@@ -89,9 +89,9 @@ public class DataDrivenDataTable extends DataDrivenInputBase implements DataDriv
             for(int i = 1; i < dataTable.height(); i++) {
                 
                 // get the row of the data table at index
-                List<String> row​ = dataTable.row(i);
+                List<String> row = dataTable.row(i);
                 
-                inputParameters.put((String)row.get(columnPrimaryKeyIndex), getDataRow(row​));
+                inputParameters.put((String)row.get(columnPrimaryKeyIndex), getDataRow(row));
                 
             }
            
@@ -107,7 +107,7 @@ public class DataDrivenDataTable extends DataDrivenInputBase implements DataDriv
      * 
      * @return
      */
-    protected Map getDataRow(List<String> row​) {
+    protected Map getDataRow(List<String> row) {
         
         Map rowData = null;
        
