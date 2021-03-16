@@ -40,7 +40,7 @@ public class AndroidDemoTests extends MobileAppDemoTestBase {
             
             //validateLoginScreen(loginScreen); 
             
-            loginScreen.validateNotificationReceivedAndGoBack("⁨AutoBudd");
+            loginScreen.validateNotificationReceivedAndGoBack("AutoBudd");
         
         }
         catch(Exception e) { throw e; }
