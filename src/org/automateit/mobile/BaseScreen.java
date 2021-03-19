@@ -116,7 +116,13 @@ public class BaseScreen extends ViewBase {
      * 
      * @param baseScreen 
      */
-    protected void inheritSession(BaseScreen baseScreen) { setWebDriver(baseScreen.getWebDriver()); }
+    protected void inheritSession(BaseScreen baseScreen) { 
+        
+        this.driver = (AppiumDriver)baseScreen.getWebDriver();
+        
+        setWebDriver(baseScreen.getWebDriver()); 
+    
+    }
     
     /**
      * Setup the web driver to use for this set of tests.
