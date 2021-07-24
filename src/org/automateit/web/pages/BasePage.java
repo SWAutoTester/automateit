@@ -500,7 +500,7 @@ public class BasePage extends ViewBase {
                     
                 try {
                         
-                    WebDriverWait wait = new WebDriverWait(this.driver, (new Long(this.timeout)).longValue());
+                    WebDriverWait wait = new WebDriverWait(this.driver, Long.valueOf(this.timeout));
                          
                     Alert alert = wait.until(ExpectedConditions.alertIsPresent()); 
                         
@@ -558,7 +558,7 @@ public class BasePage extends ViewBase {
             
             try {
             
-                this.driver.manage().timeouts().implicitlyWait((new Long(this.timeout)).longValue(), TimeUnit.SECONDS);
+                this.driver.manage().timeouts().implicitlyWait(Long.valueOf(this.timeout), TimeUnit.SECONDS);
                   
                 logger.debug("Page content has been loaded, now waiting for Ajax completion");
                    
@@ -566,7 +566,7 @@ public class BasePage extends ViewBase {
                     
                     logger.debug("Waiting for Javascript and Ajax to complete loading on the page");
                     
-                    if(!waitForJSandAjaxToLoad((new Long(this.timeout).longValue()))) logger.info("Error when checking if javascript and ajax has been loaded");
+                    if(!waitForJSandAjaxToLoad(Long.valueOf(this.timeout))) logger.info("Error when checking if javascript and ajax has been loaded");
                 
                 }
               
@@ -614,7 +614,7 @@ public class BasePage extends ViewBase {
         
         try { 
             
-            waitForJSandAjaxToLoad((new Long(this.timeout).longValue())); 
+            waitForJSandAjaxToLoad(Long.valueOf(this.timeout)); 
             
             return this.driver.getTitle(); 
         
@@ -965,9 +965,9 @@ public class BasePage extends ViewBase {
             
             if(timeout == null) timeout = this.timeout; // protect aginst null conditions
             
-            waitForAjaxCompletion((new Long(timeout)).longValue());
+            waitForAjaxCompletion(Long.valueOf(timeout));
             
-            WebElement myDynamicElement = (new WebDriverWait(driver, (new Long(timeout)).longValue())).until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
+            WebElement myDynamicElement = (new WebDriverWait(driver, Long.valueOf(timeout))).until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
             
         }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
@@ -992,9 +992,9 @@ public class BasePage extends ViewBase {
         
         try {
             
-            waitForAjaxCompletion((new Long(timeout)).longValue());
+            waitForAjaxCompletion(Long.valueOf(timeout));
             
-            WebElement myDynamicElement = (new WebDriverWait(driver, (new Long(timeout)).longValue())).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+            WebElement myDynamicElement = (new WebDriverWait(driver, Long.valueOf(timeout))).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
             
         }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
@@ -1019,9 +1019,9 @@ public class BasePage extends ViewBase {
         
         try {
             
-            waitForAjaxCompletion((new Long(timeout)).longValue());
+            waitForAjaxCompletion(Long.valueOf(timeout));
             
-            WebElement myDynamicElement = (new WebDriverWait(driver, (new Long(timeout)).longValue())).until(ExpectedConditions.presenceOfElementLocated(By.className(classname)));
+            WebElement myDynamicElement = (new WebDriverWait(driver, Long.valueOf(timeout))).until(ExpectedConditions.presenceOfElementLocated(By.className(classname)));
             
         }
         catch(Exception e) { printDOM(); throw new BasePageException(e); }
@@ -2329,7 +2329,7 @@ public class BasePage extends ViewBase {
         
         try {
             
-            int intSyncTimeout = (new Integer(timeout)).intValue();
+            int intSyncTimeout = Integer.valueOf(timeout);
             
             for(int i = 0; i < intSyncTimeout; i++) {
                 
@@ -3639,7 +3639,7 @@ public class BasePage extends ViewBase {
             
             logger.debug("Timeout is set to: " + this.timeout);
             
-            driver.manage().timeouts().implicitlyWait((new Long(this.timeout)).longValue(), TimeUnit.SECONDS); 
+            driver.manage().timeouts().implicitlyWait(Long.valueOf(this.timeout), TimeUnit.SECONDS); 
         
         }
         catch(Exception e) { throw e; }
@@ -3690,14 +3690,14 @@ public class BasePage extends ViewBase {
             logger.debug("Creating Selenium 3.0 instance: " + properties.get(StringCapabilities.BROWSER_NAME.getCapability()));
             
             // screenshot properties
-            if(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability()) != null) { doScreenshot = (new Boolean(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability()))).booleanValue(); }
+            if(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability()) != null) { doScreenshot = Boolean.valueOf(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability())); }
             
             logger.debug("Do screenshots on each page load: " + doScreenshot);
             
             setTimeout();
             
             // set the captureSeleniumCommands
-            if(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability()) != null) { captureSeleniumCommands = (new Boolean(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability()))).booleanValue(); }
+            if(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability()) != null) { captureSeleniumCommands = Boolean.valueOf(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability())); }
            
             if(properties.get(StringCapabilities.JS_LIBRARY.getCapability()) != null) jsLibrary = properties.get(StringCapabilities.JS_LIBRARY.getCapability());
                         
@@ -3708,22 +3708,22 @@ public class BasePage extends ViewBase {
             setWebDriver(this.driver);
             
             // extra time wait ajax complete if needed
-            if(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { addExtraWaitTimeAfterAjaxComplete = (new Boolean(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability()))).booleanValue(); }
+            if(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { addExtraWaitTimeAfterAjaxComplete = Boolean.valueOf(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability())); }
                
-            if(properties.get(StringCapabilities.EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { extraWaitTimeAfterAjaxComplete = (new Long(properties.get(StringCapabilities.EXTRA_WAIT_AJAX_COMPLETE.getCapability()).trim())).longValue(); }
+            if(properties.get(StringCapabilities.EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { extraWaitTimeAfterAjaxComplete = Long.valueOf(properties.get(StringCapabilities.EXTRA_WAIT_AJAX_COMPLETE.getCapability()).trim()); }
           
             // extra time wait ajax complete if needed
-            if(properties.get(BooleanCapabilities.MAXIMIZE_BROWSER_WINDOW.getCapability()) != null) { maximizeBrowserWindow = (new Boolean(properties.get(BooleanCapabilities.MAXIMIZE_BROWSER_WINDOW.getCapability()))).booleanValue(); }
+            if(properties.get(BooleanCapabilities.MAXIMIZE_BROWSER_WINDOW.getCapability()) != null) { maximizeBrowserWindow = Boolean.valueOf(properties.get(BooleanCapabilities.MAXIMIZE_BROWSER_WINDOW.getCapability())); }
             
             // set using force page load wait time property
-            if(properties.get(BooleanCapabilities.USE_FORCE_PAGE_LOAD_TIME.getCapability()) != null) { useForcePageLoadWaitTime = (new Boolean(properties.get(BooleanCapabilities.USE_FORCE_PAGE_LOAD_TIME.getCapability()))).booleanValue(); }
+            if(properties.get(BooleanCapabilities.USE_FORCE_PAGE_LOAD_TIME.getCapability()) != null) { useForcePageLoadWaitTime = Boolean.valueOf(properties.get(BooleanCapabilities.USE_FORCE_PAGE_LOAD_TIME.getCapability())); }
             
             // set force page load wait time (actual millisecond setting) property
-            if(properties.get(StringCapabilities.FORCE_PAGE_LOAD_WAIT_TIME.getCapability()) != null) { forcePageLoadWaitTime = (new Long(properties.get(StringCapabilities.FORCE_PAGE_LOAD_WAIT_TIME.getCapability()).trim())).longValue(); }
+            if(properties.get(StringCapabilities.FORCE_PAGE_LOAD_WAIT_TIME.getCapability()) != null) { forcePageLoadWaitTime = Long.valueOf(properties.get(StringCapabilities.FORCE_PAGE_LOAD_WAIT_TIME.getCapability()).trim()); }
            
             if(properties.get(BooleanCapabilities.USE_HTTP_AUTH.getCapability()) != null) {
                 
-                useHTTPAuth = (new Boolean(properties.get(BooleanCapabilities.USE_HTTP_AUTH.getCapability()))).booleanValue();
+                useHTTPAuth = Boolean.valueOf(properties.get(BooleanCapabilities.USE_HTTP_AUTH.getCapability()));
                 
                 sleep(2000);
                 

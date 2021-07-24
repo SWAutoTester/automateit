@@ -815,7 +815,7 @@ public class TestNGUtils {
                 
                 if(data.hasDataId(key)) {
                     
-                    dataset.addValue((new Long(data.returnInputDataForDataIdAndColumnNumber(key, 1))).longValue(), "Values", key);
+                    dataset.addValue(Long.valueOf(data.returnInputDataForDataIdAndColumnNumber(key, 1)), "Values", key);
                     
                 }
                 

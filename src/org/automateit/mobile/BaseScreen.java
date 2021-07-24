@@ -159,7 +159,7 @@ public class BaseScreen extends ViewBase {
         
         createNewWebDriver();
             
-        this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+        this.driver.manage().timeouts().implicitlyWait(Long.valueOf(properties.get("timeout")), TimeUnit.SECONDS);
        
     }
     
@@ -232,7 +232,7 @@ public class BaseScreen extends ViewBase {
      * @param endY
      * @param duration
      */
-    public void swipe(String startX, String startY, String endX, String endY, String duration) { swipe((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(duration)).intValue()); }
+    public void swipe(String startX, String startY, String endX, String endY, String duration) { swipe(Integer.valueOf(startX), Integer.valueOf(startY), Integer.valueOf(endX), Integer.valueOf(endY), Integer.valueOf(duration)); }
         
     /**
      * Perform a tap/click on the screen.
@@ -258,7 +258,7 @@ public class BaseScreen extends ViewBase {
      * @param x
      * @param y
      */
-    public void tap(String x, String y) { tap((new Integer(x)).intValue(), (new Integer(y)).intValue()); }
+    public void tap(String x, String y) { tap(Integer.valueOf(x), Integer.valueOf(y)); }
        
     /**
      * Perform a tap/click on the screen.
@@ -314,7 +314,7 @@ public class BaseScreen extends ViewBase {
      * @param endX
      * @param endY
      */
-    public void scroll(String startX, String startY, String endX, String endY) { scroll((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(3)).intValue()); }
+    public void scroll(String startX, String startY, String endX, String endY) { scroll(Integer.valueOf(startX), Integer.valueOf(startY), Integer.valueOf(endX), Integer.valueOf(endY), Integer.valueOf(3)); }
     
     /**
      * Perform a scroll.
@@ -346,7 +346,7 @@ public class BaseScreen extends ViewBase {
      * @param endY
      * @param duration
      */
-    public void scroll(String startX, String startY, String endX, String endY, String duration) { scroll((new Integer(startX)).intValue(), (new Integer(startY)).intValue(), (new Integer(endX)).intValue(), (new Integer(endY)).intValue(), (new Integer(duration)).intValue()); }
+    public void scroll(String startX, String startY, String endX, String endY, String duration) { scroll(Integer.valueOf(startX), Integer.valueOf(startY), Integer.valueOf(endX), Integer.valueOf(endY), Integer.valueOf(duration)); }
     
     /**
      * Scroll down one entire screen length.
@@ -3292,7 +3292,7 @@ public class BaseScreen extends ViewBase {
         try { 
             
             logger.info("The timeout value is set to (seconds): " + timeout);
-            driver.manage().timeouts().implicitlyWait((new Long(timeout)).longValue(), TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(Long.valueOf(timeout), TimeUnit.SECONDS);
         
         }
         catch(Exception e) { throw e; }
@@ -3324,9 +3324,9 @@ public class BaseScreen extends ViewBase {
         
         if(properties.getForceAppResetInstall()) {
           
-            noReset = (new Boolean(properties.get(BooleanCapabilities.NO_RESET.getCapability()))).booleanValue();
+            noReset = Boolean.valueOf(properties.get(BooleanCapabilities.NO_RESET.getCapability()));
         
-            reInstallApp = (new Boolean(properties.get(BooleanCapabilities.REINSTALL_APP.getCapability()))).booleanValue();
+            reInstallApp = Boolean.valueOf(properties.get(BooleanCapabilities.REINSTALL_APP.getCapability()));
           
         }
        
@@ -3362,7 +3362,7 @@ public class BaseScreen extends ViewBase {
             hasBeenInitialized = true;
             
             logger.info("Successfully made new web driver instance, now set the timeout value: " + properties.get("timeout"));
-            this.driver.manage().timeouts().implicitlyWait((new Long(properties.get("timeout"))).longValue(), TimeUnit.SECONDS);
+            this.driver.manage().timeouts().implicitlyWait(Long.valueOf(properties.get("timeout")), TimeUnit.SECONDS);
           
             logger.info("New webdriver created successfully: " + this.driver);
             

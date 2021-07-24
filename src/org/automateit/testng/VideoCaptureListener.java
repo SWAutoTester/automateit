@@ -103,7 +103,7 @@ public class VideoCaptureListener extends TestListenerAdapter {
                 
                 logger.info("Loading webdriver property: " + "recordVideo" + "|" + CommonProperties.getInstance().get("recordVideo"));
                 
-                boolean recordVideo = (new Boolean(CommonProperties.getInstance().get("recordVideo"))).booleanValue();
+                boolean recordVideo = Boolean.valueOf(CommonProperties.getInstance().get("recordVideo"));
                 
                 CommonProperties.getInstance().setRecordVideo(recordVideo);
                 
