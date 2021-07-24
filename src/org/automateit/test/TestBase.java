@@ -257,7 +257,7 @@ public class TestBase extends ViewBase {
         
         try { 
             
-            long future = (new Long("3000000000000")).longValue();
+            long future = Long.valueOf("3000000000000");
             long now = (new Date()).getTime();
             
             this.getCurrentUniqueString = String.valueOf(future - now);

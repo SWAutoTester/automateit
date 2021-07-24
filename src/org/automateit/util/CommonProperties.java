@@ -323,7 +323,7 @@ public class CommonProperties extends Properties {
     public boolean getAppNoReset() { 
         
         if(!containsKey(BooleanCapabilities.NO_RESET.getCapability())) return false;
-        else return (new Boolean(containsKey(BooleanCapabilities.NO_RESET.getCapability()))).booleanValue();
+        else return Boolean.valueOf(containsKey(BooleanCapabilities.NO_RESET.getCapability()));
     
     }
     
@@ -359,7 +359,7 @@ public class CommonProperties extends Properties {
     public boolean getReInstallApp() { 
        
         if(!containsKey(BooleanCapabilities.REINSTALL_APP.getCapability())) return false;
-        else return (new Boolean(get(BooleanCapabilities.REINSTALL_APP.getCapability()))).booleanValue();
+        else return Boolean.valueOf(get(BooleanCapabilities.REINSTALL_APP.getCapability()));
     
     }
     
@@ -390,7 +390,7 @@ public class CommonProperties extends Properties {
     public boolean getRecordVideo() { 
         
         if(!containsKey(BooleanCapabilities.RECORD_VIDEO.getCapability())) return false;
-        else return (new Boolean(containsKey(BooleanCapabilities.RECORD_VIDEO.getCapability()))).booleanValue();
+        else return Boolean.valueOf(containsKey(BooleanCapabilities.RECORD_VIDEO.getCapability()));
     
     }
     
@@ -526,7 +526,7 @@ public class CommonProperties extends Properties {
     public boolean getAutoAcceptAlerts() { 
         
         if(!containsKey(BooleanCapabilities.AUTO_ACCEPT_ALERTS.getCapability())) return false;
-        else return (new Boolean(get(BooleanCapabilities.AUTO_ACCEPT_ALERTS.getCapability()))).booleanValue();
+        else return Boolean.valueOf(get(BooleanCapabilities.AUTO_ACCEPT_ALERTS.getCapability()));
         
     }
     
@@ -545,7 +545,7 @@ public class CommonProperties extends Properties {
     public boolean getAutoGrantPermissions() { 
         
         if(!containsKey(BooleanCapabilities.AUTO_GRANT_PERMISSIONS.getCapability())) return false;
-        else return (new Boolean(get(BooleanCapabilities.AUTO_GRANT_PERMISSIONS.getCapability()))).booleanValue();
+        else return Boolean.valueOf(get(BooleanCapabilities.AUTO_GRANT_PERMISSIONS.getCapability()));
         
     }
     

@@ -170,7 +170,7 @@ public class Utils {
     public boolean doReportingOnTestSuccess() { 
         
         if(CommonProperties.getInstance().get("doReportingOnTestSuccess") == null) return false;
-        return (new Boolean(CommonProperties.getInstance().get("doReportingOnTestSuccess"))); 
+        return Boolean.valueOf(CommonProperties.getInstance().get("doReportingOnTestSuccess")); 
     
     }
     
@@ -185,7 +185,7 @@ public class Utils {
     public boolean doReportingOnTestFail() { 
         
         if(CommonProperties.getInstance().get("doReportingOnTestFail") == null) return false;
-        return (new Boolean(CommonProperties.getInstance().get("doReportingOnTestFail"))); 
+        return Boolean.valueOf(CommonProperties.getInstance().get("doReportingOnTestFail")); 
     
     }
     
@@ -543,13 +543,13 @@ public class Utils {
         try {
             
             // add 2 negative numbers
-            if(x.trim().startsWith("-") && y.trim().startsWith("-")) return 0 - Math.abs((new Integer(x.trim())).intValue()) - Math.abs((new Integer(y.trim())).intValue());
+            if(x.trim().startsWith("-") && y.trim().startsWith("-")) return 0 - Math.abs(Integer.valueOf(x.trim())) - Math.abs(Integer.valueOf(y.trim()));
             // add x and subtract y
-            if(!x.trim().startsWith("-") && y.trim().startsWith("-")) return 0 + Math.abs((new Integer(x.trim())).intValue()) - Math.abs((new Integer(y.trim())).intValue());
+            if(!x.trim().startsWith("-") && y.trim().startsWith("-")) return 0 + Math.abs(Integer.valueOf(x.trim())) - Math.abs(Integer.valueOf(y.trim()));
             // add x and subtract y
-            if(x.trim().startsWith("-") && !y.trim().startsWith("-")) return 0 - Math.abs((new Integer(x.trim())).intValue()) + Math.abs((new Integer(y.trim())).intValue());
+            if(x.trim().startsWith("-") && !y.trim().startsWith("-")) return 0 - Math.abs(Integer.valueOf(x.trim())) + Math.abs(Integer.valueOf(y.trim()));
             // add x and y
-            if(!x.trim().startsWith("-") && !y.trim().startsWith("-")) return 0 + Math.abs((new Integer(x.trim())).intValue()) + Math.abs((new Integer(y.trim())).intValue());
+            if(!x.trim().startsWith("-") && !y.trim().startsWith("-")) return 0 + Math.abs(Integer.valueOf(x.trim())) + Math.abs(Integer.valueOf(y.trim()));
           
             else return -1000;
           
@@ -584,7 +584,7 @@ public class Utils {
      */
     public boolean getBooleanValueFromString(String booleanValue) {
         
-        try { return (new Boolean(booleanValue)).booleanValue(); }
+        try { return Boolean.valueOf(booleanValue); }
         catch(Exception e) { return false; }
         
     }
