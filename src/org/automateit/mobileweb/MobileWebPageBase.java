@@ -16,17 +16,19 @@
  * along with Automate It!.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package org.automateit.web.pages;
+package org.automateit.mobileweb;
+ 
+import java.net.URL;
 
-import java.util.concurrent.TimeUnit;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.awt.event.KeyEvent;
+import org.testng.Assert;
 
 import java.io.File;
 
-import org.testng.Assert;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.Alert;
@@ -42,6 +44,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.appium.java_client.remote.MobileCapabilityType;
+
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
+
 import org.apache.log4j.Logger;
 
 import org.automateit.core.ViewBase;
@@ -54,22 +61,47 @@ import org.automateit.util.Utils;
 
 import org.automateit.core.StringCapabilities;
 import org.automateit.core.BooleanCapabilities;
-
-import org.automateit.web.WebDriverFactory;
-
+      
 /**
- * BasePage is the class that all other page classes should extend for web-based UI testing.
+ * This class is the base class for all other screen classes to use.
  * 
- * It obfuscates the driver- and interface-specific programming from the automated
- * test developer and offers general functionality and convenience methods to make
- * programming easier and faster.
- * <p>
- * <b>
- * The current interface used is Selenium 3.0 which uses <code>WebDriver</code>.
- * </b>
+ * It abstracts away all of the webdriver-specific programming and provides 
+ * easy to use convenience methods for rapid development of mobile apps using
+ * webdriver and the screen design pattern.
+ * 
  * @author mburnside
  */
-public class BasePage extends ViewBase {
+public class MobileWebPageBase extends ViewBase {
+    
+    /**
+     * The url where this mobile web page is accessed
+     */
+    protected String url = null;
+    
+    /**
+     * This is the UDID of the device to use
+     */
+    protected String udid = null;
+    
+    /**
+     * Indicates if this class has been initialized
+     */
+    protected boolean hasBeenInit = false;
+    
+    /**
+     * Maximize Browser Window. Default is <code>true</code>.
+     */
+    protected boolean maximizeBrowserWindow = true;
+    
+    /**
+     * The utilities class to help with convenience methods
+     */
+    protected Utils utils = new Utils();
+    
+    /**
+     * Add a start URL to make sure that one specified cannot be overritten accidentally or by reload of common properties
+     */
+    protected String startURL =  null;
     
     /**
      * JavaScript library that the application is using. This is required to query the active ajax connection
@@ -105,37 +137,7 @@ public class BasePage extends ViewBase {
      * Properties that can be used for any class extending this class
      */
     protected CommonProperties properties = CommonProperties.getInstance();
-	
-    /**
-     *  logging object, logging conf is defined in conf/log4j.properties
-     */
-    protected static Logger logger = Logger.getLogger(BasePage.class);
- 
-    /**
-     * Maximize Browser Window. Default is <code>true</code>.
-     */
-    protected boolean maximizeBrowserWindow = true;
-   
-    /**
-     * Use HTTP Authentication. Default is <code>false</code>.
-     */
-    protected boolean useHTTPAuth = false;
-    
-    /**
-     * The username value that the Robot types into the username field on the authorization prompt.
-     */
-    public String httpAuthUsername = null;
-    
-    /**
-     * The password value that the Robot types into the password field on the authorization prompt.
-     */
-    public String httpAuthPassword = null;
-    
-    /**
-     * The object that has logic to pick the correct webdriver and set it up
-     */
-    protected WebDriverFactory webDriverFactory = new WebDriverFactory();
-    
+  
     /**
      * Non-selenium-based screenshot capture object.
      * 
@@ -168,148 +170,219 @@ public class BasePage extends ViewBase {
     protected boolean captureSeleniumCommands = true;
     
     /**
-     * The utilities class to help with convenience methods
+     * Logging class
      */
-    protected Utils utils = new Utils();
+    private Logger logger = Logger.getLogger(MobileWebPageBase.class);
     
     /**
-     * Add a start URL to make sure that one specified cannot be overritten accidentally or by reload of common properties
+     * Default Constructor. The first screen that appears on the app must use this constructor
+     * 
+     * @throws Exception 
      */
-    protected String startURL =  null;
+    public MobileWebPageBase() throws Exception { }
     
     /**
-     * Initialize this class to prepare for testing. Loads the properties file 
-     * located at <code>conf/seleniumconfiguration.properties</code>.
-     * <p>
-     * This method also calls "start" method.
+     * Default Constructor. The first screen that appears on the app must use this constructor
      * 
-     * This method uses the start page indicated by the baseURL property
+     * @param url
      * 
-     * @throws BasePageException
+     * @throws Exception 
      */
-    protected void init() throws BasePageException { 
-      
-        try {
-           
-            logger.debug("Starting at URL from properties file: " + properties.get(StringCapabilities.URL.getCapability()));
-           
-            startURL = properties.get(StringCapabilities.URL.getCapability());
-           
-            createNewWebDriver(getModifiedStartURL());
-            
-            stopPerformanceCapturePageLoaded();
-        
-        }
-        catch(Exception e) { throw new BasePageException(e); }
-
+    public MobileWebPageBase(String url) throws Exception {
+    
+        try { this.url = url; }
+        catch(Exception e) { throw e; }
+    
     }
     
     /**
-     * Initialize this class to prepare for testing. Loads the properties file 
-     * located at <code>conf/seleniumconfiguration.properties</code>.
-     * <p>
-     * This method also calls "start" method.
+     * Default Constructor. The first screen that appears on the app must use this constructor
      * 
-     * This method uses the start page indicated by the baseURL property
+     * @param url
+     * @param udid
      * 
-     * @throws BasePageException
+     * @throws Exception 
      */
-    protected void init(String url) throws BasePageException { 
-      
-        try {
-         
-            logger.debug("Starting at URL: " + url);
-            
-            startURL = url;
-            
-            createNewWebDriver(getModifiedStartURL());
-            
-            stopPerformanceCapturePageLoaded();
-        
-        }
-        catch(Exception e) { throw new BasePageException(e); }
-
+    public MobileWebPageBase(String url, String udid) throws Exception {
+    
+        try { this.url = url; this.udid = udid; }
+        catch(Exception e) { throw e; }
+    
     }
     
     /**
-     * Initialize this class to prepare for testing. Loads the properties file 
-     * located at <code>conf/seleniumconfiguration.properties</code>.
-     * <p>
-     * This method also calls "start" method.
+     * Default Constructor. The first screen that appears on the app must use this constructor
      * 
-     * This method uses the start page indicated by the baseURL property
+     * @param init
      * 
-     * @throws BasePageException
+     * @throws Exception 
      */
-    protected void init(String url, String username, String password) throws BasePageException { 
-      
-        try {
-          
-            logger.debug("Starting at URL: " + url + "|" + username + "|" + password);
-           
-            startURL = url;
-            
-            createNewWebDriver(getModifiedStartURL());
-            
-            stopPerformanceCapturePageLoaded();
-        
-        }
-        catch(Exception e) { throw new BasePageException(e); }
-
+    public MobileWebPageBase(boolean init) throws Exception {
+    
+        try { if(init) initSetup(); }
+        catch(Exception e) { throw e; }
+    
+    }
+    
+    /**
+     * Copy Constructor. Each screen class must use this constructor.
+     * 
+     * @param basePage
+     * 
+     * @throws Exception 
+     */
+    public MobileWebPageBase(MobileWebPageBase basePage) throws Exception {
+    
+        try { inheritSession(basePage); }
+        catch(Exception e) { throw e; }
+    
     }
     
     /**
      * Initialize the CommonProperties object
-     * @throws BasePageException 
+     * 
+     * @throws Exception 
      */
-    protected void initializeCommonProperties() throws BasePageException {
+    protected void initializeCommonProperties() throws Exception {
         
         try { this.properties.load(this.properties.PROPERTIESFILEPATH); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
         
     }
-           
-    /**
-     * return the username set in property config
-     */
-    protected String getUsername() { return properties.getProperty("username"); }
     
     /**
-     * return the password set in property config     
+     * Initialize this class to prepare for testing. Loads the properties file 
+     * located at <code>conf/seleniumconfiguration.properties</code>.
+     * <p>
+     * This method also calls "start" method.
+     * 
+     * This method uses the start page indicated by the baseURL property
+     * 
+     * @throws Exception
      */
-    protected String getPassword() { return properties.getProperty("password"); }
-    
-    /**    
-     * @return: true if using internet explorer browser
-     */
-    public boolean isBrowserIE() { return properties.isBrowserIE(); }
-    
-    /**    
-     * @return: true if using safari
-     */
-    public boolean isBrowserSafari() { return properties.isBrowserSafari(); }
-    
-    /**
-     * Check if Chrome browser is used or not
-     *
-     * @return: true if using chrome browser
-     */
-    public boolean isBrowserChrome() { return properties.isBrowserChrome(); }
-    
-    /**
-     * Check if Firefox browser is used or not
-     *
-     * @return: true if using firefox browser
-     */
-    public boolean isBrowserFirefox() { return properties.isBrowserFirefox(); }
-    
-    /**
-     * Check if Opera browser is used or not
-     *
-     * @return: true if using opera browser
-     */
-    public boolean isBrowserOpera() { return properties.isBrowserOpera(); }
+    protected void initSetup() throws Exception { 
+        
+        logger.debug("Initializing a new BasePage -> selenium/webdriver and other settings using baseURL property (default initialization)");
+        
+        try {
+            
+            initializeCommonProperties();
+        
+            logger.info("Starting at baseURL: " + properties.get(StringCapabilities.URL.getCapability()));
+            
+            initSetup(properties.get(StringCapabilities.URL.getCapability()));
+        
+        }
+        catch(Exception e) { throw e; }
 
+    }
+    
+    /**
+     * Initialize this class to prepare for testing. Loads the properties file 
+     * located at <code>conf/seleniumconfiguration.properties</code>.
+     * <p>
+     * This method also calls "start" method.
+     * 
+     * @param startURL The starting URL to open after the webdriver has been initialized and new session is created.
+     * 
+     * @throws Exception
+     */
+    protected void initSetup(String startURL) throws Exception {
+        
+        try { initSetup(startURL, false); }
+        catch(Exception e) { throw e; }
+        
+    }
+    
+    /**
+     * Initialize this class to prepare for testing. Loads the properties file 
+     * located at <code>conf/seleniumconfiguration.properties</code>.
+     * <p>
+     * This method also calls "start" method.
+     * 
+     * @param startURL The starting URL to open after the webdriver has been initialized and new session is created.
+     * @param goToURL Tells this if needing to render the4 web page immediately
+     * 
+     * @throws Exception
+     */
+    protected void initSetup(String startURL, boolean goToURL) throws Exception { 
+      
+        try {
+            
+            initializeCommonProperties();
+            
+            this.url = startURL;
+            
+            logger.info("Initializing a new BaseMobilewebPage -> WebDriver and other settings");
+            
+            logger.info("startURL: " + startURL);
+            logger.info("goToURL: " + goToURL);
+           
+            logger.info("Properties loaded at: " + properties.PROPERTIESFILEPATH + ", size: " + properties.size());
+         
+            logger.info("Creating Selenium 3.0 instance: " + properties.get(StringCapabilities.ID_SELENIUM_DRIVER.getCapability()));
+
+            // screenshot properties
+            if(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability()) != null) { doScreenshot = Boolean.valueOf(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability())); }
+            
+            logger.info("Do screenshots on each page load: " + doScreenshot);
+            
+            // set the captureSeleniumCommands
+            if(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability()) != null) { captureSeleniumCommands = Boolean.valueOf(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability())); }
+            
+            logger.info("Capture selenium commands: " + captureSeleniumCommands);
+           
+            logger.info("Opening the start url: " + this.url);
+           
+        }
+        catch(Exception e) { throw e; }
+
+    }
+    
+    /**
+     * Create the web driver
+     * 
+     * @param startURL
+     * @param goToURL
+     * 
+     * @throws Exception 
+     */
+    protected void createWebDriver(String startURL, boolean goToURL) throws Exception { 
+      
+        try {
+            
+            logger.info("Creating Selenium/WebDriver: startURL: " + startURL + " goToURL: " + goToURL);
+            
+            DesiredCapabilities cap = new DesiredCapabilities();
+		
+            cap.setCapability(MobileCapabilityType.DEVICE_NAME, "Android Device");
+		
+            cap.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
+            
+            if(udid != null) cap.setCapability(MobileCapabilityType.UDID, udid);
+            
+            AndroidDriver<AndroidElement> driver = new AndroidDriver<AndroidElement>(new URL(properties.get(StringCapabilities.URL.getCapability())), cap);
+           
+            if(goToURL) driver.get(startURL);
+            
+            setWebDriver(driver);
+           
+            hasBeenInit = true;
+            
+            logger.info("Finished initializing Selenium/WebDriver: " + driver);
+           
+        }
+        catch(Exception e) { logger.error("Error creating webdriver"); logger.error(e); throw e; }
+
+    }
+   
+    /**
+     * Return the webdriver interface.
+     * 
+     * @return The webdriver interface
+     */
+    public WebDriver getWebDriver() { return driver; }
+    
     /**
      * Specifies the amount of time that Selenium will wait for actions to complete.
      * <p>
@@ -330,367 +403,80 @@ public class BasePage extends ViewBase {
     protected String getTimeout() { return this.timeout; }
     
     /**
-     * Return the add extra wait time after ajax complete option.
-     * 
-     * @return 
-     */
-    protected boolean getAddExtraWaitTimeAfterAjaxComplete() { return this.addExtraWaitTimeAfterAjaxComplete; }
-    
-    /**
-     * Return the extra wait time after ajax complete.
-     * 
-     * @return 
-     */
-    protected long getExtraWaitTimeAfterAjaxComplete() { return this.extraWaitTimeAfterAjaxComplete; }
-    	
-    /**
-     * Get the javascript library
-     * 
-     * @return 
-     */
-    protected String getJSLibrary() { return this.jsLibrary; }
-    
-    /**
-     * Return the webdriver interface.
-     * 
-     * @return The webdriver interface
-     */
-    public WebDriver getWebDriver() { return driver; }
-    
-    /**
-     * Return if we are forcing a sleep/delay and bypass ajax library to determine
-     * page loading completion.
-     * 
-     * @return useForcePageLoadWaitTime
-     */
-    public boolean getUseForcePageLoadWaitTime() { return useForcePageLoadWaitTime; }
-    
-    /**
-     * Return the forced sleep/delay which is used with 
-     * <code>useForcePageLoadWaitTime</code> to bypass ajax library 
-     * to determine page loading completion.
-     * 
-     * @return forcePageLoadWaitTime
-     */
-    public long getForcePageLoadWaitTime() { return forcePageLoadWaitTime; }
-
-    /**
-     * Opens an URL in the test frame. 
-     * <p>
-     * This accepts both relative and absolute URLs. 
-     * <p>
-     * The "open" command waits for the page to load before proceeding, ie. 
-     * the "AndWait" suffix is implicit. 
-     * <p>
-     * Note: The URL must be on the same domain as the runner HTML due to
-     * security restrictions in the browser (Same Origin Policy). If you need
-     * to open an URL on another domain, use the Selenium Server to start a
-     * new browser session on that domain. 
-     * 
-     * @param url The URL to open; may be relative or absolute.
-     * 
-     * @throws BasePageException
-     */
-    public void open(String url) throws BasePageException { 
-        
-        logger.debug("Open/Get a URL: " + url);
-        
-        info("Opening the url: " + url);
-        
-        commandList.addToList("open: " + url);
-        
-        PerformanceCapture.getInstance().start(getPageName());
-        
-        try {
-        
-            if(useHTTPAuth) passHTTPAuthentication(httpAuthUsername, httpAuthPassword, url);
-            else { this.driver.navigate().to(url); }
-        
-        }
-        catch(Exception e) { 
-            
-            logger.error(e); 
-            
-            throw new BasePageException(e);
-        
-        }
-        finally { completeOpen(); }
-        
-    }
-    
-    /**
-     * Opens an URL in the test frame. 
-     * <p>
-     * This accepts both relative and absolute URLs. It uses a Smart Robot to
-     * open a URL that is protected from loading by an authorization prompt.
-     * <p>
-     * The "open" command waits for the page to load before proceeding, ie. 
-     * the "AndWait" suffix is implicit. 
-     * <p>
-     * Note: The URL must be on the same domain as the runner HTML due to
-     * security restrictions in the browser (Same Origin Policy). If you need
-     * to open an URL on another domain, use the Selenium Server to start a
-     * new browser session on that domain. 
-     * 
-     * @param username
-     * @param password
-     * @param url The URL to open; may be relative or absolute.
-     * 
-     * @throws BasePageException
-     */
-    public void passHTTPAuthentication(String username, String password, String url) throws BasePageException { 
-        
-        logger.info("Opening a URL from HTTP Authorization prompt: " + username + "|" + password + "|" + url);
-       
-        if(username == null) throw new BasePageException("Username value for Robot interaction is null");
-        
-        if(password == null) throw new BasePageException("Password value for Robot interaction is null");
-        
-        commandList.addToList("open: " + username + "|" + password + "|" + url);
-        
-        try {
-            
-            //this.driver.get(url); 
-            this.driver.navigate().to(url);
-           
-            HTTPAuthenticationRobot robot = new HTTPAuthenticationRobot();
-
-            robot.type(username);
-
-            robot.keyPress(KeyEvent.VK_TAB);
-            robot.keyRelease(KeyEvent.VK_TAB);
-
-            robot.type(password);
-
-            robot.keyPress(KeyEvent.VK_TAB);
-            robot.keyRelease(KeyEvent.VK_TAB);
-
-            robot.keyPress(KeyEvent.VK_TAB);
-            robot.keyRelease(KeyEvent.VK_TAB);
-
-            PerformanceCapture.getInstance().start(getPageName());
-
-            robot.keyPress(KeyEvent.VK_ENTER);
-            robot.keyRelease(KeyEvent.VK_ENTER);
-            
-        }
-        catch(Exception e) { 
-            
-            logger.error(e); 
-            
-            throw new BasePageException(e);
-        
-        }
-        finally { completeOpen(); }
-        
-    }
-    
-    /**
-     * Perform any necessary final steps to the webdriver or basepage after open
-     */
-    private void completeOpen() {
-          
-            // this is here because firefox always prompts for authenticated url in automation
-            // so close it if it shows up
-            if(isBrowserFirefox()) {
-                    
-                try {
-                        
-                    WebDriverWait wait = new WebDriverWait(this.driver, Long.valueOf(this.timeout));
-                         
-                    Alert alert = wait.until(ExpectedConditions.alertIsPresent()); 
-                        
-                    alert.accept();
-                    
-                }
-                catch(Exception le) { }
-                    
-            }
-            
-    }
-    
-    /**
-     * This method logs some info to the Command List for reporting purpose 
-     * @param info
-     */
-    protected void logInfoToCommandList(String info) { commandList.addToList(info); }
-        
-    /**
-     * Wait for a page to load for <code>s</code> number of milliseconds (ms).
-     * 
-     * @param s The number of milliseconds (ms) 
-     */
-    protected void waitForPageToLoad(String s) throws BasePageException { 
-        
-        logger.debug("Waiting for page to load (ms): " + s);
-        
-        try { waitForPageToLoad(s, true); }
-        catch(BasePageException e) { throw e; }
-    
-    }
-    
-    /**
-     * Wait for a page to load for <code>s</code> number of milliseconds (ms).
-     * 
-     * @param s
-     * @param checkAjaxComplete 
-     * 
-     * @throws BasePageException
-     */
-    protected void waitForPageToLoad(String s, boolean checkAjaxComplete) throws BasePageException { 
-    
-        logger.debug("Waiting for page to load (ms) and check for any ajax calls to be completed: " + s + "|" + checkAjaxComplete);
-        
-        commandList.addToList("waitForPageToLoad: " + s); 
-        
-        if(this.useForcePageLoadWaitTime) {
-            
-            logger.debug("Forcing a page load wait time of: " + this.forcePageLoadWaitTime);
-            
-            sleep(this.forcePageLoadWaitTime);
-            
-        }
-        else {
-            
-            try {
-            
-                this.driver.manage().timeouts().implicitlyWait(Long.valueOf(this.timeout), TimeUnit.SECONDS);
-                  
-                logger.debug("Page content has been loaded, now waiting for Ajax completion");
-                   
-                if(checkAjaxComplete) {
-                    
-                    logger.debug("Waiting for Javascript and Ajax to complete loading on the page");
-                    
-                    if(!waitForJSandAjaxToLoad(Long.valueOf(this.timeout))) logger.info("Error when checking if javascript and ajax has been loaded");
-                
-                }
-              
-                if(addExtraWaitTimeAfterAjaxComplete) {
-                    
-                    logger.debug("Delay for Ajax completion for additional content loading from ajax call: " + extraWaitTimeAfterAjaxComplete);
-                    
-                    sleep(extraWaitTimeAfterAjaxComplete);
-                    
-                }
-            
-            }
-            catch(Exception e) { throw new BasePageException(e); }
-            
-        }
-    
-    }
-    
-    /**
-     * Assert a title equals exactly a string specified by <code>s</code>.
-     * 
-     * @param s The title
-     * 
-     * @throws BasePageException
-     */
-    protected void assertTitle(String s) throws BasePageException { 
-        
-        logger.debug("Asserting title is correct: " + s);
-        
-        commandList.addToList("assertTitle: " + s + "|" + getTitle());
-        
-        try { Assert.assertEquals(s.trim(), getTitle().trim()); }
-        catch(Exception e) { throw new BasePageException(e); }
-        
-    }
-
-    /**
-     * Return the page title.
-     * 
-     * @return The page title
-     * 
-     * @throws BasePageException
-     */
-    protected String getTitle() throws BasePageException { 
-        
-        try { 
-            
-            waitForJSandAjaxToLoad(Long.valueOf(this.timeout)); 
-            
-            return this.driver.getTitle(); 
-        
-        }
-        catch(Exception e) { throw new BasePageException(e); }
-            
-    }
-
-    /**
-     * Assert that text specified in <code>s</code> exists in the document.
-     * 
-     * @param s The text that should be present
+     * Go to the URL
      * 
      * @throws Exception 
      */
-    public void assertText(String s) throws Exception {
+    public void goToURL() throws Exception {
         
-        logger.info("Asserting expected text is present: " + s);
+        info("Go To URL in Mobile Browser: " + this.url);
+        logger.info("Go To URL in Mobile Browser: " + this.url);
         
-        commandList.addToList("assertText| " + s);
-        
-        try { Assert.assertTrue(this.driver.getPageSource().contains(s), "Expect text '" + s +"' in page but not found."); }
-        catch(Exception e) { throw new BasePageException(e); }
-    
-    }
-    
-    /**
-     * Check to see if text specified in <code>s</code> exists in the document.
-     * 
-     * @param s The text that should be present
-     * 
-     * @return 
-     */
-    public boolean containsText(String s) {
-        
-        logger.info("Checking that expected text is present: " + s);
-        
-        commandList.addToList("isTextPresent: " + s);
-        
-        try { return driver.getPageSource().contains(s); }
-        catch(Exception e) { return false; }
-        
-    }
-    
-    /**
-     * Simulates the user clicking the "close" button browser
-     */
-    public void close() { 
-        
-        logger.info("Closing the browser");
-        
-        commandList.addToList("close");
-        
-        try { if(driver != null) driver.quit(); }
+        try { addScreenshotToReport(); }
         catch(Exception e) { }
         
+        try { 
+            
+            if(!hasBeenInit) initSetup(this.url); 
+            
+            driver.get(this.url); 
+            
+            info("Go To URL successfully loaded in Mobile Browser: " + this.url);
+            logger.info("Go To URL successfully loaded in Mobile Browser: " + this.url);
+            
+            try { addScreenshotToReport(); }
+            catch(Exception e) { }
+           
+        }
+        catch(Exception e) { throw e; }
+        
     }
-
+    
+    /**
+     * Verify that the user is not able access a website (URL) from the mobile web browser - blocked.
+     * 
+     * @throws Exception 
+     */
+    public void verifyBlockedAccess() throws Exception {
+        
+        info("Verify Blocked access: " + this.url);
+        logger.info("Verify Blocked access: " + this.url);
+        
+        try { 
+            
+            validateWebElementContainsText_XPATH("This site"); 
+            validateWebElementContainsText_XPATH("be reached");
+            validateWebElementContainsText_XPATH("server IP address could not be found");
+        
+        }
+        catch(Exception e) { 
+            
+            printDOM();
+            
+            throw e; 
+            
+        }
+        finally {
+            
+            try { addScreenshotToReport(); }
+            catch(Exception e) { }
+            
+        }
+   
+    }
+    
     /**
      * Inherits the session from the previous page class.
      * 
      * @param basePage 
      */
-    protected void inheritSession(BasePage basePage) { 
+    protected void inheritSession(MobileWebPageBase basePage) { 
         
         logger.debug("Inheriting session from previous page: " + basePage);
        
         driver = basePage.getWebDriver();
        
         timeout = basePage.getTimeout();
-        
-        addExtraWaitTimeAfterAjaxComplete = basePage.getAddExtraWaitTimeAfterAjaxComplete();
-        
-        extraWaitTimeAfterAjaxComplete = basePage.getExtraWaitTimeAfterAjaxComplete();
-        
-        jsLibrary = basePage.getJSLibrary();
-        
-        useForcePageLoadWaitTime = basePage.getUseForcePageLoadWaitTime();
-        
-        forcePageLoadWaitTime = basePage.getForcePageLoadWaitTime();
       
         stopPerformanceCapturePageLoaded();
        
@@ -704,12 +490,12 @@ public class BasePage extends ViewBase {
      * 
      * @return The html source
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    protected String getHtmlSource() throws BasePageException { 
+    protected String getHtmlSource() throws Exception { 
         
         try { return driver.getPageSource(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
         
     }
     
@@ -737,9 +523,9 @@ public class BasePage extends ViewBase {
      * @param locator
      * @param value 
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void type(String locator, String value) throws BasePageException { 
+    public void type(String locator, String value) throws Exception { 
         
         logger.debug("Entering data: " + value + " into element at locator: " + locator);
         
@@ -747,7 +533,7 @@ public class BasePage extends ViewBase {
         
         try { 
             
-            if(locator == null) throw new BasePageException("Unable to enter data because xpath locator value is null");
+            if(locator == null) throw new Exception("Unable to enter data because xpath locator value is null");
             if(value != null) {
                 
                 this.driver.findElement(By.xpath(locator)).sendKeys(value);
@@ -756,7 +542,7 @@ public class BasePage extends ViewBase {
             } 
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
     
     }
 
@@ -765,9 +551,9 @@ public class BasePage extends ViewBase {
      *
      * @param locator
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void mouseEventClick(String locator) throws BasePageException {
+    public void mouseEventClick(String locator) throws Exception {
         
         commandList.addToList("mouseEventClick: " + locator);
 
@@ -780,7 +566,7 @@ public class BasePage extends ViewBase {
             js.executeScript("var evt = document.createEvent('MouseEvents');" + "evt.initMouseEvent('click',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" + "arguments[0].dispatchEvent(evt);", element);
         
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
 
@@ -791,9 +577,9 @@ public class BasePage extends ViewBase {
      * @param value 
      * * @param checkAjax check after waiting for ajax to complete
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void type(String locator, String value, boolean checkAjax) throws BasePageException { 
+    public void type(String locator, String value, boolean checkAjax) throws Exception { 
         
         logger.debug("Entering data: " + value + " into element at locator: " + locator);
         
@@ -806,23 +592,21 @@ public class BasePage extends ViewBase {
             waitForConditionElementXPathPresent(locator, timeout);
                 
             this.driver.findElement(By.xpath(locator)).sendKeys(value);
-            
-            waitForPageToLoad(timeout, checkAjax);
-            
+           
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
-    
+   
     /**
      * Type text <code>value</code> into a file chooser.
      * 
      * @param locator
      * @param value
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void enterTextIntoFileChooser(String locator, String value) throws BasePageException { 
+    public void enterTextIntoFileChooser(String locator, String value) throws Exception { 
         
         logger.info("Entering data into the active element: " + value);
         
@@ -837,7 +621,7 @@ public class BasePage extends ViewBase {
             element.sendKeys(value);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -846,9 +630,9 @@ public class BasePage extends ViewBase {
      * 
      * @param value
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void enterTextIntoFileChooser2(String value) throws BasePageException { 
+    public void enterTextIntoFileChooser2(String value) throws Exception { 
         
         logger.info("Entering data into a file chooser: " + value);
         
@@ -858,7 +642,7 @@ public class BasePage extends ViewBase {
         catch(Exception e) { 
             
             try { driver.findElement(By.xpath("//input[@type='file']")); }
-            catch(Exception le) { printDOM(); throw new BasePageException(le); }
+            catch(Exception le) { printDOM(); throw new Exception(le); }
             
         }
     
@@ -872,9 +656,9 @@ public class BasePage extends ViewBase {
      * @param locator An element locator
      * @param checkAjax check after waiting for ajax to complete
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void click(String locator, boolean checkAjax) throws BasePageException { 
+    public void click(String locator, boolean checkAjax) throws Exception { 
 
         logger.debug("Clicking on element with locator: " + locator + " turning off ajax completion checking");
 
@@ -886,8 +670,6 @@ public class BasePage extends ViewBase {
               
         find(By.xpath(locator)).click();
 
-        waitForPageToLoad(timeout, checkAjax);
-
     }
 
     /**
@@ -897,32 +679,32 @@ public class BasePage extends ViewBase {
      * 
      * @param locator An element locator
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void click(String locator) throws BasePageException { 
+    public void click(String locator) throws Exception { 
         
         logger.debug("Clicking on element with locator: " + locator);
     
         commandList.addToList("click: " + locator);
         
         try { click(locator, true); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
     
     }
     
     /**
      * Ends the test session, killing the browser.
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void stop() throws BasePageException { 
+    public void stop() throws Exception { 
         
         logger.info("Stopping the selenium session");
     
         commandList.addToList("stop");
         
         try { this.driver.quit(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
     
     }
      
@@ -932,12 +714,12 @@ public class BasePage extends ViewBase {
      * 
      * @param timeout 
      */
-    public void waitForAjaxCompletion(long timeout) throws BasePageException {
+    public void waitForAjaxCompletion(long timeout) throws Exception {
         
         logger.debug("Wait for Ajax and javascript execution completion with timeout: " + timeout);
         
         try { waitForJSandAjaxToLoad(timeout); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
     
     }
     
@@ -949,9 +731,9 @@ public class BasePage extends ViewBase {
      * @param elementId
      * @param timeout
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void waitForConditionElementIDPresent(String elementId, String timeout) throws BasePageException {
+    public void waitForConditionElementIDPresent(String elementId, String timeout) throws Exception {
         
         logger.debug("Wait For Condition - element Id present: " + timeout + "|" + elementId);
         
@@ -966,7 +748,7 @@ public class BasePage extends ViewBase {
             WebElement myDynamicElement = (new WebDriverWait(driver, Long.valueOf(timeout))).until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
          
     }
     
@@ -978,9 +760,9 @@ public class BasePage extends ViewBase {
      * @param xpath
      * @param timeout timeout in seconds
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void waitForConditionElementXPathPresent(String xpath, String timeout) throws BasePageException {
+    public void waitForConditionElementXPathPresent(String xpath, String timeout) throws Exception {
         
         logger.debug("Wait For Condition - xpath present: " + timeout + "|" + xpath);
         
@@ -993,7 +775,7 @@ public class BasePage extends ViewBase {
             WebElement myDynamicElement = (new WebDriverWait(driver, Long.valueOf(timeout))).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
          
     }
     
@@ -1005,9 +787,9 @@ public class BasePage extends ViewBase {
      * @param classname
      * @param timeout timeout in seconds
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void waitForConditionElementClassnamePresent(String classname, String timeout) throws BasePageException {
+    public void waitForConditionElementClassnamePresent(String classname, String timeout) throws Exception {
         
         logger.debug("Wait For Condition - xpath present: " + timeout + "|" + classname);
         
@@ -1020,7 +802,7 @@ public class BasePage extends ViewBase {
             WebElement myDynamicElement = (new WebDriverWait(driver, Long.valueOf(timeout))).until(ExpectedConditions.presenceOfElementLocated(By.className(classname)));
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
          
     }
     
@@ -1033,16 +815,16 @@ public class BasePage extends ViewBase {
      * 
      * @return <code>true</code> if the pattern matches the text, <code>false</code> otherwise
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public boolean isTextPresent(String s) throws BasePageException { 
+    public boolean isTextPresent(String s) throws Exception { 
         
         logger.info("Asserting that text is present in the rendered page: " + s);
     
         commandList.addToList("isTextPresent: " + s); 
         
         try { return getHtmlSource().contains(s); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
     
     }
     
@@ -1056,14 +838,14 @@ public class BasePage extends ViewBase {
      * 
      * @return The text of the element
      */
-    public String getText(String locator) throws BasePageException { 
+    public String getText(String locator) throws Exception { 
         
         logger.info("Get text from locator: " + locator);
     
         commandList.addToList("getText: " + locator);
         
         try { return find(By.xpath(locator)).getText(); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
         
     }
     
@@ -1077,30 +859,30 @@ public class BasePage extends ViewBase {
      * 
      * @return The text of the element
      */
-    public String getValue(String locator) throws BasePageException { 
+    public String getValue(String locator) throws Exception { 
         
         logger.info("Get value from locator: " + locator);
     
         commandList.addToList("getValue: " + locator);
         
         try { return find(By.xpath(locator)).getAttribute("value"); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw e; }
     
     }
     
     /**
      * Simulates the user clicking the "Refresh" button on their browser. 
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void refresh() throws BasePageException { 
+    public void refresh() throws Exception { 
         
         logger.info("Simulate Refresh browser button click");
     
         commandList.addToList("refresh");
         
         try { this.driver.navigate().refresh(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
         
     }
     
@@ -1113,14 +895,14 @@ public class BasePage extends ViewBase {
      * 
      * @return <code>true</code> if the checkbox is checked, <code>false</code> otherwise
      */
-    protected boolean isChecked(String locator) throws BasePageException { 
+    protected boolean isChecked(String locator) throws Exception { 
         
         logger.info("Is the element checked: " + locator);
     
         commandList.addToList("isChecked: " + locator);
         
         try { return find(By.xpath(locator)).isSelected(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
         
     }
     
@@ -1129,14 +911,14 @@ public class BasePage extends ViewBase {
      * 
      * @return The entire text of the page
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    protected String getBodyText() throws BasePageException { 
+    protected String getBodyText() throws Exception { 
     
         commandList.addToList("getBodyText");
         
         try { return this.driver.getPageSource(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
     
     }
   
@@ -1145,25 +927,25 @@ public class BasePage extends ViewBase {
      * 
      * @param locator An element locator
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void check(String locator) throws BasePageException { 
+    protected void check(String locator) throws Exception { 
         
         logger.info("Checking the element at locator: " + locator);
         
         commandList.addToList("check: " + locator);
         
         try { if(!find(By.xpath(locator)).isSelected()) find(By.xpath(locator)).click(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
     
     }
  
     /**
      * Take a screenshot.
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void doScreenshot() throws BasePageException {
+    public void doScreenshot() throws Exception {
         
         logger.info("Attempting to do a screenshot of the desktop");
     
@@ -1175,23 +957,23 @@ public class BasePage extends ViewBase {
                                    + "image" + System.currentTimeMillis(), ".png");
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
     
     }
     
     /**
      * Maximize the browser window.
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void maximizeWindow() throws BasePageException { 
+    public void maximizeWindow() throws Exception { 
         
         logger.debug("Maximizing the browser window");
         
         commandList.addToList("maximizeWindow");
         
         try { driver.manage().window().maximize(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
    
     }
     
@@ -1221,14 +1003,14 @@ public class BasePage extends ViewBase {
      * @param message - message to describe assertion in case of fail
      * @param locator
      */
-    protected void assertElementPresent(String message, String locator) throws BasePageException { 
+    protected void assertElementPresent(String message, String locator) throws Exception { 
         
         logger.info("Assert the element is present/visible: " + locator + "|" + message);
         
         commandList.addToList("assertElementPresent: " + locator + "|" + message);
         
         try { Assert.assertTrue(isElementPresent(locator), message); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw e; }
     
     }
     
@@ -1238,14 +1020,14 @@ public class BasePage extends ViewBase {
      * @param message - message to describe assertion in case of fail
      * @param locator
      */
-    protected void assertElementNotPresent(String message, String locator) throws BasePageException {
+    protected void assertElementNotPresent(String message, String locator) throws Exception {
         
         logger.info("Assert the element is not present/visible: " + locator + "|" + message);
     
         commandList.addToList("assertElementNotPresent: " + locator + "|" + message);
         
         try { Assert.assertFalse(isElementPresent(locator), message); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
     
     }
     
@@ -1330,9 +1112,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementContainingText(String text, String className) throws BasePageException {
+    public void clickOnWebElementContainingText(String text, String className) throws Exception {
         
         logger.info("Clicking on web element containing text: " + text + "|" + className);
             
@@ -1355,9 +1137,7 @@ public class BasePage extends ViewBase {
                 if(data.contains(text)) {
                     
                     element.click();
-                    
-                    waitForPageToLoad(timeout);
-                        
+                      
                     return;
                 
                 }
@@ -1368,7 +1148,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1379,9 +1159,9 @@ public class BasePage extends ViewBase {
      * @param text2
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void clickOnWebElementContainingText(String text1, String text2, String className) throws BasePageException {
+    protected void clickOnWebElementContainingText(String text1, String text2, String className) throws Exception {
        
         logger.info("Clicking on web element containing text: " + text1 + "|" + text2 + "|" + className);
         
@@ -1400,9 +1180,7 @@ public class BasePage extends ViewBase {
                 if(data.contains(text1) && data.contains(text2)) {
                    
                     element.click();
-                    
-                    waitForPageToLoad(timeout);
-                        
+                       
                     return;
                 
                 }
@@ -1413,7 +1191,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text1: " + text1 + " and text2: " + text2);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1423,9 +1201,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void clickOnWebElementMatchingText(String text, String className) throws BasePageException {
+    protected void clickOnWebElementMatchingText(String text, String className) throws Exception {
         
         logger.info("Clicking on web element matching text: " + text + "|" + className);
         
@@ -1444,9 +1222,7 @@ public class BasePage extends ViewBase {
                 if(data.equals(text.trim())) {
                    
                     element.click();
-                    
-                    waitForPageToLoad(timeout);
-                        
+                       
                     return;
                 
                 }
@@ -1457,7 +1233,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find text in any screen element matching type: " + className + " and text: " + text);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1467,9 +1243,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void validateWebElementContainingText(String text, String className) throws BasePageException {
+    public void validateWebElementContainingText(String text, String className) throws Exception {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -1501,7 +1277,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1511,9 +1287,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateWebElementMatchingText(String text, String className) throws BasePageException {
+    protected void validateWebElementMatchingText(String text, String className) throws Exception {
         
         logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
             
@@ -1537,7 +1313,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1547,9 +1323,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateWebElementContainingTextValueAttribute(String text, String className) throws BasePageException {
+    protected void validateWebElementContainingTextValueAttribute(String text, String className) throws Exception {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -1573,7 +1349,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1583,9 +1359,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateWebElementMatchingTextValueAttribute(String text, String className) throws BasePageException {
+    protected void validateWebElementMatchingTextValueAttribute(String text, String className) throws Exception {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -1609,7 +1385,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1619,9 +1395,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void clickOnWebElementContainingTextValueAttribute(String text, String className) throws BasePageException {
+    protected void clickOnWebElementContainingTextValueAttribute(String text, String className) throws Exception {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
         
@@ -1640,9 +1416,7 @@ public class BasePage extends ViewBase {
                 if(data.contains(text)) {
                    
                     element.click();
-                    
-                    waitForPageToLoad(timeout);
-                  
+                   
                     return;
                     
                 };
@@ -1653,7 +1427,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1663,9 +1437,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void clickOnWebElementMatchingTextValueAttribute(String text, String className) throws BasePageException {
+    protected void clickOnWebElementMatchingTextValueAttribute(String text, String className) throws Exception {
         
         logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
         
@@ -1684,9 +1458,7 @@ public class BasePage extends ViewBase {
                 if(data.equals(text)) {
                     
                     element.click();
-                    
-                    waitForPageToLoad(timeout);
-                    
+                   
                     return;
                     
                 };
@@ -1697,7 +1469,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not validate a screen component with text in any screen element matching type: " + className + " and text: " + text);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1706,9 +1478,9 @@ public class BasePage extends ViewBase {
      * 
      * @param name
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateWebElementContainingTextByName(String name) throws BasePageException {
+    protected void validateWebElementContainingTextByName(String name) throws Exception {
         
         logger.info("Validating that element of name: " + name + " exists");
             
@@ -1722,7 +1494,7 @@ public class BasePage extends ViewBase {
             if(element == null) throw new Exception("Could not validate a screen component with screen element matching name: " + name);
                    
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1732,9 +1504,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateAllWebElementsDoNotContainText(String text, String className) throws BasePageException {
+    protected void validateAllWebElementsDoNotContainText(String text, String className) throws Exception {
         
         logger.info("Validate all web elements do not contain text:" + text + "|" + className);
         
@@ -1755,7 +1527,7 @@ public class BasePage extends ViewBase {
             }
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1765,9 +1537,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateAllWebElementsDoNotContainTextByValueAttribute(String text, String className) throws BasePageException {
+    protected void validateAllWebElementsDoNotContainTextByValueAttribute(String text, String className) throws Exception {
         
         logger.info("Validate all web elements do not contain text by value attribute:" + text + "|" + className);
         
@@ -1788,16 +1560,16 @@ public class BasePage extends ViewBase {
             }
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
     /**
      * Get list of text values from web elements matching xpath value
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected List<String> getListOfTextValuesFromAllMatchingXPath(String xpath) throws BasePageException {
+    protected List<String> getListOfTextValuesFromAllMatchingXPath(String xpath) throws Exception {
         
         logger.info("Get list of text values from all matching XPath:" + xpath);
         
@@ -1814,7 +1586,7 @@ public class BasePage extends ViewBase {
             return values;
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1845,7 +1617,7 @@ public class BasePage extends ViewBase {
             return true;
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1873,7 +1645,7 @@ public class BasePage extends ViewBase {
             return textValues.contains(value);
            
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -1885,9 +1657,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected int getElementTypeIndexMatchingText(String text, String className) throws BasePageException {
+    protected int getElementTypeIndexMatchingText(String text, String className) throws Exception {
         
         logger.info("Get element type index matching text:" + text + "|" + className);
         
@@ -1915,7 +1687,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find the index of a screen component with text in any screen element matching type: " + className + " and text: " + text);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -1927,9 +1699,9 @@ public class BasePage extends ViewBase {
      * 
      * @return 
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected int getElementTypeIndexContainingText(String text, String className) throws BasePageException {
+    protected int getElementTypeIndexContainingText(String text, String className) throws Exception {
         
         logger.info("Get element type index containing text:" + text + "|" + className);
         
@@ -1959,7 +1731,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find the index of a screen component with text in any screen element containing type/classname: " + className + " and text: " + text);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -1972,9 +1744,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public String getWebElementIdForElementNameAttributeContainsText(String className, String text) throws BasePageException {
+    public String getWebElementIdForElementNameAttributeContainsText(String className, String text) throws Exception {
         
         logger.info("Get web element Id for element name attribute contains text:" + text + "|" + className);
         
@@ -1999,7 +1771,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Unable to find cell displayed value for text: " + text);
           
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -2019,9 +1791,9 @@ public class BasePage extends ViewBase {
      * 
      * @param value
      *
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementWithText(String value) throws BasePageException {
+    public void clickOnWebElementWithText(String value) throws Exception {
        
         logger.info("Clicking on any web element with text value: " + value);
         
@@ -2030,11 +1802,9 @@ public class BasePage extends ViewBase {
         try { 
             
             find(By.linkText(value)).click();
-            
-            waitForPageToLoad(timeout);
-        
+           
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -2043,16 +1813,16 @@ public class BasePage extends ViewBase {
      * 
      * @param element
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clearWebElement(WebElement element) throws BasePageException { 
+    public void clearWebElement(WebElement element) throws Exception { 
         
         logger.debug("Clear web element: " + element);
         
         commandList.addToList("clearWebElement:" + element);
     
         try { element.clear(); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -2061,16 +1831,16 @@ public class BasePage extends ViewBase {
      * 
      * @param locator
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clearWebElement(String locator) throws BasePageException { 
+    public void clearWebElement(String locator) throws Exception { 
         
         logger.debug("Clear web element: " + locator);
         
         commandList.addToList("clearWebElement:" + locator);
     
         try { clearWebElement(getWebElementWithLocator(locator)); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -2081,12 +1851,12 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithId(String id) throws BasePageException {
+    public WebElement getWebElementWithId(String id) throws Exception {
       
         try { return getWebElementWithId(id, false); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -2098,9 +1868,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithId(String id, boolean disableImplicitWait) throws BasePageException {
+    public WebElement getWebElementWithId(String id, boolean disableImplicitWait) throws Exception {
        
         logger.info("Preparing to find web element by id: " + id + "|" + disableImplicitWait);
         
@@ -2113,7 +1883,7 @@ public class BasePage extends ViewBase {
             return find(By.id(id)); 
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         finally {
             
             // enable implicit wait regardless if it was turned off at the beginning of the method
@@ -2131,12 +1901,12 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithLocator(String locator) throws BasePageException {
+    public WebElement getWebElementWithLocator(String locator) throws Exception {
        
         try { return getWebElementWithLocator(locator, false); }
-        catch(BasePageException e) { throw e; }
+        catch(Exception e) { throw e; }
         
     }
     
@@ -2148,9 +1918,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithLocator(String locator, boolean disableImplicitWait) throws BasePageException {
+    public WebElement getWebElementWithLocator(String locator, boolean disableImplicitWait) throws Exception {
        
         logger.debug("Preparing to find web element by locator: " + locator + "|" + disableImplicitWait);
         
@@ -2163,7 +1933,7 @@ public class BasePage extends ViewBase {
             return find(By.xpath(locator)); 
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         finally {
             
             // enable implicit wait regardless if it was turned off at the beginning of the method
@@ -2180,9 +1950,9 @@ public class BasePage extends ViewBase {
      * @param xpath
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void enterTextIntoRichTextEditor(String xpath, String text) throws BasePageException {
+    public void enterTextIntoRichTextEditor(String xpath, String text) throws Exception {
        
         logger.info("Enter data into rich text editor: " + xpath + "|" + text);
         
@@ -2199,7 +1969,7 @@ public class BasePage extends ViewBase {
             driver.switchTo().window(driver.getWindowHandle()); 
         
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
 
@@ -2212,9 +1982,9 @@ public class BasePage extends ViewBase {
      * 
      * @return the value of the specified attribute 
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public String getWebElementAttribute(String xpath, String attributeLocator) throws BasePageException {
+    public String getWebElementAttribute(String xpath, String attributeLocator) throws Exception {
        
         logger.info("Get web element attribute:" + xpath + "|" + attributeLocator);
         
@@ -2227,7 +1997,7 @@ public class BasePage extends ViewBase {
             return element.getAttribute(attributeLocator);
 
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -2241,9 +2011,9 @@ public class BasePage extends ViewBase {
      * 
      * @return the value of the specified attribute 
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public List<String> getWebElementsAttribute(String xpath, String attributeLocator) throws BasePageException {
+    public List<String> getWebElementsAttribute(String xpath, String attributeLocator) throws Exception {
        
         logger.info("Get web elements attribute:" + xpath + "|" + attributeLocator);
         
@@ -2260,7 +2030,7 @@ public class BasePage extends ViewBase {
             return values;
 
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -2269,9 +2039,9 @@ public class BasePage extends ViewBase {
      * 
      * @param xpath
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void switchToWorkarea(String xpath) throws BasePageException {
+    public void switchToWorkarea(String xpath) throws Exception {
         
         logger.info("Switch to work area located at: " + xpath);
         
@@ -2286,23 +2056,23 @@ public class BasePage extends ViewBase {
             driver.switchTo().frame(frame);
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
    
     }
     
     /**
      * Switch back to current window
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void switchBackToCurrentWindow() throws BasePageException {
+    public void switchBackToCurrentWindow() throws Exception {
         
         logger.info("Switch back to current window");
         
         commandList.addToList("switchBackToCurrentWindow");
        
         try { this.driver.switchTo().defaultContent(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
   
     }
     
@@ -2315,9 +2085,9 @@ public class BasePage extends ViewBase {
      * 
      * @param locator
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void elementIsDisplayedWithTimeout(String locator) throws BasePageException {
+    public void elementIsDisplayedWithTimeout(String locator) throws Exception {
         
         logger.info("Element is displayed with timeout:" + locator);
         
@@ -2334,23 +2104,23 @@ public class BasePage extends ViewBase {
             }
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
      
     }
     
     /**
      * Simulate an Enter key press on the active element
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickEnterKeyOnActiveElement() throws BasePageException {
+    public void clickEnterKeyOnActiveElement() throws Exception {
         
         logger.info("Click enter key on active element");
         
         commandList.addToList("clickEnterKeyOnActiveElement");
         
         try { this.driver.switchTo().activeElement().sendKeys(Keys.ENTER); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
      }
     
@@ -2361,9 +2131,9 @@ public class BasePage extends ViewBase {
       * 
      * @param locator
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void selectMultipleElements(String locator) throws BasePageException {
+    public void selectMultipleElements(String locator) throws Exception {
         
         logger.info("Select multiple elements:" + locator);
         
@@ -2376,7 +2146,7 @@ public class BasePage extends ViewBase {
             actions.keyDown(Keys.CONTROL).click(find(By.xpath(locator))).keyUp(Keys.CONTROL).build().perform();
                  
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
               
     }
     
@@ -2387,16 +2157,16 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public String getSelectedOptionValue(String xpathLocator) throws BasePageException {
+    public String getSelectedOptionValue(String xpathLocator) throws Exception {
         
         logger.info("Get selected option value:" + xpathLocator);
         
         commandList.addToList("getSelectedOptionValue: " + xpathLocator);
         
         try { return new Select(find(By.xpath(xpathLocator))).getFirstSelectedOption().getText(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -2408,10 +2178,10 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
       
-    public String getObjectAttribute(String object, String attributeLocator) throws BasePageException {
+    public String getObjectAttribute(String object, String attributeLocator) throws Exception {
           
         logger.info("Get object attribute:" + object + "|" + attributeLocator);
           
@@ -2424,7 +2194,7 @@ public class BasePage extends ViewBase {
             return objectName.getAttribute(attributeLocator);
         
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
 
     }
 
@@ -2433,9 +2203,9 @@ public class BasePage extends ViewBase {
      *
      * @param xpath
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void scrollingToElementofAPage(String xpath) throws BasePageException {
+    public void scrollingToElementofAPage(String xpath) throws Exception {
         
         commandList.addToList("scrollingToElementOfAPage: " + xpath);
 
@@ -2446,7 +2216,7 @@ public class BasePage extends ViewBase {
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
             
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
     }
 
     /**
@@ -2456,9 +2226,9 @@ public class BasePage extends ViewBase {
      * @param x_axis
      * @param y_axis
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void dragAndDropBy(String xpath, int x_axis, int y_axis) throws BasePageException {
+    public void dragAndDropBy(String xpath, int x_axis, int y_axis) throws Exception {
 
         commandList.addToList("dragAndDropBy " + xpath + " x-axis|" + x_axis + " y-axis|" + y_axis);
 
@@ -2471,7 +2241,7 @@ public class BasePage extends ViewBase {
             action.dragAndDropBy(drag, x_axis, y_axis).build().perform();
 
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
     }
 
 
@@ -2570,7 +2340,7 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
     protected String getModifiedStartURL() {
         
@@ -2597,7 +2367,7 @@ public class BasePage extends ViewBase {
     public String getElementDOM() throws Exception {
         
         try { return this.driver.getPageSource(); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
     
@@ -2628,9 +2398,9 @@ public class BasePage extends ViewBase {
     /**
      * Scroll down
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void scrollDown() throws BasePageException {
+    public void scrollDown() throws Exception {
         
         logger.info("scroll down");
         
@@ -2643,7 +2413,7 @@ public class BasePage extends ViewBase {
             js.executeScript("window.scrollBy(0,250)", "");
                  
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
               
     }
     
@@ -2652,9 +2422,9 @@ public class BasePage extends ViewBase {
      * 
      * @param pixelsDown
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void scrollDown(int pixelsDown) throws BasePageException {
+    public void scrollDown(int pixelsDown) throws Exception {
         
         logger.info("scroll down: " + pixelsDown);
         
@@ -2667,16 +2437,16 @@ public class BasePage extends ViewBase {
             js.executeScript("window.scrollBy(0," + String.valueOf(pixelsDown) + ")", "");
                  
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
               
     }
     
     /**
      * Scroll up
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void scrollUp() throws BasePageException {
+    public void scrollUp() throws Exception {
         
         logger.info("scroll up");
         
@@ -2689,7 +2459,7 @@ public class BasePage extends ViewBase {
             js.executeScript("window.scrollBy(0,-250)", "");
                  
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
               
     }
     
@@ -2698,9 +2468,9 @@ public class BasePage extends ViewBase {
      * 
      * @param pixelsUp
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void scrollUp(int pixelsUp) throws BasePageException {
+    public void scrollUp(int pixelsUp) throws Exception {
         
         logger.info("scroll up");
         
@@ -2713,16 +2483,16 @@ public class BasePage extends ViewBase {
             js.executeScript("window.scrollBy(0,-" + String.valueOf(pixelsUp) + ")", "");
                  
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
               
     }
     
     /**
      * Scroll down to the bottpm of the web page
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void scrollDownToBottomOfPage() throws BasePageException {
+    public void scrollDownToBottomOfPage() throws Exception {
         
         logger.info("scroll down to botom of page");
         
@@ -2735,7 +2505,7 @@ public class BasePage extends ViewBase {
             js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
                  
         }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
               
     }
     
@@ -2744,16 +2514,16 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void clickOnWebElementByPartialLinkText(String text) throws BasePageException {
+    protected void clickOnWebElementByPartialLinkText(String text) throws Exception {
         
         logger.info("Click on a link containing the text: " + text);
             
         commandList.addToList("clickOnWebElementByPartialLinkText: " + text);
         
         try { find(By.partialLinkText(text)).click(); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -2762,16 +2532,16 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void validateLinkIsVisible(String text) throws BasePageException {
+    protected void validateLinkIsVisible(String text) throws Exception {
         
         logger.info("Validate a link matching the text is visible: " + text);
             
         commandList.addToList("validateLinkIsVisible: " + text);
         
         try { find(By.linkText(text)); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -2780,16 +2550,16 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void clickOnWebElementByLinkText(String text) throws BasePageException {
+    protected void clickOnWebElementByLinkText(String text) throws Exception {
         
         logger.info("Click on a link matching the text: " + text);
             
         commandList.addToList("clickOnWebElementByPartialLinkText: " + text);
         
         try { find(By.linkText(text)).click(); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
 
@@ -2800,16 +2570,16 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public List<WebElement> getWebElementsWithCSS(String cssSelector) throws BasePageException {
+    public List<WebElement> getWebElementsWithCSS(String cssSelector) throws Exception {
 
         logger.debug("Preparing to find web element by css selector: " + cssSelector);
 
         commandList.addToList("getWebElementWithCSS:" + cssSelector);
         
         try { return findElements(By.cssSelector(cssSelector)); }
-        catch(Exception e) { throw new BasePageException(e); }
+        catch(Exception e) { throw new Exception(e); }
         
     }
 
@@ -2819,9 +2589,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param cssSelector
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementContainingTextCSSSelector(String text, String cssSelector) throws BasePageException {
+    public void clickOnWebElementContainingTextCSSSelector(String text, String cssSelector) throws Exception {
        
         logger.debug("Clicking on web element with css selector and containing text: " + text + "|" + cssSelector);
         
@@ -2830,8 +2600,6 @@ public class BasePage extends ViewBase {
         try {
                     
             getWebElementWithCSSAndContainsText(text, cssSelector).click();
-                            
-            waitForPageToLoad(timeout);
             
         }
         catch(Exception e) { throw e; }
@@ -2844,9 +2612,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param cssSelector
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementMatchingTextCSSSelector(String text, String cssSelector) throws BasePageException {
+    public void clickOnWebElementMatchingTextCSSSelector(String text, String cssSelector) throws Exception {
        
         logger.info("Clicking on web element with css selector and matching text: " + text + "|" + cssSelector);
         
@@ -2855,9 +2623,7 @@ public class BasePage extends ViewBase {
         try {
                     
             getWebElementWithCSSAndMatchesText(text, cssSelector).click();
-                            
-            waitForPageToLoad(timeout);
-            
+           
         }
         catch(Exception e) { throw e; }
         
@@ -2869,11 +2635,11 @@ public class BasePage extends ViewBase {
      * @param text
      * @param cssSelector
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      * 
      * @return
      */
-    public WebElement getWebElementWithCSSAndContainsText(String text, String cssSelector) throws BasePageException {
+    public WebElement getWebElementWithCSSAndContainsText(String text, String cssSelector) throws Exception {
 
         logger.debug("Get the web element with css selector and containing text: " + text + "|" + cssSelector);
 
@@ -2899,7 +2665,7 @@ public class BasePage extends ViewBase {
                throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
         
          }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
 
         
 
@@ -2913,9 +2679,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithCSSAndMatchesText(String text, String cssSelector) throws BasePageException {
+    public WebElement getWebElementWithCSSAndMatchesText(String text, String cssSelector) throws Exception {
 
         logger.debug("Get the web element with css selector and containing text: " + text + "|" + cssSelector);
 
@@ -2941,7 +2707,7 @@ public class BasePage extends ViewBase {
                 throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
    
         }    
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
 
     }
 
@@ -2955,9 +2721,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithCSSAndMatchesTypeAndContainsText(String type, String typeValue, String cssSelector) throws BasePageException {
+    public WebElement getWebElementWithCSSAndMatchesTypeAndContainsText(String type, String typeValue, String cssSelector) throws Exception {
        
         logger.info("Get a web element matching the css selector and matches a type and containing the text: " + type + "|" + typeValue + "|" + cssSelector);
         
@@ -2983,7 +2749,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + typeValue + " and matching type: " + type);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -2995,9 +2761,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementWithCSSAndMatchesDataAtIdAndContainsText(String value, String cssSelector) throws BasePageException {
+    public WebElement getWebElementWithCSSAndMatchesDataAtIdAndContainsText(String value, String cssSelector) throws Exception {
        
         logger.info("Get a web element matching the css selector and matches a type and containing the text: " + value + "|" + cssSelector);
         
@@ -3023,7 +2789,7 @@ public class BasePage extends ViewBase {
             throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + value + " and matching type: data-atid");
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3034,9 +2800,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param cssSelector
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementWithCSSAndMatchesTypeAndContainsText(String type, String text, String cssSelector) throws BasePageException {
+    public void clickOnWebElementWithCSSAndMatchesTypeAndContainsText(String type, String text, String cssSelector) throws Exception {
        
         logger.info("Click on a web element matching the css selector and matches a type and containing the text: " + type + "|" + text + "|" + cssSelector);
         
@@ -3053,9 +2819,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param cssSelector
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementWithCSSAndMatchesAtIdAndContainsText(String text, String cssSelector) throws BasePageException {
+    public void clickOnWebElementWithCSSAndMatchesAtIdAndContainsText(String text, String cssSelector) throws Exception {
        
         logger.info("Click on a web element matching the css selector and matches a type and containing the text: " + text + "|" + cssSelector);
         
@@ -3073,16 +2839,16 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementAtResourceId(String resourceId) throws BasePageException {
+    public WebElement getWebElementAtResourceId(String resourceId) throws Exception {
        
         logger.info("Get the web element at resource id: " + resourceId);
         
         commandList.addToList("getWebElementAtResourceId:" + resourceId);
         
         try { return find(By.id(resourceId)); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3093,12 +2859,12 @@ public class BasePage extends ViewBase {
      * 
      * @return
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public WebElement getWebElementAtDataAtId(String id) throws BasePageException {
+    public WebElement getWebElementAtDataAtId(String id) throws Exception {
        
         try { return getWebElementWithLocator("//*[@data-atid='" + id + "']"); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3107,9 +2873,9 @@ public class BasePage extends ViewBase {
      * 
      * @param resourceId
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clickOnWebElementWithResourceId(String resourceId) throws BasePageException {
+    public void clickOnWebElementWithResourceId(String resourceId) throws Exception {
        
         logger.info("Click on the element with the matching resource id attribute: " + resourceId);
         
@@ -3128,9 +2894,9 @@ public class BasePage extends ViewBase {
      * @param cssSelector
      * @param value
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void enterTextIntoWebElementUsingCSSSelector(String type, String typeValue, String cssSelector, String value) throws BasePageException { 
+    public void enterTextIntoWebElementUsingCSSSelector(String type, String typeValue, String cssSelector, String value) throws Exception { 
         
         logger.debug("Type text value into a web element at the CSS selector: " + cssSelector + "|" + typeValue + "|" + value);
         
@@ -3143,7 +2909,7 @@ public class BasePage extends ViewBase {
             element.sendKeys(value);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3153,9 +2919,9 @@ public class BasePage extends ViewBase {
      * @param resourceId
      * @param value
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void enterTextIntoWebElementUsingResourceId(String resourceId, String value) throws BasePageException { 
+    public void enterTextIntoWebElementUsingResourceId(String resourceId, String value) throws Exception { 
         
         logger.debug("Type text value into a web element at the resource id: " + resourceId + "|" + value);
         
@@ -3168,7 +2934,7 @@ public class BasePage extends ViewBase {
             element.sendKeys(value);
              
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3179,9 +2945,9 @@ public class BasePage extends ViewBase {
      * @param cssSelector
      * @param value
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void enterTextIntoWebElementUsingDataAtId(String dataAtIdValue, String cssSelector, String value) throws BasePageException { 
+    public void enterTextIntoWebElementUsingDataAtId(String dataAtIdValue, String cssSelector, String value) throws Exception { 
         
         logger.debug("Type text value into a web element at the data-atid: " + cssSelector + "|" + dataAtIdValue + "|" + value);
         
@@ -3194,7 +2960,7 @@ public class BasePage extends ViewBase {
             element.sendKeys(value);
              
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3204,9 +2970,9 @@ public class BasePage extends ViewBase {
      * @param dataAtIdValue
      * @param value
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void enterTextIntoWebElementUsingDataAtId(String dataAtIdValue, String value) throws BasePageException { 
+    public void enterTextIntoWebElementUsingDataAtId(String dataAtIdValue, String value) throws Exception { 
         
         logger.debug("Type text value into a web element at the data-atid: " + "|" + dataAtIdValue + "|" + value);
         
@@ -3219,7 +2985,7 @@ public class BasePage extends ViewBase {
             element.sendKeys(value);
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3230,16 +2996,16 @@ public class BasePage extends ViewBase {
      * 
      * @return 
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public String getTextInWebElementUsingResourceId(String resourceId) throws BasePageException { 
+    public String getTextInWebElementUsingResourceId(String resourceId) throws Exception { 
         
         logger.debug("Get the text value in a web element at the resource id: " + resourceId);
         
         commandList.addToList("getTextInWebElementUsingResourceId: " + resourceId);
         
         try { return getWebElementAtResourceId(resourceId).getText(); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3250,16 +3016,16 @@ public class BasePage extends ViewBase {
      * 
      * @return 
      * 
-     * @throws BasePageException
+     * @throws Exception
      */
-    public String getTextInWebElementUsingDataAtId(String id) throws BasePageException { 
+    public String getTextInWebElementUsingDataAtId(String id) throws Exception { 
         
         logger.debug("Get the text value in a web element at the data-atid: " + id);
         
         commandList.addToList("getTextInWebElementUsingDataAtId: " + id);
         
         try { return getWebElementWithLocator("//*[@data-atid='" + id + "']").getText(); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3268,16 +3034,16 @@ public class BasePage extends ViewBase {
      * 
      * @param resourceId
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clearWebElementUsingResourceId(String resourceId) throws BasePageException { 
+    public void clearWebElementUsingResourceId(String resourceId) throws Exception { 
         
         logger.debug("Get the text value in a web element at the resource id: " + resourceId);
         
         commandList.addToList("getTextInWebElementUsingResourceId: " + resourceId);
         
         try { clearWebElement(getWebElementAtResourceId(resourceId)); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3286,16 +3052,16 @@ public class BasePage extends ViewBase {
      * 
      * @param value
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void clearWebElementUsingDataAtId(String value) throws BasePageException { 
+    public void clearWebElementUsingDataAtId(String value) throws Exception { 
         
         logger.debug("Get the text value in a web element at the data-atid: " + value);
         
         commandList.addToList("clearWebElementUsingDataAtId: " + value);
         
         try { clearWebElement(getWebElementWithLocator("//*[@data-atid='" + value + "']")); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
     
     }
     
@@ -3304,12 +3070,12 @@ public class BasePage extends ViewBase {
      * 
      * @param resourceId
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void validateWebElementAtResourceId(String resourceId) throws BasePageException {
+    public void validateWebElementAtResourceId(String resourceId) throws Exception {
        
         try { getWebElementAtResourceId(resourceId); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3318,12 +3084,12 @@ public class BasePage extends ViewBase {
      * 
      * @param id
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void validateWebElementAtDataAtId(String id) throws BasePageException {
+    public void validateWebElementAtDataAtId(String id) throws Exception {
        
         try { getWebElementWithLocator("//*[@data-atid='" + id + "']"); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3332,12 +3098,12 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void validateWebElementContainsText(String text) throws BasePageException {
+    public void validateWebElementContainsText(String text) throws Exception {
        
         try { getWebElementWithLocator("//*[text()='" + text + "']"); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3346,12 +3112,12 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    public void validateWebElementContainsText_XPATH(String text) throws BasePageException {
+    public void validateWebElementContainsText_XPATH(String text) throws Exception {
        
         try { getWebElementWithLocator("//*[contains(text(),'" + text + "')]"); }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3668,81 +3434,6 @@ public class BasePage extends ViewBase {
         
     }
     
-    /**
-     * Create the new web driver
-     * 
-     * @throws Exception 
-     */
-    protected void createNewWebDriver(String url) throws Exception {
-        
-        try {
-            
-            initializeCommonProperties();
-            
-            logger.debug("Initializing a new BasePage -> WebDriver and other settings");
-           
-            logger.debug("Properties loaded at: " + CommonProperties.getInstance().PROPERTIESFILEPATH + ", size: " + this.properties.size());
-         
-            logger.debug("Creating Selenium 3.0 instance: " + properties.get(StringCapabilities.BROWSER_NAME.getCapability()));
-            
-            // screenshot properties
-            if(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability()) != null) { doScreenshot = Boolean.valueOf(properties.get(BooleanCapabilities.CAPTURE_SCREENSHOTS.getCapability())); }
-            
-            logger.debug("Do screenshots on each page load: " + doScreenshot);
-            
-            setTimeout();
-            
-            // set the captureSeleniumCommands
-            if(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability()) != null) { captureSeleniumCommands = Boolean.valueOf(properties.get(BooleanCapabilities.CAPTURE_SELENIUM_COMMANDS.getCapability())); }
-           
-            if(properties.get(StringCapabilities.JS_LIBRARY.getCapability()) != null) jsLibrary = properties.get(StringCapabilities.JS_LIBRARY.getCapability());
-                        
-            this.driver = webDriverFactory.getWebDriver(properties.get(StringCapabilities.ID_SELENIUM_DRIVER.getCapability()), properties.get(StringCapabilities.URL.getCapability()));
-                
-            logger.debug("Finished initializing Selenium/WebDriver 3.0: " + this.driver);
-                
-            setWebDriver(this.driver);
-            
-            // extra time wait ajax complete if needed
-            if(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { addExtraWaitTimeAfterAjaxComplete = Boolean.valueOf(properties.get(BooleanCapabilities.ENABLE_EXTRA_WAIT_AJAX_COMPLETE.getCapability())); }
-               
-            if(properties.get(StringCapabilities.EXTRA_WAIT_AJAX_COMPLETE.getCapability()) != null) { extraWaitTimeAfterAjaxComplete = Long.valueOf(properties.get(StringCapabilities.EXTRA_WAIT_AJAX_COMPLETE.getCapability()).trim()); }
-          
-            // extra time wait ajax complete if needed
-            if(properties.get(BooleanCapabilities.MAXIMIZE_BROWSER_WINDOW.getCapability()) != null) { maximizeBrowserWindow = Boolean.valueOf(properties.get(BooleanCapabilities.MAXIMIZE_BROWSER_WINDOW.getCapability())); }
-            
-            // set using force page load wait time property
-            if(properties.get(BooleanCapabilities.USE_FORCE_PAGE_LOAD_TIME.getCapability()) != null) { useForcePageLoadWaitTime = Boolean.valueOf(properties.get(BooleanCapabilities.USE_FORCE_PAGE_LOAD_TIME.getCapability())); }
-            
-            // set force page load wait time (actual millisecond setting) property
-            if(properties.get(StringCapabilities.FORCE_PAGE_LOAD_WAIT_TIME.getCapability()) != null) { forcePageLoadWaitTime = Long.valueOf(properties.get(StringCapabilities.FORCE_PAGE_LOAD_WAIT_TIME.getCapability()).trim()); }
-           
-            if(properties.get(BooleanCapabilities.USE_HTTP_AUTH.getCapability()) != null) {
-                
-                useHTTPAuth = Boolean.valueOf(properties.get(BooleanCapabilities.USE_HTTP_AUTH.getCapability()));
-                
-                sleep(2000);
-                
-                if(useHTTPAuth) {
-                
-                    if(properties.get(StringCapabilities.HTTP_AUTH_USERNAME.getCapability()) != null) httpAuthUsername = properties.get(StringCapabilities.HTTP_AUTH_USERNAME.getCapability());
-                
-                    if(properties.get(StringCapabilities.HTTP_AUTH_PASSWORD.getCapability()) != null) httpAuthPassword = properties.get(StringCapabilities.HTTP_AUTH_PASSWORD.getCapability());
-                    
-                }
-                
-            }
-           
-            logger.debug("Opening the start url: " + url);
-            
-            open(url);
-           
-            if(this.maximizeBrowserWindow) maximizeWindow();
-            
-        }
-        catch(Exception e) { throw e; }
-        
-    }
     
     /**
      * Allow for setting the timeout manually (if needed)
@@ -3761,9 +3452,9 @@ public class BasePage extends ViewBase {
      * 
      * @param text
      * 
-     * @throws BasePageException 
+     * @throws Exception 
      */
-    protected void hoverOnWebElementByLinkText(String text) throws BasePageException {
+    protected void hoverOnWebElementByLinkText(String text) throws Exception {
         
         logger.info("Hover on a link matching the text: " + text);
             
@@ -3776,7 +3467,7 @@ public class BasePage extends ViewBase {
             builder.moveToElement(find(By.linkText(text))).build().perform();
             
         }
-        catch(Exception e) { printDOM(); throw new BasePageException(e); }
+        catch(Exception e) { printDOM(); throw new Exception(e); }
         
     }
     
@@ -3861,9 +3552,9 @@ public class BasePage extends ViewBase {
      * 
      * @return
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public WebElement getWebElementWithCSSAndStartsWithText(String text, String cssSelector) throws BasePageException {
+    public WebElement getWebElementWithCSSAndStartsWithText(String text, String cssSelector) throws Exception {
 
         logger.debug("Get the web element with css selector and starts with text: " + text + "|" + cssSelector);
 
@@ -3889,7 +3580,7 @@ public class BasePage extends ViewBase {
                 throw new Exception("Could not find text in any screen element matching type: " + cssSelector + " and text: " + text);
 
             }
-            catch(Exception e) { printDOM(); throw new BasePageException(e); }
+            catch(Exception e) { printDOM(); throw new Exception(e); }
 
     }
 
@@ -3899,9 +3590,9 @@ public class BasePage extends ViewBase {
      * @param text
      * @param locator
      *
-     * @throws BasePageException
+     * @throws Exception
      */
-    public void clickOnWebElementWithXpathAndStartsWithText(String text, String locator) throws BasePageException {
+    public void clickOnWebElementWithXpathAndStartsWithText(String text, String locator) throws Exception {
 
         logger.debug("Get the web element with locator and starts with text: " + locator + "|" + text);
 
@@ -3935,7 +3626,7 @@ public class BasePage extends ViewBase {
                 throw new Exception("Could not find text in any screen element matching locator: " + locator + " and starting with text: " + text);
 
             }
-            catch(Exception e) { printDOM(); throw new BasePageException(e); }
+            catch(Exception e) { printDOM(); throw new Exception(e); }
 
     }
     
@@ -3968,6 +3659,68 @@ public class BasePage extends ViewBase {
 
         Thread.sleep(500); 
     
+    }
+    
+    /**
+     * Opens an URL in the test frame. 
+     * <p>
+     * This accepts both relative and absolute URLs. 
+     * <p>
+     * The "open" command waits for the page to load before proceeding, ie. 
+     * the "AndWait" suffix is implicit. 
+     * <p>
+     * Note: The URL must be on the same domain as the runner HTML due to
+     * security restrictions in the browser (Same Origin Policy). If you need
+     * to open an URL on another domain, use the Selenium Server to start a
+     * new browser session on that domain. 
+     * 
+     * @param url The URL to open; may be relative or absolute.
+     * 
+     * @throws Exception
+     */
+    public void open(String url) throws Exception { 
+        
+        logger.debug("Open/Get a URL: " + url);
+        
+        info("Opening the url: " + url);
+        
+        commandList.addToList("open: " + url);
+        
+        PerformanceCapture.getInstance().start(getPageName());
+        
+        try {
+        
+            this.driver.navigate().to(url);
+        
+        }
+        catch(Exception e) { 
+            
+            logger.error(e); 
+            
+            throw e;
+        
+        }
+        finally { completeOpen(); }
+        
+    }
+    
+    /**
+     * Perform any necessary final steps to the webdriver or basepage after open
+     */
+    private void completeOpen() {
+          
+                  
+                try {
+                        
+                    WebDriverWait wait = new WebDriverWait(this.driver, Long.valueOf(this.timeout));
+                         
+                    Alert alert = wait.until(ExpectedConditions.alertIsPresent()); 
+                        
+                    alert.accept();
+                    
+                }
+                catch(Exception le) { }
+          
     }
     
 }

@@ -39,8 +39,6 @@ import org.automateit.testng.TestNGUtils;
 
 import org.automateit.util.CommonProperties;
 
-import org.automateit.web.pages.BaseMobileWebPage;
-
 /**
  * This is the base testing class.
  * 
@@ -361,21 +359,6 @@ public class TestBase extends ViewBase {
     protected void assertEquals(boolean actual, boolean expected, String errorMessage) throws Exception {
         
         try { Assert.assertEquals(actual, expected, errorMessage); }
-        catch(Exception e) { throw e; }
-        
-        
-    }
-    
-    /**
-     * Verify/Validate the mobile web page.
-     * 
-     * @param baseMobileWebPage
-     * 
-     * @throws Exception 
-     */
-    protected void verifyMobileWebPage(BaseMobileWebPage baseMobileWebPage) throws Exception {
-        
-        try { baseMobileWebPage.validate(); }
         catch(Exception e) { throw e; }
         
         

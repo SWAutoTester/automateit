@@ -8,8 +8,6 @@ import org.automateit.example.page.YahooHomeMobileWebPage;
 import org.automateit.example.page.FacebookHomeMobileWebPage;
 import org.automateit.example.page.TwitterHomeMobileWebPage;
 
-import org.automateit.web.pages.VerifyWebsiteAccessWorkflow;
-
 /**
  * This class shows an example of how to use the AutomateIt! framework - and various useful features
  * for testing.
@@ -95,29 +93,5 @@ public class MobileWebTests extends TestBase {
         catch(Exception e) { throw e; }
     
     }
-    
-    /**
-     * Verify that we can display the Twitter web page on the mobile device web browser
-     *
-     * @throws Exception 
-     */
-    @Test(description = "Verify that we can display the Twitter web page on the mobile device web browser", groups = { "example_mobileweb" })
-    public void test_D_Validate_Group_Of_Mobile_Web_Page_Access() throws Exception {
-      
-        try { 
-            
-            VerifyWebsiteAccessWorkflow verifyWebsiteAccessWorkflow = new VerifyWebsiteAccessWorkflow();
-            
-            verifyWebsiteAccessWorkflow.addPageToValidate(new YahooHomeMobileWebPage());
-            verifyWebsiteAccessWorkflow.addPageToValidate(new FacebookHomeMobileWebPage());
-            verifyWebsiteAccessWorkflow.addPageToValidate(new TwitterHomeMobileWebPage()); 
-            
-            verifyWebsiteAccessWorkflow.execute();
-            
-        }
-        catch(Exception e) { throw e; }
-    
-    }
-    
 	
 }

@@ -1,6 +1,6 @@
 package org.automateit.example.page;
 
-import org.automateit.web.pages.BaseMobileWebPage;
+import org.automateit.mobileweb.MobileWebPageBase;
 
 /**
  * This class shows an example of how to use the AutomateIt! framework
@@ -9,7 +9,7 @@ import org.automateit.web.pages.BaseMobileWebPage;
  * 
  * @author mburnside
  */
-public class FacebookHomeMobileWebPage extends BaseMobileWebPage {
+public class FacebookHomeMobileWebPage extends MobileWebPageBase {
     
     private final static String URL = "http://www.facebook.com/";
    
