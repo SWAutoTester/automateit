@@ -136,7 +136,7 @@ public class PrometheusPushGatewayAlertHandler extends TestListenerAdapter imple
             
             props.put(TEST_NAME, result.getName());
           
-            props.put(TEST_DURATION, String.valueOf((new Long(result.getEndMillis() - result.getStartMillis())).intValue() / 1000));
+            props.put(TEST_DURATION, String.valueOf((Long.valueOf(result.getEndMillis() - result.getStartMillis())).intValue() / 1000));
             
             props.put(TEST_START_TIME, String.valueOf(result.getStartMillis()));
             

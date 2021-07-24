@@ -67,7 +67,7 @@ public class SendZabbixMessageThread extends SendMessageThreadBase {
             
             logger.info("Sending a Zabbix message with these properties: " + this.props);
             
-            ZabbixSender zabbixSender = new ZabbixSender(props.getProperty("host"), (new Integer(props.getProperty("port")).intValue()));
+            ZabbixSender zabbixSender = new ZabbixSender(props.getProperty("host"), Integer.valueOf(props.getProperty("port")));
 
             DataObject dataObject = new DataObject();
 		

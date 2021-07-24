@@ -207,7 +207,7 @@ public class SendPrometheusPushGatewayMessageThread extends SendMessageThreadBas
      * 
      * @return 
      */
-    private double getDoubleValue(String value) { return (new Double(value)).doubleValue(); }
+    private double getDoubleValue(String value) { return Double.valueOf(value); }
     
 }
 
