@@ -97,7 +97,7 @@ public enum BooleanCapabilities {
                 
                 logger.info("Setting Desired Capabilities property: " + capabilityName + "|" + properties.get(capabilityName));
                
-                capabilities.setCapability(capabilityName, (new Boolean(String.valueOf(properties.get(capabilityName)))).booleanValue());
+                capabilities.setCapability(capabilityName, Boolean.valueOf(String.valueOf(properties.get(capabilityName))));
                     
             }
             
