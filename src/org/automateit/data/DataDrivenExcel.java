@@ -84,11 +84,11 @@ public class DataDrivenExcel implements DataDrivenInput {
                         
                         case XSSFCell.CELL_TYPE_NUMERIC:
                             
-                            rowData.put(cell.getColumnIndex(), String.valueOf((new Double(cell.getNumericCellValue())).intValue()));
+                            rowData.put(cell.getColumnIndex(), String.valueOf((Double.valueOf(cell.getNumericCellValue())).intValue()));
                             
                             if(cell.getColumnIndex() == 0) {
                                 
-                                inputParameters.put(String.valueOf((new Double(cell.getNumericCellValue())).intValue()), rowData);
+                                inputParameters.put(String.valueOf((Double.valueOf(cell.getNumericCellValue())).intValue()), rowData);
                             
                             }
                             

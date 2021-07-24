@@ -102,7 +102,7 @@ public class XYBarChartDataArchive extends DataArchiveBase {
             
             String row = "Event Count Data Collection";
             
-            double value = (new Double(data[1])).doubleValue();
+            double value = Double.valueOf(data[1]);
   
             dataset.addValue(value, row, category);
    

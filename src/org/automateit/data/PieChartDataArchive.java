@@ -92,7 +92,7 @@ public class PieChartDataArchive extends DataArchiveBase {
                  
             String[] data = list.get(i); 
   
-            dataset.setValue(data[0], (new Integer(data[1]).intValue()));
+            dataset.setValue(data[0], Integer.valueOf(data[1]));
    
             log.info("Added data to dataset for pie chart: " + data[0] + "|" +  data[1]);
             

@@ -159,7 +159,7 @@ public class BaseShell {
             if(!this.connectionProperties.containsKey("private_key_file")) throw new Exception("The properties/configuration file must contain key: private_key_file");
             if(!this.connectionProperties.containsKey("private_key_password")) throw new Exception("The properties/configuration file must contain key: private_key_password");
         
-            this.session = jsch.getSession(username, hostname, (new Integer(port)).intValue());
+            this.session = jsch.getSession(username, hostname, Integer.valueOf(port));
             
             if((password != null) && (!password.trim().equals(""))) this.session.setPassword(password);
             
@@ -195,7 +195,7 @@ public class BaseShell {
             if(!this.connectionProperties.containsKey("private_key_file")) throw new Exception("The properties/configuration file must contain key: private_key_file");
             if(!this.connectionProperties.containsKey("private_key_password")) throw new Exception("The properties/configuration file must contain key: private_key_password");
             
-            this.session = jsch.getSession(username, hostname, (new Integer(port)).intValue());
+            this.session = jsch.getSession(username, hostname, Integer.valueOf(port));
             
             if((password != null) && (!password.trim().equals(""))) this.session.setPassword(password);
             
