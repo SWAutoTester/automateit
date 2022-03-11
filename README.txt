@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v2.1.4 - 16 Mar 2021
+Automate It! Web/Mobile Test Automation Framework v2.2 - 10 Mar 2022
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -75,7 +75,7 @@ https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
 Selenium Server
 ---------------
-v3.141.59
+4.1.2
 http://www.seleniumhq.org/download/
 
 Appium Drivers
