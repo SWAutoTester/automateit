@@ -92,7 +92,7 @@ https://logging.apache.org/log4j/2.x/download.html
 
 JavaMail
 --------
- JavaMail API 1.4.5
+JavaMail API 1.4.5
 
 
 
