@@ -73,8 +73,8 @@ Edge Driver
 99.0.1150.39
 https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
-Selenium Server
----------------
+Selenium WebDriver
+------------------
 4.1.2
 http://www.seleniumhq.org/download/
 
