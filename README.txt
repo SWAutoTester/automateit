@@ -54,19 +54,24 @@ Third Party API Dependency Versions:
 
 FirefoxDriver
 -------------
-v0.29.0
+0.30.0
 https://github.com/mozilla/geckodriver/releases
-https://github.com/mozilla/geckodriver/releases/tag/v0.29.0
+https://github.com/mozilla/geckodriver/releases/tag/v0.30.0
 
 ChromeDriver
 -------------
-89.0.4389.23
-https://sites.google.com/a/chromium.org/chromedriver/downloads
-https://chromedriver.storage.googleapis.com/index.html?path=89.0.4389.23/
+99.0.4844.51
+https://sites.google.com/chromium.org/driver/downloads
+https://chromedriver.storage.googleapis.com/index.html?path=99.0.4844.51/
 
 SafariDriver
 ------------
 Latest version of SafariDriver comes embedded in latest Safari browser
+
+Edge Driver
+-----------
+99.0.1150.39
+https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
 Selenium Server
 ---------------
