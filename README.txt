@@ -86,7 +86,8 @@ https://search.maven.org/search?q=g:io.appium
 
 Log4J
 ------
-Apache Log4j API 2.10.0 API
+Apache Log4j API 2.17.2
+Security Vulnerability fixes for CVE-2021-45105, CVE-2021-45046 and CVE-2021-44228
 https://logging.apache.org/log4j/2.x/download.html
 
 JavaMail
