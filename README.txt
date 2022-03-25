@@ -50,6 +50,11 @@ Instructions to run the mobile-app-based testing examples:
 
 1) In the installation directory, type "ant ios", "ant android" for each mobile app. For your specific environment, you may need to edit the configuration files in "conf" directory.
 
+Release Notes:
+1) If implementing your tests using Cucumber/Gherkin part of this framework, recommended to use JDK 11.X
+Java(TM) SE Runtime Environment 18.9 (build 11.0.14+8-LTS-263)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.14+8-LTS-263, mixed mode)
+
 Third Party API Dependency Versions:
 
 FirefoxDriver
