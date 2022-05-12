@@ -31,6 +31,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
 
@@ -81,6 +82,11 @@ public class WebDriverFactory {
      * Safari WebDriver identifier key
      */
     public static final String SAFARIWEBDRIVER = "SAFARIWEBDRIVER";
+    
+    /**
+     * Edge WebDriver identifier key
+     */
+    public static final String EDGEWEBDRIVER = "EDGEWEBDRIVER";
    
     /**
      *  Logging object
@@ -152,6 +158,29 @@ public class WebDriverFactory {
             CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().IE);
             
             return ((WebDriver)new InternetExplorerDriver());
+            
+        }
+        
+        else if(webDriverId.equals(EDGEWEBDRIVER)) {
+            
+            logger.info("Creating an instance of Microsoft EDGE webdriver");
+            
+            String driverLocation = CommonProperties.getInstance().get("webdriver.edge.driver.location");
+            
+            // now we check if its a real file and where it is expected to be. If not, add another "dot" to the path to back one more dir
+            File f = new File(driverLocation);
+            if(!f.exists() && !f.isFile()) driverLocation = "." + driverLocation;
+            
+            logger.info("Setting system property for Microsoft EDGE Driver - webdriver.edge.driver.location=" + driverLocation);
+            
+            if((driverLocation == null) || (driverLocation.trim().length() == 0))
+                   throw new Exception("The system property 'webdriver.edge.driver' is not configured propertly: " + driverLocation);
+            
+            System.setProperty("webdriver.edge.driver", driverLocation);
+            
+            CommonProperties.getInstance().setBrowserType(CommonProperties.getInstance().EDGE);
+            
+            return ((WebDriver)new EdgeDriver());
             
         }
         

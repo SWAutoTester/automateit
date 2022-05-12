@@ -147,6 +147,12 @@
       <antcall target="example"/>
   </target>
   
+  <target name="example_edge" depends="jar">
+      <antcall target="delete_master_configuration_file"/>
+      <antcall target="copy_edge_configuration_file"/>
+      <antcall target="example"/>
+  </target>
+  
   <target name="delete_master_configuration_file">
       <delete file="${conf}/${master_configuration_file}"/>
   </target>
@@ -157,6 +163,10 @@
   
   <target name="copy_chrome_configuration_file">
       <copy file="${conf}/configuration.properties.chrome.properties" tofile="${conf}/${master_configuration_file}"/>
+  </target>
+  
+  <target name="copy_edge_configuration_file">
+      <copy file="${conf}/configuration.properties.edge.properties" tofile="${conf}/${master_configuration_file}"/>
   </target>
   
   <target name="copy_safari_configuration_file">

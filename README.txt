@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v2.2 - 10 Mar 2022
+Automate It! Web/Mobile Test Automation Framework v2.3 - 12 May 2022
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -75,7 +75,7 @@ Latest version of SafariDriver comes embedded in latest Safari browser
 
 Edge Driver
 -----------
-99.0.1150.39
+101.0.1210.39
 https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
 Selenium WebDriver

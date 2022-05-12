@@ -71,6 +71,11 @@ public class CommonProperties extends Properties {
     public static final int OPERA = 4;
     
     /**
+     * Indicates the browser is Edge
+     */
+    public static final int EDGE = 5;
+    
+    /**
      * The browser type. Default is CHOME.
      */
     private int browserType = 0;
