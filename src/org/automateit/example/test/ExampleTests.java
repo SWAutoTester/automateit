@@ -100,6 +100,8 @@ public class ExampleTests extends TestBase {
             
             for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { 
                 
+                info("Scroll Down");
+                
                 this.yahooHomePage.scrollDown(SCROLLPIXELS); 
                 
                 delay(1000); 
@@ -126,6 +128,8 @@ public class ExampleTests extends TestBase {
         try { 
            
             for(int i = 0; i < SCROLLINTERACTIONLIMIT; i++) { 
+                
+                info("Scroll Up");
                 
                 this.yahooHomePage.scrollUp(SCROLLPIXELS); 
                 

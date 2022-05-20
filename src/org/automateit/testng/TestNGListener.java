@@ -26,6 +26,7 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.TestListenerAdapter;
 
+import org.automateit.util.CommonProperties;
 import org.automateit.util.ScreenshotCapture;
 
 /**
@@ -41,6 +42,11 @@ public class TestNGListener extends TestListenerAdapter {
      * The screenshots directory
      */
     private final String SCREENSHOTS_DIR = "screenshots";
+    
+    /**
+     * Properties that can be used for any class extending this class
+     */
+    protected CommonProperties properties = CommonProperties.getInstance();
     
     /**
      * The count to use
@@ -63,7 +69,7 @@ public class TestNGListener extends TestListenerAdapter {
            
            String path = file.getAbsolutePath();
            
-           String screenshotFileLocation = "file:///" + path + File.separator + SCREENSHOTS_DIR + File.separator + result.getName() + "." + ScreenshotCapture.JPG;
+           String screenshotFileLocation = getScreenshotFileLocation(path, result);
            
            log.debug("Failed test case screenshot file location: " + screenshotFileLocation);
            
@@ -109,7 +115,7 @@ public class TestNGListener extends TestListenerAdapter {
            
            String path = file.getAbsolutePath();
            
-           String screenshotFileLocation = "file:///" + path + File.separator + SCREENSHOTS_DIR + File.separator + result.getName() + "." + ScreenshotCapture.JPG;
+           String screenshotFileLocation = getScreenshotFileLocation(path, result);
            
            log.debug("Success test case screenshot file location: " + screenshotFileLocation);
            
@@ -138,9 +144,46 @@ public class TestNGListener extends TestListenerAdapter {
            Reporter.setCurrentTestResult(null);
            
        }
-       catch(Exception e) { e.printStackTrace(); log.error(e); }
+       catch(Exception e) { log.error(e); }
    
    }
+   
+   /**
+     * Determine if we should use local file path for reporting. 
+     * 
+     * This property is set in automateit.properties file.
+     * 
+     * @return 
+     */
+    private boolean useLocalFilePathForReporting() {
+        
+        if((properties.getProperty("useLocalFilePathForReporting") != null) && "true".equals(properties.getProperty("useLocalFilePathForReporting"))) return true;
+        else return false;
+       
+    }
+    
+    /**
+     * Get the String location for file location in the anchor link
+     * 
+     * @param path
+     * @param result
+     * 
+     * @return 
+     */
+    private String getScreenshotFileLocation(String path, ITestResult result) {
+           
+        if(useLocalFilePathForReporting()) { 
+         
+            return "file:///" + path + File.separator + SCREENSHOTS_DIR + File.separator + result.getName() + "." + ScreenshotCapture.JPG;
+           
+        }
+        else {
+          
+            return SCREENSHOTS_DIR + File.separator + result.getName() + "." + ScreenshotCapture.JPG;
+           
+        }
+        
+    }
 
 }
 

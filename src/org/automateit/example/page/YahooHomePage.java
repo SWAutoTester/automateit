@@ -74,8 +74,8 @@ public class YahooHomePage extends BasePage {
         
         info("Clicking on the Search button");
         
-        try { clickOnWebElementWithResourceId("header-desktop-search-button"); }
-        catch(Exception e) { throw e; }
+        try { clickOnWebElementWithResourceId("ybar-search"); }
+        catch(Exception e) { clickOnWebElementWithResourceId("header-desktop-search-button"); }
         
     }
 	

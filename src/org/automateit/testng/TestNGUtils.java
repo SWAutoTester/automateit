@@ -376,7 +376,7 @@ public class TestNGUtils {
      */
     private void createSeleniumCommandLog(int divId) {
         
-        logger.debug("Is WebDriver command list empty: " + CommandList.getInstance().isEmpty());
+        logger.debug("Is Framework command list empty: " + CommandList.getInstance().isEmpty());
         
         if(CommandList.getInstance().isEmpty() || !captureSeleniumCommands()) {
             
@@ -390,10 +390,10 @@ public class TestNGUtils {
        
         String[] list = CommandList.getInstance().getAllInList();
         
-        logger.debug("Writing the WebDriver command log with : " + list.length + " commands");
+        logger.debug("Writing the Framework command log with : " + list.length + " commands");
                 
         // note: toggleElement is a javascript function provided by ReportsNG
-        Reporter.log("<p><input type=\"button\" onclick=\"javascript:toggleElement('" + newId  + "', 'block');\" value=\"Show/Hide WebDriver commands\" /><p><br>");
+        Reporter.log("<p><input type=\"button\" onclick=\"javascript:toggleElement('" + newId  + "', 'block');\" value=\"Show/Hide AutomateIt! API calls\" /><p><br>");
         
         Reporter.log("<div class=\"mid\" id=\"" + newId + "\" style=\"DISPLAY: none\">");
         
@@ -727,7 +727,7 @@ public class TestNGUtils {
     /**
      * Determine if we should use local file path for reporting. 
      * 
-     * This property is set in seleniumconfiguration.properties file.
+     * This property is set in automateit.properties file.
      * 
      * @return 
      */
@@ -739,7 +739,7 @@ public class TestNGUtils {
     }
     
     /**
-     * This property is set in seleniumconfiguration.properties file.
+     * This property is set in automateit.properties file.
      * 
      * screenshotsDirectory
      * 
@@ -748,7 +748,7 @@ public class TestNGUtils {
     public String getScreenshotsDirectory() { return properties.getProperty("screenshotsDirectory"); }
     
     /**
-     * This property is set in seleniumconfiguration.properties file.
+     * This property is set in automateit.properties file.
      * 
      * performanceDataDirectory
      * 

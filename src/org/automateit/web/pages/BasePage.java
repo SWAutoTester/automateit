@@ -195,7 +195,7 @@ public class BasePage extends ViewBase {
            
             startURL = properties.get(StringCapabilities.URL.getCapability());
            
-            createNewWebDriver(getModifiedStartURL());
+            createNewWebDriver(getStartURL());
             
             stopPerformanceCapturePageLoaded();
         
@@ -222,7 +222,7 @@ public class BasePage extends ViewBase {
             
             startURL = url;
             
-            createNewWebDriver(getModifiedStartURL());
+            createNewWebDriver(getStartURL());
             
             stopPerformanceCapturePageLoaded();
         
@@ -249,7 +249,7 @@ public class BasePage extends ViewBase {
            
             startURL = url;
             
-            createNewWebDriver(getModifiedStartURL());
+            createNewWebDriver(getStartURL());
             
             stopPerformanceCapturePageLoaded();
         
@@ -2565,25 +2565,11 @@ public class BasePage extends ViewBase {
     }
     
     /**
-     * This is a special method only for Cloudmondo requirement of dynamic naming of base url for testing
-     * against specific environments determined at runtime.
+     * Get the URL to start with and navigate to
      * 
      * @return
-     * 
-     * @throws BasePageException 
      */
-    protected String getModifiedStartURL() {
-        
-        String targetEnvironment = null;
-        
-        if(properties.get(StringCapabilities.TARGET_ENVIRONMENT_KEY.getCapability()) != null) targetEnvironment = properties.get(StringCapabilities.TARGET_ENVIRONMENT_KEY.getCapability());
-        else if(System.getProperty("CM_TARGET_ENVIRONMENT") != null) { targetEnvironment = System.getProperty("CM_TARGET_ENVIRONMENT"); }
-        else { targetEnvironment = properties.get("CM_TARGET_ENVIRONMENT"); } 
-        
-        try { return utils.getModifiedURL(startURL, targetEnvironment); }
-        catch(Exception e) { logger.error(e); }
-        
-        return properties.get(StringCapabilities.URL.getCapability());
+    protected String getStartURL() { return properties.get(StringCapabilities.URL.getCapability());
 
     }
     

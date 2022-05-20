@@ -133,24 +133,32 @@
       <antcall target="delete_master_configuration_file"/>
       <antcall target="copy_firefox_configuration_file"/>
       <antcall target="example"/>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
   </target>
   
   <target name="example_chrome" depends="jar">
       <antcall target="delete_master_configuration_file"/>
       <antcall target="copy_chrome_configuration_file"/>
       <antcall target="example"/>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
   </target>
   
   <target name="example_safari" depends="jar">
       <antcall target="delete_master_configuration_file"/>
       <antcall target="copy_safari_configuration_file"/>
       <antcall target="example"/>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
   </target>
   
   <target name="example_edge" depends="jar">
       <antcall target="delete_master_configuration_file"/>
       <antcall target="copy_edge_configuration_file"/>
       <antcall target="example"/>
+      <antcall target="copy_images"/>
+      <antcall target="copy_screenshots"/>
   </target>
   
   <target name="delete_master_configuration_file">
@@ -263,6 +271,10 @@
   
   <target name="copy_screenshots">
       <copy todir="${results}/${html}">
+          <fileset dir="${screenshots}"/>
+      </copy>
+      <mkdir dir="${results}/${html}/${screenshots}"/>
+      <copy todir="${results}/${html}/${screenshots}">
           <fileset dir="${screenshots}"/>
       </copy>
   </target>

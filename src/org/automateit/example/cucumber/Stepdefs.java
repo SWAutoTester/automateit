@@ -3,6 +3,7 @@ package org.automateit.example.cucumber;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.And;
 //import cucumber.api.java.Before;
 //import cucumber.api.java.After;
 
@@ -44,10 +45,21 @@ public class Stepdefs extends StepDefinitionsBase {
             
             this.yahooHomePage.enterSearchText(text);
             
-            delay(2000); // wait 2 seconds
+            delay(3000); // wait 3 seconds for demo purposes
             
         }
         catch(Exception e) { throw e; }
+        
+    }
+    
+    @And("^I click on the Search button$")
+    public void I_click_on_the_Search_button() throws Exception {
+        
+        info("I click on the Search button");
+        
+        this.yahooHomePage.clickOnSearchButton();
+            
+        delay(3000); // wait 3 seconds for demo purposes
         
     }
 
@@ -60,23 +72,5 @@ public class Stepdefs extends StepDefinitionsBase {
         // to verify certain text is visible (search returned expected results)
         
     }
-    /*
-    @Before
-    public void before(Scenario scenario) {
-        this.scenario = scenario;
-    }
-    
-    @After
-    public void after(Scenario scenario) {
-        
-        try { addScreenshotToReport(); }
-        catch(Exception le) { }
-        
-        scenario.write("Scenario finished - closing the mobile app / web browser");
-        
-        CommonWebDriver.getInstance().close();
-        
-    }
-*/
     
 }
