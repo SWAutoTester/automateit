@@ -281,8 +281,10 @@ public class BaseScreen extends ViewBase {
      * Perform a tap/click on the screen.
      * 
      * @param locator xpath/css locator
+     * 
+     * @throws BaseScreenException
      */
-    public void tap(String locator) throws Exception {
+    public void tap(String locator) throws BaseScreenException{
         
         logger.info("Attempting to perform tap on screen at web element at location: " + locator);
             
@@ -290,9 +292,14 @@ public class BaseScreen extends ViewBase {
         
         TouchAction touchAction = new TouchAction(this.driver);
             
-        WebElement webelement = getWebElementByXPath(locator);
-           
-        touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
+        try { 
+            
+            WebElement webelement = getWebElementByXPath(locator); 
+            
+            touchAction.tap(PointOption.point(webelement.getLocation().getX(), webelement.getLocation().getY())).perform();
+        
+        }
+        catch(Exception e) { throw new BaseScreenException(e); }  
          
     }
     
@@ -370,9 +377,9 @@ public class BaseScreen extends ViewBase {
     /**
      * Scroll down one entire screen length.
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void scrollUp() throws Exception {
+    public void scrollUp() throws BaseScreenException {
         
         logger.info("Scroll Up");
             
@@ -391,7 +398,7 @@ public class BaseScreen extends ViewBase {
             delay(1500);
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -403,9 +410,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementContainingText(String text, String className) throws Exception {
+    public WebElement getWebElementContainingText(String text, String className) throws BaseScreenException {
         
         logger.info("getWebElementContainingText:" + text + "," + className);
             
@@ -449,9 +456,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public String getFullValueOfWebElementContainingText(String text, String className) throws Exception {
+    public String getFullValueOfWebElementContainingText(String text, String className) throws BaseScreenException {
         
         logger.info("clickOnWebElementContainingText:" + text + "," + className);
             
@@ -468,9 +475,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementContainingText(String text, String className) throws Exception {
+    public void clickOnWebElementContainingText(String text, String className) throws BaseScreenException {
         
         logger.info("clickOnWebElementContainingText:" + text + "|" + className);
             
@@ -487,9 +494,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void clickOnSecondWebElementContainingText(String text, String className) throws Exception {
+    public void clickOnSecondWebElementContainingText(String text, String className) throws BaseScreenException {
         
         logger.info("clickOnSecondWebElementContainingText:" + text + "|" + className);
             
@@ -546,9 +553,9 @@ public class BaseScreen extends ViewBase {
      * @param text2
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementContainingText(String text1, String text2, String className) throws Exception {
+    public void clickOnWebElementContainingText(String text1, String text2, String className) throws BaseScreenException {
         
         logger.info("clickOnWebElementContainingText:" + text1 + "|" + text2 + "|" + className);
             
@@ -592,16 +599,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementMatchingText(String text, String className) throws Exception {
+    public void clickOnWebElementMatchingText(String text, String className) throws BaseScreenException {
         
         logger.info("clickOnWebElementMatchingText:" + text + "|" + className);
         
         commandList.addToList("clickOnWebElementMatchingText:" + text + "|" + className);
         
         try { clickOnWebElementMatchingText(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -612,9 +619,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementMatchingText(String text, String className, boolean ignoreCase) throws Exception {
+    public void clickOnWebElementMatchingText(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("clickOnWebElementMatchingText:" + text + "|" + className + "|" + ignoreCase);
         
@@ -677,9 +684,9 @@ public class BaseScreen extends ViewBase {
      * @param text2
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementMatchingText(String text1, String text2, String className) throws Exception {
+    public void clickOnWebElementMatchingText(String text1, String text2, String className) throws BaseScreenException {
         
         logger.info("clickOnWebElementMatchingText:" + text1 + "|" + text2 + "|" + className);
         
@@ -724,16 +731,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingText(String text, String className) throws Exception {
+    public void validateWebElementContainingText(String text, String className) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
         commandList.addToList("validateWebElementContainingText:" + text + "|" + className);
         
         try { validateWebElementContainingText(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -744,9 +751,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingText(String text, String className, boolean ignoreCase) throws Exception {
+    public void validateWebElementContainingText(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -789,16 +796,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementMatchingText(String text, String className) throws Exception {
+    public void validateWebElementMatchingText(String text, String className) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
             
         commandList.addToList("validateWebElementMatchingText:" + text + "|" + className);
         
         try { validateWebElementMatchingText(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -809,9 +816,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementMatchingText(String text, String className, boolean ignoreCase) throws Exception {
+    public void validateWebElementMatchingText(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
             
@@ -848,16 +855,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingTextValueAttribute(String text, String className) throws Exception {
+    public void validateWebElementContainingTextValueAttribute(String text, String className) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
         commandList.addToList("validateWebElementContainingTextValueAttribute:" + text + "|" + className);
         
         try { validateWebElementContainingTextValueAttribute(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -868,9 +875,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+    public void validateWebElementContainingTextValueAttribute(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -913,16 +920,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingText_ContentDescription(String text, String className) throws Exception {
+    public void validateWebElementContainingText_ContentDescription(String text, String className) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
         commandList.addToList("validateWebElementContainingText_ContentDescription:" + text + "|" + className);
         
         try { validateWebElementContainingText_ContentDescription(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -933,9 +940,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+    public void validateWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -978,16 +985,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementMatchingText_ContentDescription(String text, String className) throws Exception {
+    public void validateWebElementMatchingText_ContentDescription(String text, String className) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
             
         commandList.addToList("validateWebElementMatchingText_ContentDescription:" + text + "|" + className);
         
         try { validateWebElementMatchingText_ContentDescription(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -998,9 +1005,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void validateWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+    public void validateWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
             
@@ -1045,9 +1052,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @returns
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementContainingText_ContentDescription(String text, String className) throws Exception {
+    public WebElement getWebElementContainingText_ContentDescription(String text, String className) throws BaseScreenException {
             
         commandList.addToList("getWebElementContainingText_ContentDescription:" + text + "|" + className );
         
@@ -1063,9 +1070,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @returns
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementMatchingText_ContentDescription(String text, String className) throws Exception {
+    public WebElement getWebElementMatchingText_ContentDescription(String text, String className) throws BaseScreenException {
             
         commandList.addToList("getWebElementMatchingText_ContentDescription:" + text + "|" + className );
         
@@ -1081,9 +1088,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @returns
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementContainingText_ContentDescription(String text, String className) throws Exception {
+    public void clickOnWebElementContainingText_ContentDescription(String text, String className) throws BaseScreenException {
             
         commandList.addToList("clickOnWebElementContainingText_ContentDescription:" + text + "|" + className );
         
@@ -1098,9 +1105,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      *  
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+    public void clickOnWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws BaseScreenException {
             
         commandList.addToList("clickOnWebElementContainingText_ContentDescription:" + text + "|" + className  + "|" + ignoreCase);
         
@@ -1116,9 +1123,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @returns
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementMatchingText_ContentDescription(String text, String className) throws Exception {
+    public void clickOnWebElementMatchingText_ContentDescription(String text, String className) throws BaseScreenException {
             
         commandList.addToList("clickOnWebElementMatchingText_ContentDescription:" + text + "|" + className );
         
@@ -1133,9 +1140,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      *  
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+    public void clickOnWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws BaseScreenException {
             
         commandList.addToList("clickOnWebElementMatchingText_ContentDescription:" + text + "|" + className  + "|" + ignoreCase);
         
@@ -1150,9 +1157,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+    public WebElement getWebElementContainingText_ContentDescription(String text, String className, boolean ignoreCase) throws BaseScreenException {
             
         commandList.addToList("getWebElementContainingText_ContentDescription:" + text + "|" + className + "|" + ignoreCase);
         
@@ -1194,9 +1201,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws Exception {
+    public WebElement getWebElementMatchingText_ContentDescription(String text, String className, boolean ignoreCase) throws BaseScreenException {
             
         commandList.addToList("getWebElementMatchingText_ContentDescription:" + text + "|" + className + "|" + ignoreCase);
         
@@ -1253,16 +1260,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementMatchingTextValueAttribute(String text, String className) throws Exception {
+    public void validateWebElementMatchingTextValueAttribute(String text, String className) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
         commandList.addToList("validateWebElementMatchingTextValueAttribute:" + text + "|" + className);
         
         try { validateWebElementMatchingTextValueAttribute(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -1271,11 +1278,11 @@ public class BaseScreen extends ViewBase {
      * 
      * @param text
      * @param className
-     * @param ignoreCase
+     * @param BaseScreenException
      * 
      * @throws Exception 
      */
-    public void validateWebElementMatchingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+    public void validateWebElementMatchingTextValueAttribute(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validating that element of type: " + className + " contains text: " + text + " appears on the screen somewhere.");
             
@@ -1312,16 +1319,16 @@ public class BaseScreen extends ViewBase {
      * @param resourceId
      * @param expectedText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateElementWithResourceIdContainingText(String resourceId, String expectedText) throws Exception {
+    public void validateElementWithResourceIdContainingText(String resourceId, String expectedText) throws BaseScreenException {
         
         logger.info("Validate that there is a web element at resource id containing the text expected: " + resourceId + "|" + expectedText);
             
         commandList.addToList("validateElementWithResourceIdContainingText:" + resourceId + "|" + expectedText);
         
         try { validateElementWithResourceIdContainingText(resourceId, expectedText, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -1332,9 +1339,9 @@ public class BaseScreen extends ViewBase {
      * @param expectedText
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateElementWithResourceIdContainingText(String resourceId, String expectedText, boolean ignoreCase) throws Exception {
+    public void validateElementWithResourceIdContainingText(String resourceId, String expectedText, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validate that there is a web element at resource id containing the text expected: " + resourceId + "|" + expectedText + "|" + ignoreCase);
             
@@ -1364,16 +1371,16 @@ public class BaseScreen extends ViewBase {
      * @param resourceId
      * @param expectedText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateElementWithResourceIdMatchingText(String resourceId, String expectedText) throws Exception {
+    public void validateElementWithResourceIdMatchingText(String resourceId, String expectedText) throws BaseScreenException {
         
         logger.info("Validate that there is a web element at resource id matching the text expected: " + resourceId + "|" + expectedText);
             
         commandList.addToList("validateElementWithResourceIdMatchingText:" + resourceId + "|" + expectedText);
         
         try { validateElementWithResourceIdMatchingText(resourceId, expectedText, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -1384,9 +1391,9 @@ public class BaseScreen extends ViewBase {
      * @param expectedText
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void validateElementWithResourceIdMatchingText(String resourceId, String expectedText, boolean ignoreCase) throws Exception {
+    public void validateElementWithResourceIdMatchingText(String resourceId, String expectedText, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Validate that there is a web element at resource id matching the text expected: " + resourceId + "|" + expectedText + "|" + ignoreCase);
             
@@ -1416,16 +1423,16 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void clickOnWebElementContainingTextValueAttribute(String text, String className) throws Exception {
+    public void clickOnWebElementContainingTextValueAttribute(String text, String className) throws BaseScreenException {
         
         logger.info("Clicking on web element of type: " + className + " containing text: " + text + " appears on the screen somewhere.");
         
         commandList.addToList("clickOnWebElementContainingTextValueAttribute:" + text + "|" + className);
         
         try { clickOnWebElementContainingTextValueAttribute(text, className, false); }
-        catch(Exception e) { printDOM(); throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -1436,9 +1443,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickOnWebElementContainingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+    public void clickOnWebElementContainingTextValueAttribute(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Clicking on web element of type: " + className + " containing text: " + text + " appears on the screen somewhere.");
         
@@ -1501,9 +1508,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void clickOnWebElementMatchingTextValueAttribute(String text, String className) throws Exception {
+    public void clickOnWebElementMatchingTextValueAttribute(String text, String className) throws BaseScreenException {
         
         logger.info("Clicking on web element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
         
@@ -1521,9 +1528,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param ignoreCase
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void clickOnWebElementMatchingTextValueAttribute(String text, String className, boolean ignoreCase) throws Exception {
+    public void clickOnWebElementMatchingTextValueAttribute(String text, String className, boolean ignoreCase) throws BaseScreenException {
         
         logger.info("Clicking on web element of type: " + className + " matches text: " + text + " appears on the screen somewhere.");
         
@@ -1583,9 +1590,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param name
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateWebElementContainingTextByName(String name) throws Exception {
+    public void validateWebElementContainingTextByName(String name) throws BaseScreenException {
         
         logger.info("Validating that element of name: " + name + " exists");
             
@@ -1609,9 +1616,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateAllWebElementsDoNotContainText(String text, String className) throws Exception {
+    public void validateAllWebElementsDoNotContainText(String text, String className) throws BaseScreenException {
         
         commandList.addToList("validateAllWebElementsDoNotContainText:" + text + "|" + className);
         
@@ -1640,9 +1647,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateAllWebElementsDoNotContainTextByValueAttribute(String text, String className) throws Exception {
+    public void validateAllWebElementsDoNotContainTextByValueAttribute(String text, String className) throws BaseScreenException {
         
         commandList.addToList("validateAllWebElementsDoNotContainTextByValueAttribute:" + text + "|" + className);
         
@@ -1671,9 +1678,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected int getElementTypeIndexMatchingText(String text, String className) throws Exception {
+    protected int getElementTypeIndexMatchingText(String text, String className) throws BaseScreenException {
         
         commandList.addToList("getElementTypeIndexMatchingText:" + className + "|" + text);
         
@@ -1696,7 +1703,7 @@ public class BaseScreen extends ViewBase {
             }
             
             // if we get here, we could not find the element so throw an exception
-            throw new Exception("Could the index of a screen component with text in any screen element matching type: " + className + " and text: " + text);
+            throw new Exception("Could not find the index of a screen component with text in any screen element matching type: " + className + " and text: " + text);
             
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1709,9 +1716,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected int getElementTypeIndexContainingText(String text, String className) throws Exception {
+    protected int getElementTypeIndexContainingText(String text, String className) throws BaseScreenException {
         
         commandList.addToList("getElementTypeIndexContainingText:" + className + "|" + text);
         
@@ -1736,7 +1743,7 @@ public class BaseScreen extends ViewBase {
             }
             
             // if we get here, we could not find the element so throw an exception
-            throw new Exception("Could the index of a screen component with text in any screen element containing type: " + className + " and text: " + text);
+            throw new Exception("Could not find the index of a screen component with text in any screen element containing type: " + className + " and text: " + text);
             
         }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1752,9 +1759,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getWebElementIdForElementNameAttributeContainsText(String className, String text) throws Exception {
+    public String getWebElementIdForElementNameAttributeContainsText(String className, String text) throws BaseScreenException {
        
         logger.info("Preparing to find the id of : " + text);
         
@@ -1792,9 +1799,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public String getWebElementIdForTextElementValueAttributeContainsText(String text, String elementType) throws Exception {
+    public String getWebElementIdForTextElementValueAttributeContainsText(String text, String elementType) throws BaseScreenException {
        
         logger.info("Preparing to find the id of : " + text);
         
@@ -1829,9 +1836,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param elementType
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected int getElementTypeMatchingNameAttributeTextCount(String text, String elementType) throws Exception {
+    protected int getElementTypeMatchingNameAttributeTextCount(String text, String elementType) throws BaseScreenException {
         
         commandList.addToList("getElementTypeMatchingNameAttributeTextCount:" + text + "|" + elementType);
         
@@ -1864,9 +1871,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param elementType
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected int getElementTypeContainsNameAttributeTextCount(String text, String elementType) throws Exception {
+    protected int getElementTypeContainsNameAttributeTextCount(String text, String elementType) throws BaseScreenException {
         
         commandList.addToList("getElementTypeContainsNameAttributeTextCount:" + text + "|" + elementType);
         
@@ -1900,9 +1907,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected WebElement getWebElementByXPath(String xpath) throws Exception {
+    protected WebElement getWebElementByXPath(String xpath) throws BaseScreenException {
         
         try { return find(By.xpath(xpath)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1916,9 +1923,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected List<WebElement> getWebElementsByXPath(String xpath) throws Exception {
+    protected List<WebElement> getWebElementsByXPath(String xpath) throws BaseScreenException {
 
         try { return findElements(By.xpath(xpath)); }
 
@@ -1933,9 +1940,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected WebElement getWebElementByName(String name) throws Exception {
+    protected WebElement getWebElementByName(String name) throws BaseScreenException {
         
         try { return find(By.name(name)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1949,9 +1956,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected List<WebElement> getWebElementsByClassName(String name) throws Exception {
+    protected List<WebElement> getWebElementsByClassName(String name) throws BaseScreenException {
         
         try { return findElements(By.className(name)); }
         catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
@@ -1966,9 +1973,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected WebElement getWebElementAtLocationByClassNameAndNameAttributeValue(String className, String name) throws Exception {
+    protected WebElement getWebElementAtLocationByClassNameAndNameAttributeValue(String className, String name) throws BaseScreenException {
         
         try {
             
@@ -2002,9 +2009,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected WebElement getWebElementAtLocationByClassNameAndValueAttributeValue(String className, String value) throws Exception {
+    protected WebElement getWebElementAtLocationByClassNameAndValueAttributeValue(String className, String value) throws BaseScreenException {
         
         try {
             
@@ -2040,9 +2047,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected WebElement getWebElementAtLocationByClassNameAndValueAttributeValueEquals(String className, String value) throws Exception {
+    protected WebElement getWebElementAtLocationByClassNameAndValueAttributeValueEquals(String className, String value) throws BaseScreenException {
         
         try {
             
@@ -2076,9 +2083,9 @@ public class BaseScreen extends ViewBase {
      *
      * @return web element
      *
-     * @throws Exception
+     * @throws BaseScreenException
      */
-    public WebElement getElementsByText(List<WebElement> elements, String text) throws Exception {
+    public WebElement getElementsByText(List<WebElement> elements, String text) throws BaseScreenException {
 
         logger.info("Get the element contains text: " + text + " appears on the screen somewhere.");
 
@@ -2101,9 +2108,9 @@ public class BaseScreen extends ViewBase {
     /**
      * Go Back (using Android device back button).
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void androidGoBack() throws Exception {
+    public void androidGoBack() throws BaseScreenException {
         
         logger.info("androidGoBack");
         
@@ -2123,9 +2130,9 @@ public class BaseScreen extends ViewBase {
     /**
      * Simulate Enter or Return key (using Android enter key).
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void androidClickEnterKey() throws Exception { 
+    public void androidClickEnterKey() throws BaseScreenException { 
         
         logger.info("androidClickEnterKey");
         
@@ -2199,9 +2206,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param resourceId
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clearWebElementByResourceId(String resourceId) throws Exception { 
+    public void clearWebElementByResourceId(String resourceId) throws BaseScreenException { 
         
         logger.debug("Clear web element by resource id: " + resourceId);
         
@@ -2218,9 +2225,9 @@ public class BaseScreen extends ViewBase {
      * @param value
      * @param classname
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clearWebElementByValueAndClassname(String value, String classname) throws Exception { 
+    public void clearWebElementByValueAndClassname(String value, String classname) throws BaseScreenException { 
         
         logger.debug("Clear web element by value and classname: " + value + "|" + classname);
         
@@ -2240,9 +2247,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementWithNameAttributeContainsText(String elementType, String attributeName, String attributeValue) throws Exception {
+    public WebElement getWebElementWithNameAttributeContainsText(String elementType, String attributeName, String attributeValue) throws BaseScreenException {
        
         logger.info("Preparing to find web element for element type: " + elementType + " and attribute value: " + attributeValue + " and attribute name: " + attributeName);
         
@@ -2280,9 +2287,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public WebElement getWebElementWithId(String id) throws Exception {
+    public WebElement getWebElementWithId(String id) throws BaseScreenException {
        
         logger.info("Preparing to find web element by id: " + id);
         
@@ -2296,13 +2303,13 @@ public class BaseScreen extends ViewBase {
     /**
      * Get the element at the matching resource id attribute.
      * 
-     * @param id
+     * @param resourceId
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public WebElement getWebElementAtResourceId(String resourceId) throws Exception {
+    public WebElement getWebElementAtResourceId(String resourceId) throws BaseScreenException {
        
         logger.info("Get the web element at resource id: " + resourceId);
         
@@ -2318,16 +2325,16 @@ public class BaseScreen extends ViewBase {
      * 
      * @param xpath
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void click(String xpath) throws Exception {
+    public void click(String xpath) throws BaseScreenException {
         
         logger.info("Clicking on web element at location: " + xpath);
             
         commandList.addToList("click:" + xpath);
         
         try { getWebElementByXPath(xpath).click(); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2336,9 +2343,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param id
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickUsingResourceId(String id) throws Exception {
+    public void clickUsingResourceId(String id) throws BaseScreenException {
         
         logger.info("Clicking on web element with resource id: " + id);
              
@@ -2354,9 +2361,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param name
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clickUsingElementName(String name) throws Exception {
+    public void clickUsingElementName(String name) throws BaseScreenException {
         
         logger.info("Clicking on web element with name: " + name);
              
@@ -2372,9 +2379,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param id
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getValueAtWebElementWithResourceId(String id) throws Exception {
+    public String getValueAtWebElementWithResourceId(String id) throws BaseScreenException {
         
         logger.info("Get value at web element with resource id: " + id);
              
@@ -2390,9 +2397,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param id
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void verifyWebElementWithResourceId(String id) throws Exception {
+    public void verifyWebElementWithResourceId(String id) throws BaseScreenException {
         
         logger.info("Verify value at web element with resource id: " + id);
              
@@ -2409,9 +2416,9 @@ public class BaseScreen extends ViewBase {
      * @param xpath
      * @param text
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void enterDataIntoWebElement(String xpath, String text) throws Exception {
+    public void enterDataIntoWebElement(String xpath, String text) throws BaseScreenException {
         
         commandList.addToList("enterDataIntoWebElement:" + text + "|" + xpath);
             
@@ -2436,7 +2443,7 @@ public class BaseScreen extends ViewBase {
             try { Thread.sleep(1000); } catch(Exception e) { }
            
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2446,9 +2453,9 @@ public class BaseScreen extends ViewBase {
      * @param xpath
      * @param text
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void enterDataIOS(String xpath, String text) throws Exception {
+    public void enterDataIOS(String xpath, String text) throws BaseScreenException {
         
         commandList.addToList("enterDataIntoWebElement:" + text + "|" + xpath);
             
@@ -2469,7 +2476,7 @@ public class BaseScreen extends ViewBase {
             try { Thread.sleep(1000); } catch(Exception e) { }
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2479,9 +2486,9 @@ public class BaseScreen extends ViewBase {
      * @param name
      * @param text
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void enterSearchDataIOSByElementName(String name, String text) throws Exception {
+    public void enterSearchDataIOSByElementName(String name, String text) throws BaseScreenException {
         
         commandList.addToList("enterDataIOSByElementName:" + text + "|" + name);
             
@@ -2504,7 +2511,7 @@ public class BaseScreen extends ViewBase {
             try { Thread.sleep(1000); } catch(Exception e) { }
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2514,9 +2521,9 @@ public class BaseScreen extends ViewBase {
      * @param xpath
      * @param text
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void enterDataAndSearchIOS(String xpath, String text) throws Exception {
+    public void enterDataAndSearchIOS(String xpath, String text) throws BaseScreenException {
         
         commandList.addToList("enterDataAndSearchIOS:" + text + "|" + xpath);
             
@@ -2529,7 +2536,7 @@ public class BaseScreen extends ViewBase {
             clickOnWebElementContainingText("Search", "XCUIElementTypeButton");
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2539,9 +2546,9 @@ public class BaseScreen extends ViewBase {
      * @param resourceId
      * @param text
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void enterDataIntoWebElementByResourceId(String resourceId, String text) throws Exception {
+    public void enterDataIntoWebElementByResourceId(String resourceId, String text) throws BaseScreenException {
         
         commandList.addToList("enterDataIntoWebElementByResourceId:" + text + "|" + resourceId);
             
@@ -2573,10 +2580,8 @@ public class BaseScreen extends ViewBase {
     
     /**
      * Minimize/dismiss the keyboard from view.
-     * 
-     * @throws Exception 
      */
-    public void minimizeKeyboard() throws Exception {
+    public void minimizeKeyboard() {
         
         commandList.addToList("minimize keyboard");
         
@@ -2603,16 +2608,16 @@ public class BaseScreen extends ViewBase {
      * 
      * @param xpath
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected void assertWebElementIsVisible(String xpath) throws Exception {
+    protected void assertWebElementIsVisible(String xpath) throws BaseScreenException {
         
         logger.info("Asserting a webelement is visible on the screen: " + xpath);
         
         commandList.addToList("assertWebElementIsVisible|" + xpath);
         
         try { Assert.assertNotNull(getWebElementByXPath(xpath)); }
-        catch(Exception e) { throw new BaseScreenException(e); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2621,16 +2626,16 @@ public class BaseScreen extends ViewBase {
      * 
      * @param xpath
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    protected void assertTextValueOfWebElementIsEqual(String xpath, String expectedValue) throws Exception {
+    protected void assertTextValueOfWebElementIsEqual(String xpath, String expectedValue) throws BaseScreenException {
         
         logger.info("Asserting text value of webelement attribute is equal to: " + expectedValue);
         
         commandList.addToList("assertTextValueOfWebElementIsEqual|" + xpath + "|" + expectedValue);
         
         try { Assert.assertEquals(getWebElementByXPath(xpath).getText().trim(), expectedValue); }
-        catch(Exception e) { throw new BaseScreenException(e); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2641,16 +2646,16 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getDisplayedValue(String xpath) throws Exception {
+    public String getDisplayedValue(String xpath) throws BaseScreenException {
         
         logger.info("Get display value from web element at location: " + xpath);
             
         commandList.addToList("getDisplayedValue:" + xpath);
         
         try { return getWebElementByXPath(xpath).getText(); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2687,9 +2692,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return A DataDrivenInput instance
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    protected DataDrivenInput setupDataDrivenInput(String dataFile) throws Exception {
+    protected DataDrivenInput setupDataDrivenInput(String dataFile) throws BaseScreenException {
         
         try { return utils.setupDataDrivenInput(dataFile); }
         catch(Exception e) { throw new BaseScreenException(e); }
@@ -2705,9 +2710,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return A DataDrivenInput instance
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    protected DataDrivenInput setupDataDrivenInput(String dataFile, int id) throws Exception {
+    protected DataDrivenInput setupDataDrivenInput(String dataFile, int id) throws BaseScreenException {
         
         try { return utils.setupDataDrivenInput(dataFile, id); }
         catch(Exception e) { throw new BaseScreenException(e); }
@@ -2722,9 +2727,9 @@ public class BaseScreen extends ViewBase {
      * @param endXDataSetId
      * @param endYDataSetId
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void performScroll(String dataInputFile, String startXDataSetId, String startYDataSetId, String endXDataSetId, String endYDataSetId) throws Exception { 
+    public void performScroll(String dataInputFile, String startXDataSetId, String startYDataSetId, String endXDataSetId, String endYDataSetId) throws BaseScreenException { 
     
         try { 
             
@@ -2733,7 +2738,7 @@ public class BaseScreen extends ViewBase {
             performScroll(setupDataDrivenInput(dataInputFile), startXDataSetId, startYDataSetId, endXDataSetId, endYDataSetId);
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2746,9 +2751,9 @@ public class BaseScreen extends ViewBase {
      * @param endXDataSetId
      * @param endYDataSetId
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void performScroll(DataDrivenInput scrollData, String startXDataSetId, String startYDataSetId, String endXDataSetId, String endYDataSetId) throws Exception { 
+    public void performScroll(DataDrivenInput scrollData, String startXDataSetId, String startYDataSetId, String endXDataSetId, String endYDataSetId) throws BaseScreenException { 
     
         try { 
            
@@ -2774,7 +2779,7 @@ public class BaseScreen extends ViewBase {
             else throw new Exception("The input data file is missing one of the following data set id's: " + startXDataSetId + "|" + startYDataSetId + "|" + endXDataSetId + "|" + endYDataSetId);
            
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
  
@@ -2784,9 +2789,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param elements
      *
-     * @throws Exception
+     * @throws BaseScreenException
      */
-    public void scrollToTopInDropDown(String className, List<WebElement> elements) throws Exception {
+    public void scrollToTopInDropDown(String className, List<WebElement> elements) throws BaseScreenException {
         
         logger.info("Perform scroll to top into drop down");
    
@@ -2817,7 +2822,7 @@ public class BaseScreen extends ViewBase {
             if(options.size() > 0) scrollToTopInDropDown(className, newElements);
             
         } 
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
 
@@ -2829,9 +2834,9 @@ public class BaseScreen extends ViewBase {
      *
      * @return true in case of successful scroll false in case if scroll ends
      *
-     * @throws Exception
+     * @throws BaseScreenException
      */
-    public boolean scrollNextInDropDown(String className, List<WebElement> elements) throws Exception {
+    public boolean scrollNextInDropDown(String className, List<WebElement> elements) throws BaseScreenException {
         
         logger.info("Perform scroll one step into drop down");
  
@@ -2861,7 +2866,7 @@ public class BaseScreen extends ViewBase {
             return false;
 
         } 
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
     }
 
     /**
@@ -2872,9 +2877,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public WebElement searchByScrollingInDropDown(String className, String text) throws Exception {
+    public WebElement searchByScrollingInDropDown(String className, String text) throws BaseScreenException {
         
         logger.info("Search for the element of type: " + className + " conatains text: " + text + " by scrolling into the drop down");
     
@@ -2901,7 +2906,7 @@ public class BaseScreen extends ViewBase {
             return webElement;
 
         } 
-        catch (Exception e) { throw e; }
+        catch (Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
 
@@ -2911,9 +2916,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param text
      *
-     * @throws Exception
+     * @throws BaseScreenException
      */
-    public Point getCoordinates(String className, String text) throws Exception {
+    public Point getCoordinates(String className, String text) throws BaseScreenException {
 
         WebElement webElement = null;
 
@@ -2925,7 +2930,7 @@ public class BaseScreen extends ViewBase {
                 return webElement.getLocation();
 
         }
-        catch (Exception e) { throw e; }
+        catch (Exception e) { printDOM(); throw new BaseScreenException(e); }
 
     }
 
@@ -2936,9 +2941,9 @@ public class BaseScreen extends ViewBase {
      * @param text
      * @param className
      *
-     * @throws Exception
+     * @throws BaseScreenException
      */
-    public void searchAndSelectTextFromDropDown(String text, String className) throws Exception {
+    public void searchAndSelectTextFromDropDown(String text, String className) throws BaseScreenException {
 
         WebElement webElement = null;
 
@@ -2974,7 +2979,7 @@ public class BaseScreen extends ViewBase {
             else {throw new Exception("Could not find text in dropdown"); }
 
         } 
-        catch (Exception e) { throw e; }
+        catch (Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -2983,9 +2988,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param seconds
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void backgroundApp(int seconds) throws Exception { 
+    public void backgroundApp(int seconds) throws BaseScreenException { 
         
         try {
             
@@ -2998,7 +3003,7 @@ public class BaseScreen extends ViewBase {
             delay(5000);
         
         }
-        catch(Exception e) { throw new BaseScreenException(e); }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
     
     }
     
@@ -3018,10 +3023,8 @@ public class BaseScreen extends ViewBase {
     
     /**
      * Print the element hierarchy.
-     * 
-     * @throws Exception 
      */
-    public void printDOM() throws Exception {
+    public void printDOM() {
         
         try { logger.error("DOM|" + getElementDOM()); }
         catch(Exception e) { logger.error("Not able to get element DOM"); }
@@ -3033,11 +3036,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param url
      * 
-     * @return
-     * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void open(String url) throws Exception {
+    public void open(String url) throws BaseScreenException {
         
         try { if(driver != null) driver.get(url); }
         catch(Exception e) { throw new BaseScreenException(e); }
@@ -3051,9 +3052,9 @@ public class BaseScreen extends ViewBase {
      * @param className
      * @param attributeName
      *
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void verifyContainingText(String text, String className, String attributeName) throws Exception {
+    public void verifyContainingText(String text, String className, String attributeName) throws BaseScreenException {
         
         logger.info("verifyContainingText:" + text + "|" + className + "|" + attributeName);
             
@@ -3103,25 +3104,25 @@ public class BaseScreen extends ViewBase {
      * @param endY
      * @param duration
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void scrollAcrossRegion(int startX, int startY, int endX, int endY, int duration) throws Exception {
+    public void scrollAcrossRegion(int startX, int startY, int endX, int endY, int duration) throws BaseScreenException {
         
         logger.info("scrollAcrossRegion|" + startX + "|" + startY + "|" + endX + "|" + endY + "|" + duration);
             
         commandList.addToList("scrollAcrossRegion|" + startX + "|" + startY + "|" + endX + "|" + endY + "|" + duration);
         
         try { swipe(startX, startY, endX, endY, duration); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
     /**
      * Scroll up on the entire device screen height - middle
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void swipeUpDeviceScreen() throws Exception {
+    public void swipeUpDeviceScreen() throws BaseScreenException {
         
         logger.info("swipeUpDeviceScreen");
             
@@ -3140,16 +3141,16 @@ public class BaseScreen extends ViewBase {
             swipe(width/2, height - 50, width/2, -(height - 100), 1);
            
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
     /**
      * Scroll down on the entire device screen height - middle
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void swipeDownDeviceScreen() throws Exception {
+    public void swipeDownDeviceScreen() throws BaseScreenException {
         
         logger.info("swipeDownDeviceScreen");
             
@@ -3168,48 +3169,48 @@ public class BaseScreen extends ViewBase {
             swipe(width/2, 50, width/2, height - 100, 1);
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
     /**
      * Scroll down.
      * 
-     * @throws Exception 
+     * @throws BaseScreenException
      */
-    public void scrollPullDown_Down() throws Exception {
+    public void scrollPullDown_Down() throws BaseScreenException {
         
         logger.info("scrollPullDown_Down");
             
         commandList.addToList("scrollPullDown_Down");
         
         try { scrollAcrossRegion(50, 500, 50, 50, 2); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
     /**
      * Scroll up.
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void scrollPullDown_Up() throws Exception {
+    public void scrollPullDown_Up() throws BaseScreenException {
         
         logger.info("scrollPullDown_Up");
             
         commandList.addToList("scrollPullDown_Down");
         
         try { scrollAcrossRegion(50, 50, 50, 500, 2); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
     /**
      * Scroll up on the entire device screen height - middle
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void swipeUpDeviceScreen_Left() throws Exception {
+    public void swipeUpDeviceScreen_Left() throws BaseScreenException {
         
         logger.info("swipeUpDeviceScreen_Left");
             
@@ -3228,16 +3229,16 @@ public class BaseScreen extends ViewBase {
             swipe(50, height - 50, 50, -(height - 100), 1);
            
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
     /**
      * Scroll down on the entire device screen height - middle
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void swipeDownDeviceScreen_Left() throws Exception {
+    public void swipeDownDeviceScreen_Left() throws BaseScreenException {
         
         logger.info("swipeDownDeviceScreen_Left");
             
@@ -3256,7 +3257,7 @@ public class BaseScreen extends ViewBase {
             swipe(50, 50, 50, height - 100, 1);
             
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { printDOM(); throw new BaseScreenException(e); }
         
     }
     
@@ -3285,9 +3286,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param timeout
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void setTimeout(String timeout) throws Exception {
+    public void setTimeout(String timeout) throws BaseScreenException {
         
         try { 
             
@@ -3295,19 +3296,19 @@ public class BaseScreen extends ViewBase {
             driver.manage().timeouts().implicitlyWait(Long.valueOf(timeout), TimeUnit.SECONDS);
         
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
     /**
      * Allow for setting the timeout manually (if needed)
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void setTimeout() throws Exception {
+    public void setTimeout() throws BaseScreenException {
         
         try { setTimeout(properties.get(StringCapabilities.TIMEOUT.getCapability())); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3378,9 +3379,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String dialPhoneNumber(String number) throws Exception {
+    public String dialPhoneNumber(String number) throws BaseScreenException {
         
         try { 
             
@@ -3388,7 +3389,7 @@ public class BaseScreen extends ViewBase {
             else return null;
         
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3397,9 +3398,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String answerActivePhoneCall() throws Exception {
+    public String answerActivePhoneCall() throws BaseScreenException {
         
         try { 
             
@@ -3407,7 +3408,7 @@ public class BaseScreen extends ViewBase {
             else return null;
         
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3416,9 +3417,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getMostRecentCallInfo() throws Exception {
+    public String getMostRecentCallInfo() throws BaseScreenException {
         
         try { 
             
@@ -3426,7 +3427,7 @@ public class BaseScreen extends ViewBase {
             else return null;
         
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3435,9 +3436,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getAllCallInfo() throws Exception {
+    public String getAllCallInfo() throws BaseScreenException {
         
         try { 
             
@@ -3445,7 +3446,7 @@ public class BaseScreen extends ViewBase {
             else return null;
         
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3456,12 +3457,12 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getLogcatData(String deviceId) throws Exception {
+    public String getLogcatData(String deviceId) throws BaseScreenException {
         
         try { return getLogcatData(deviceId, DEFAULT_LINES_LOGCAT); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3473,9 +3474,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String getLogcatData(String deviceId, int lines) throws Exception {
+    public String getLogcatData(String deviceId, int lines) throws BaseScreenException {
         
         try { 
             
@@ -3483,7 +3484,7 @@ public class BaseScreen extends ViewBase {
             else return null;
         
         }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3496,12 +3497,12 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public boolean verifyLogcatData(String deviceId, int lines, String expectedText) throws Exception {
+    public boolean verifyLogcatData(String deviceId, int lines, String expectedText) throws BaseScreenException {
         
         try { return getLogcatData(deviceId, lines).contains(expectedText); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3513,12 +3514,12 @@ public class BaseScreen extends ViewBase {
      * 
      * @return
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public boolean verifyLogcatData(String deviceId, String expectedText) throws Exception {
+    public boolean verifyLogcatData(String deviceId, String expectedText) throws BaseScreenException {
         
         try { return verifyLogcatData(deviceId, DEFAULT_LINES_LOGCAT, expectedText); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3533,12 +3534,14 @@ public class BaseScreen extends ViewBase {
      * 
      * @param messageText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateNotificationReceived(String messageText) throws Exception {
+    public void validateNotificationReceived(String messageText) throws BaseScreenException {
         
         commandList.addToList("validateNotificationReceived|" + messageText);
         
+        try {
+            
         if(isAndroid()) {
             
             androidClickHome();
@@ -3564,8 +3567,10 @@ public class BaseScreen extends ViewBase {
             validateMessageReceived(messageText);
         
         }
-        else throw new BaseScreenException("Verifications of Notifications received on iOS not yet supported");
+        else throw new Exception("Verifications of Notifications received on iOS not yet supported");
         
+        }
+        catch(Exception e) { throw new BaseScreenException(e); }
     }
     
     /**
@@ -3573,11 +3578,14 @@ public class BaseScreen extends ViewBase {
      * 
      * @param messageText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateMessageReceived(String messageText) throws Exception {
+    public void validateMessageReceived(String messageText) throws BaseScreenException {
         
         commandList.addToList("validateMessageReceived|" + messageText);
+        
+        try {
+            
         
         if(isAndroid()) {
             
@@ -3609,7 +3617,10 @@ public class BaseScreen extends ViewBase {
            
         }
 
-        else throw new BaseScreenException("Verifications of Notification received on iOS not yet supported");
+        else throw new Exception("Verifications of Notification received on iOS not yet supported");
+        
+        }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3618,11 +3629,14 @@ public class BaseScreen extends ViewBase {
      * 
      * @param messageText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void deleteMessage(String messageText) throws Exception {
+    public void deleteMessage(String messageText) throws BaseScreenException {
         
         commandList.addToList("validateMessageReceived|" + messageText);
+        
+        try {
+            
         
         if(isAndroid()) {
             
@@ -3663,7 +3677,10 @@ public class BaseScreen extends ViewBase {
           
         }
 
-        else throw new BaseScreenException("Verifications of Notification received on iOS not yet supported");
+        else throw new Exception("Verifications of Notification received on iOS not yet supported");
+        
+        }
+        catch(Exception e) { throw new BaseScreenException(e); }
         
     }
     
@@ -3672,14 +3689,14 @@ public class BaseScreen extends ViewBase {
      * 
      * @param messageText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateNotificationReceivedAndGoBack(String messageText) throws Exception {
+    public void validateNotificationReceivedAndGoBack(String messageText) throws BaseScreenException {
         
         info("Validating notification message: " + messageText);
         
         try { validateMessageReceived(messageText); }
-        catch(Exception e) { throw e; }
+        catch(Exception e) { throw new BaseScreenException(e); }
         finally {
             // go back twice to get to original Notifications/Message screen
             try { androidGoBack(); addScreenshotToReport(); androidGoBack(); addScreenshotToReport(); }
@@ -3694,9 +3711,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @param messageText
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void validateNotificationReceivedAndDelete(String messageText) throws Exception {
+    public void validateNotificationReceivedAndDelete(String messageText) throws BaseScreenException {
            
         validateMessageReceived(messageText); 
             
@@ -3711,9 +3728,9 @@ public class BaseScreen extends ViewBase {
      * 
      * @return The console output from the command
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public String runCommandOnAndroidDevice(String command) throws Exception {
+    public String runCommandOnAndroidDevice(String command) throws BaseScreenException {
         
         int MAX_ATTEMPTS = 5;
         
@@ -3754,7 +3771,7 @@ public class BaseScreen extends ViewBase {
             
         }
         
-        throw new Exception("Unable to successfully run command after " + MAX_ATTEMPTS + " attempts: " + command);
+        throw new BaseScreenException("Unable to successfully run command after " + MAX_ATTEMPTS + " attempts: " + command);
 
     }
     
@@ -3765,9 +3782,9 @@ public class BaseScreen extends ViewBase {
      * @param contentDescriptionText
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void enterTextInWebElementContainingText_ContentDescription(String text, String contentDescriptionText, String className) throws Exception {
+    public void enterTextInWebElementContainingText_ContentDescription(String text, String contentDescriptionText, String className) throws BaseScreenException {
             
         commandList.addToList("enterTextInWebElementContainingText_ContentDescription:" + text + "|" + contentDescriptionText + "|" + className );
         
@@ -3789,9 +3806,9 @@ public class BaseScreen extends ViewBase {
      * @param contentDescriptionText
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clearTextInWebElementContainingText_ContentDescription(String contentDescriptionText, String className) throws Exception {
+    public void clearTextInWebElementContainingText_ContentDescription(String contentDescriptionText, String className) throws BaseScreenException {
             
         commandList.addToList("clearTextInWebElementContainingText_ContentDescription:" + contentDescriptionText + "|" + className );
         
@@ -3806,9 +3823,9 @@ public class BaseScreen extends ViewBase {
      * @param contentDescriptionText
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void enterTextInWebElementMatchingText_ContentDescription(String text, String contentDescriptionText, String className) throws Exception {
+    public void enterTextInWebElementMatchingText_ContentDescription(String text, String contentDescriptionText, String className) throws BaseScreenException {
             
         commandList.addToList("enterTextInWebElementMatchingText_ContentDescription:" + text + "|" + contentDescriptionText + "|" + className );
         
@@ -3830,9 +3847,9 @@ public class BaseScreen extends ViewBase {
      * @param contentDescriptionText
      * @param className
      * 
-     * @throws Exception 
+     * @throws BaseScreenException 
      */
-    public void clearTextInWebElementMatchingText_ContentDescription(String contentDescriptionText, String className) throws Exception {
+    public void clearTextInWebElementMatchingText_ContentDescription(String contentDescriptionText, String className) throws BaseScreenException {
             
         commandList.addToList("clearTextInWebElementMatchingText_ContentDescription:" + contentDescriptionText + "|" + className );
         

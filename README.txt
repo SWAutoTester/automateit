@@ -1,4 +1,4 @@
-Automate It! Web/Mobile Test Automation Framework v2.3 - 12 May 2022
+Automate It! Web/Mobile Test Automation Framework v2.4 - 20 May 2022
 
 Thank you for downloading and using the most versatile and easy Java-based test automation framework using Selenium/Appium for web/mobile application testing.
 
@@ -20,7 +20,7 @@ Features:
 11) Text-To-Speech conversion and player to send audio commands to Siri, Alexa, etc.
 12) Speech-To-Text to listen to response from app and translate to text for response validation.
 13) OCR (Optical Character Recognition)
-14) Scrolling web pages up/down from Safari, Chrome, Firefox web browsers
+14) Scrolling web pages up/down from Safari, Chrome, Firefox, Edge web browsers
 15) Special styled reporting using Extent-based reporting framework for really nice and professional test result reports including easy to include screenshots from web and mobile application
 16) Alert Handlers in Zabbix, Email, and SMS for alerts of specific user-defined special events during or after tests (failed or skipped) 
 17) Cucumber/Gherkin support (see examples: ant cucumber_demo)
